@@ -21,7 +21,7 @@ from .. import config
 from ..data.sequences import context_index, model_input
 from ..features.build import build_capture
 from ..features.normalize import transform_windows
-from ..features.registry import FEATURE_NAMES, MASK_NAMES
+from ..features.registry import MASK_NAMES
 from ..model.rollout import analytic, estimate_progress
 
 
@@ -32,7 +32,8 @@ def _risk_for_flows(bundle, flows: pl.DataFrame, target_window: int, cidrs: list
     idx = np.flatnonzero(win["window"].to_numpy() == target_window)
     if idx.size == 0 or idx[0] < bundle.context - 1:
         return float("nan")
-    raw = win.select(FEATURE_NAMES).to_numpy().astype(np.float64)
+    names = list(bundle.scaler.names)
+    raw = win.select(names).to_numpy().astype(np.float64)
     _, session = np.unique(win["session_key"].to_numpy(), return_inverse=True)
     x = transform_windows(bundle.scaler, raw, mode=mode, session=session,
                           warmup=win["warmup"].to_numpy().astype(bool))
@@ -40,7 +41,7 @@ def _risk_for_flows(bundle, flows: pl.DataFrame, target_window: int, cidrs: list
 
     arr = Arrays(x=x, m=win.select(MASK_NAMES).to_numpy().astype(np.float32),
                  stage=np.zeros(win.height, dtype=np.int64), session=session, pos=np.zeros(win.height, dtype=np.int64),
-                 remaining=np.zeros(win.height, dtype=np.int64), y={}, valid={})
+                 remaining=np.zeros(win.height, dtype=np.int64), y={}, valid={}, names=names)
     with torch.no_grad():
         xt = torch.from_numpy(model_input(arr, context_index(idx[:1], bundle.context)))
         m = bundle.model

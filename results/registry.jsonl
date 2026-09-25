@@ -169,3 +169,6 @@
 {"protocol": "final-p1", "name": "lstm-s29", "path": "/home/csxzor/Desktop/26153/results/final-p1/lstm-s29.json", "written": "2026-09-25 14:32:51"}
 {"protocol": "final-p1", "name": "transformer_clf-s17", "path": "/home/csxzor/Desktop/26153/results/final-p1/transformer_clf-s17.json", "written": "2026-09-25 15:25:29"}
 {"protocol": "final-p1", "name": "transformer_clf-s23", "path": "/home/csxzor/Desktop/26153/results/final-p1/transformer_clf-s23.json", "written": "2026-09-25 16:17:59"}
+{"protocol": "dev-smoke-dev", "name": "kcwm-s17", "path": "/home/csxzor/Desktop/26153/results/dev-smoke-dev/kcwm-s17.json", "written": "2026-09-25 17:13:56"}
+{"protocol": "dev-smoke-dev", "name": "transformer_clf-s17", "path": "/home/csxzor/Desktop/26153/results/dev-smoke-dev/transformer_clf-s17.json", "written": "2026-09-25 17:22:54"}
+{"protocol": "dev-smoke-ew", "name": "kcwm-s17", "path": "/home/csxzor/Desktop/26153/results/dev-smoke-ew/kcwm-s17.json", "written": "2026-09-25 17:26:04"}

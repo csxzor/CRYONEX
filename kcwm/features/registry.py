@@ -26,7 +26,7 @@ class Feature:
 # Groups. Masks are per group: "packet" is absent on CSV input, "ip" when a source carries
 # no addresses, "lookback" until the context holds enough history.
 GROUPS = ["volume", "flags", "protocol", "timing", "ports", "hosts", "packet",
-          "access", "lateral", "c2", "exfil", "lookback"]
+          "access", "lateral", "c2", "exfil", "lookback", "history"]
 MASKED_GROUPS = {"packet": "packet", "lateral": "ip", "exfil": "ip", "lookback": "lookback"}
 
 _F = Feature
@@ -136,6 +136,19 @@ FEATURES: list[Feature] = [
     _F("beacon_pairs", "lookback", True, "connection pairs with beacon-like periodicity", "pairs"),
 ]
 
+# --- v2.1: long memory. Precursors (a scan, a login burst, a beacon) often sit 15-30+ min
+# before the compromise, beyond the model's 64-window (~11 min) context. For each attack
+# signature, the strongest value in the last 30 min and 2 h (causal rolling max, per session).
+HISTORY_SOURCES = ["half_open_max", "seq_port_score", "auth_conn_max", "web_conn_max",
+                   "icmp_sweep_max", "int_scan_max", "int_fanout_max", "beacon_max", "dns_max",
+                   "unanswered_syn_frac", "out_asym_max", "new_int_pairs"]
+HISTORY_SPANS = {"h30": 180, "h120": 720}  # windows of 10 s
+_by = {f.name: f for f in FEATURES}
+for _tag, _n in HISTORY_SPANS.items():
+    for _src in HISTORY_SOURCES:
+        FEATURES.append(_F(f"{_tag}_{_src}", "history", _by[_src].log,
+                           f"max over the last {_n * 10 // 60} min of: {_by[_src].desc}", _by[_src].unit))
+
 FEATURE_NAMES: list[str] = [f.name for f in FEATURES]
 N_FEATURES = len(FEATURES)
 BY_NAME: dict[str, Feature] = {f.name: f for f in FEATURES}
@@ -148,7 +161,8 @@ def names_in_group(group: str) -> list[str]:
     return [f.name for f in FEATURES if f.group == group]
 
 
-def feature_mask_index() -> list[int]:
+def feature_mask_index(names: list[str] | None = None) -> list[int]:
     """For each feature, the index into ``MASK_NAMES`` gating it, or -1 if always observed."""
     lookup = {"packet": 0, "ip": 1, "lookback": 2}
-    return [lookup[MASKED_GROUPS[f.group]] if f.group in MASKED_GROUPS else -1 for f in FEATURES]
+    feats = FEATURES if names is None else [BY_NAME[n] for n in names]
+    return [lookup[MASKED_GROUPS[f.group]] if f.group in MASKED_GROUPS else -1 for f in feats]

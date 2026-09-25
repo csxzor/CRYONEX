@@ -114,9 +114,9 @@ def monte_carlo(
     p = torch.maximum(p, z)
     h = h0[:, None, :].expand(Bsz, M, d).reshape(Bsz * M, d)
     comp = model.comp
-    hit = torch.zeros(Bsz, M, dtype=torch.bool)
-    first_stage = torch.zeros(Bsz, M, dtype=torch.long)
-    first_step = torch.zeros(Bsz, M, dtype=torch.long)
+    hit = torch.zeros(Bsz, M, dtype=torch.bool, device=h0.device)
+    first_stage = torch.zeros(Bsz, M, dtype=torch.long, device=h0.device)
+    first_step = torch.zeros(Bsz, M, dtype=torch.long, device=h0.device)
     zs, ps, lat, pinf = [], [], [], []
     h_mf = h0
     for k in range(horizon):
@@ -156,7 +156,7 @@ def one_step_nll(model: KillChainWorldModel, h_prev: torch.Tensor, stage_prev: t
     """
     Bsz = h_prev.shape[0]
     logT = torch.log_softmax(model.transition_logits_at(h_prev, stage_prev, progress_prev), -1)  # (B, S)
-    zs = torch.arange(S).repeat(Bsz)                                   # (B*S,)
+    zs = torch.arange(S, device=h_prev.device).repeat(Bsz)                                   # (B*S,)
     ps = torch.maximum(progress_prev.repeat_interleave(S), zs)
     hs = h_prev.repeat_interleave(S, dim=0)
     h1 = model.step(hs, model.stage_emb(zs), model.prog_emb(ps))

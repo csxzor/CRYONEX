@@ -20,8 +20,11 @@ from ..ingest.windowing import assign_windows, attach_sessions, session_spine
 from ..targets.episodes import episodes, stage_onsets, window_labels
 from ..targets.targets import forecast_targets
 from .extra import extra_features
-from .registry import FEATURE_NAMES, PACKET_FEATURES
+from .registry import FEATURE_NAMES, PACKET_FEATURES, names_in_group
 from .vector import base_features
+
+# Features computed from flows; the history group is derived afterwards by add_history().
+BASE_FEATURES = [c for c in FEATURE_NAMES if c not in set(names_in_group("history"))]
 
 
 def refine_stages(flows: pl.DataFrame, internal_cidrs: list[str]) -> pl.DataFrame:
@@ -78,7 +81,7 @@ def build_capture(
 
     has_ips = bool(internal_cidrs) and flows["src_ip"].n_unique() > 1
     win = win.sort("window").with_columns(
-        *[pl.col(c).cast(pl.Float64).fill_null(0.0).fill_nan(0.0) for c in FEATURE_NAMES],
+        *[pl.col(c).cast(pl.Float64).fill_null(0.0).fill_nan(0.0) for c in BASE_FEATURES],
         pl.col("m_packet").fill_null(0.0),
         pl.col("n_flows").fill_null(0).cast(pl.Int32),
         pl.col("n_attack_flows").fill_null(0).cast(pl.Int32),
@@ -104,7 +107,22 @@ def build_capture(
         (pl.col("window").cast(pl.Float64) * seconds).alias("t"),
     ).drop("_pos")
 
-    return flows, add_targets(win, cfg)
+    return flows, add_targets(add_history(win), cfg)
+
+
+def add_history(win: pl.DataFrame) -> pl.DataFrame:
+    """Causal long-memory features: rolling max of attack signatures over 30 min and 2 h.
+
+    Depends only on the window table, so ``kcwm refeature`` adds it to existing builds.
+    """
+    from .registry import HISTORY_SOURCES, HISTORY_SPANS
+
+    win = win.sort("window")
+    exprs = [
+        pl.col(src).rolling_max(window_size=n, min_samples=1).over("session").alias(f"{tag}_{src}")
+        for tag, n in HISTORY_SPANS.items() for src in HISTORY_SOURCES
+    ]
+    return win.drop([e.meta.output_name() for e in exprs], strict=False).with_columns(exprs)
 
 
 TARGET_COLUMNS = ["episode", "in_episode", "is_onset", "is_recurrence", "is_stage_onset",

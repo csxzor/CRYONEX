@@ -16,3 +16,4 @@ samples/*.pcapng
 
 # Per-row score dumps (34 MB; regenerate with kcwm evaluate)
 results/**/*.npz
+dist/

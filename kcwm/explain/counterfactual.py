@@ -13,18 +13,20 @@ from __future__ import annotations
 import numpy as np
 import torch
 
-from ..features.registry import FEATURES, GROUPS
+from ..features.registry import BY_NAME, FEATURES, GROUPS
 from ..model.world_model import KillChainWorldModel
 from .attributions import integrated_gradients, risk_fn
 
 
 @torch.no_grad()
 def group_counterfactual(model: KillChainWorldModel, x: np.ndarray, *, horizon: int, n_features: int,
-                         threshold: float, recent: int = 12, max_groups: int = 4) -> dict:
+                         threshold: float, recent: int = 12, max_groups: int = 4,
+                         names: list[str] | None = None) -> dict:
     f = risk_fn(model, horizon)
     base = torch.from_numpy(x[None].astype(np.float32))
     risk0 = float(f(base)[0])
-    cols = {g: [i for i, ft in enumerate(FEATURES) if ft.group == g] for g in GROUPS}
+    feats = FEATURES if names is None else [BY_NAME[n] for n in names]
+    cols = {g: [i for i, ft in enumerate(feats) if ft.group == g] for g in GROUPS}
     cur, chosen, path = base.clone(), [], []
     for _ in range(max_groups):
         best = None

@@ -17,7 +17,7 @@ import polars as pl
 import streamlit as st
 
 from kcwm import config
-from kcwm.features.registry import BY_NAME, FEATURE_NAMES, N_FEATURES
+from kcwm.features.registry import BY_NAME
 from kcwm.inference.engine import RFC1918, analyze, default_bundle, load_bundle
 from kcwm.kb.knowledge import stage_card
 from kcwm.stages import STAGE_SHORT, STAGES
@@ -185,12 +185,13 @@ def main():
     from kcwm.explain.counterfactual import group_counterfactual
 
     x = model_input(a.arrays, context_index(np.array([i]), b.context))[0]
-    att = integrated_gradients(b.model, x, horizon=b.horizon, n_features=N_FEATURES)
+    names = list(b.scaler.names)
+    att = integrated_gradients(b.model, x, horizon=b.horizon, n_features=len(names), names=names)
     cur_raw = a.windows  # native units from the scaler inverse
     native = b.scaler.inverse(a.arrays.x[i][None])[0]
     rows = []
     for name, v in att.top_features(8):
-        j = FEATURE_NAMES.index(name)
+        j = names.index(name)
         rows.append({"feature": BY_NAME[name].desc, "group": BY_NAME[name].group,
                      "value now": f"{native[j]:.3g} {BY_NAME[name].unit}", "push on risk": round(v, 3)})
     cA, cB = st.columns([1.3, 1])
@@ -199,7 +200,8 @@ def main():
     cB.plotly_chart(go.Figure(go.Bar(x=np.arange(-len(attn) + 1, 1) * 10 / 60, y=attn, marker_color="#5b8def"))
                     .update_layout(height=250, margin=dict(l=10, r=10, t=30, b=10), title="Which past windows mattered (attention)",
                                    xaxis_title="minutes before now"), width="stretch")
-    cf = group_counterfactual(b.model, x, horizon=b.horizon, n_features=N_FEATURES, threshold=b.threshold)
+    cf = group_counterfactual(b.model, x, horizon=b.horizon, n_features=len(names), threshold=b.threshold,
+                              names=names)
     if cf["steps"]:
         txt = "; ".join(f"without **{s['group']}** behaviour → {s['risk_after']:.0%}" for s in cf["steps"])
         st.write(f"Counterfactual: risk {cf['risk']:.0%}; {txt}.")

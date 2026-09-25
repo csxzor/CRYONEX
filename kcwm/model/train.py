@@ -34,6 +34,7 @@ import torch
 from sklearn.metrics import average_precision_score
 from torch import nn
 
+from .. import device as _dev
 from ..data.sequences import Arrays, context_index, model_input
 from ..features.registry import feature_mask_index
 from .rollout import analytic, estimate_progress
@@ -71,6 +72,7 @@ class TrainConfig:
     group_dropout: float = 0.3   # randomly hide the packet group so CSV-only inputs work
     risk_pos_weight: str = "sqrt"  # none | sqrt | balanced
     stop_on_train_tail: int = 0  # rejected in dev round 3; kept for the record
+    ew_weight: float = 1.0        # extra risk-loss weight on quiet windows followed by a compromise
     direct_risk: int = 0          # 1 = fallback F-A: add a direct risk head, average with rollout
 
 
@@ -81,13 +83,17 @@ class Batcher:
         if arr.bins is None:
             raise ValueError("Arrays need quantile bins for world-model training")
         self.arr, self.cfg = arr, cfg
-        gate = np.asarray(feature_mask_index())
+        gate = np.asarray(feature_mask_index(arr.names))
         self.gate = gate
         # per-row per-feature observation mask (1 = observed)
         fm = np.ones((arr.x.shape[0], arr.x.shape[1]), dtype=np.float32)
         for g in range(arr.m.shape[1]):
             fm[:, gate == g] = arr.m[:, g : g + 1]
         self.feat_mask = fm
+        from ..eval.protocols import quiet_anchors
+
+        # "Quiet" = no compromise in the last 5 min: the early-warning situation.
+        self.quiet = quiet_anchors(arr.stage, arr.session, 30)
 
     def __call__(self, anchors: np.ndarray, *, train: bool, rng: np.random.Generator | None = None):
         a, cfg = self.arr, self.cfg
@@ -120,13 +126,15 @@ class Batcher:
         for k in cfg.horizons:
             out[f"y_{k}"] = torch.from_numpy(a.y[k][anchors].astype(np.float32))
             out[f"v_{k}"] = torch.from_numpy(a.valid[k][anchors].astype(np.float32))
-        return out
+        out["quiet"] = torch.from_numpy(self.quiet[anchors].astype(np.float32))
+        dv = _dev.get()
+        return {k: v.to(dv, non_blocking=True) for k, v in out.items()}
 
 
 def stage_weights(stage: np.ndarray) -> torch.Tensor:
     counts = np.bincount(stage, minlength=S).astype(np.float64) + 1.0
     w = counts ** -0.5
-    return torch.tensor(w / w[stage].mean(), dtype=torch.float32)
+    return torch.tensor(w / w[stage].mean(), dtype=torch.float32, device=_dev.get())
 
 
 def emission_nll(model: KillChainWorldModel, h: torch.Tensor, bins: torch.Tensor, fmask: torch.Tensor) -> torch.Tensor:
@@ -148,13 +156,14 @@ def compute_losses(model: KillChainWorldModel, b: dict, cfg: TrainConfig, sw: to
 
     # transition inside the context, plus the step into the first future window
     z_next = torch.cat([z[:, 1:], b["stage_fut"][:, :1]], dim=1)
-    tv = torch.cat([torch.ones(Bsz, N - 1, dtype=torch.bool), b["fut_valid"][:, :1]], dim=1)
+    dv = H.device
+    tv = torch.cat([torch.ones(Bsz, N - 1, dtype=torch.bool, device=dv), b["fut_valid"][:, :1]], dim=1)
     tl = model.transition_logits_at(H, z, p)
     losses["trans"] = (ce(tl.reshape(-1, S), z_next.reshape(-1), weight=sw, reduction="none")
                        * tv.reshape(-1).float()).sum() / tv.float().sum()
 
     # one-step emission at sampled context positions (tau -> tau+1 inside the context)
-    pos = torch.randint(0, N - 1, (cfg.emit_positions,), generator=gen)
+    pos = torch.randint(0, N - 1, (cfg.emit_positions,), generator=gen, device=dv)
     hs = H[:, pos]
     h1 = model.step(hs, model.stage_emb(z[:, pos + 1]), model.prog_emb(torch.maximum(p[:, pos], z[:, pos + 1])))
     losses["emit"] = emission_nll(model, h1, b["bins_ctx"][:, pos + 1], b["fmask_ctx"][:, pos + 1])
@@ -163,7 +172,7 @@ def compute_losses(model: KillChainWorldModel, b: dict, cfg: TrainConfig, sw: to
     h = H[:, -1]
     zc, pc = z[:, -1], p[:, -1]
     fut_z, fut_v = b["stage_fut"], b["fut_valid"]
-    emit_steps = set(torch.randperm(cfg.unroll, generator=gen)[: cfg.imag_steps].tolist())
+    emit_steps = set(torch.randperm(cfg.unroll, generator=gen, device=dv)[: cfg.imag_steps].tolist())
     imag_now, imag_trans, imag_emit = [], [], []
     for k in range(cfg.unroll):
         logits = model.transition_logits_at(h, zc, pc)
@@ -172,7 +181,7 @@ def compute_losses(model: KillChainWorldModel, b: dict, cfg: TrainConfig, sw: to
         zt = fut_z[:, k]
         if ss_prob > 0:
             sampled = torch.multinomial(torch.softmax(logits.detach(), -1), 1, generator=gen).squeeze(-1)
-            use = torch.rand(Bsz, generator=gen) < ss_prob
+            use = torch.rand(Bsz, generator=gen, device=dv) < ss_prob
             zt = torch.where(use, sampled, zt)
         pc = torch.maximum(pc, zt)
         h = model.step(h, model.stage_emb(zt), model.prog_emb(pc))
@@ -197,6 +206,7 @@ def compute_losses(model: KillChainWorldModel, b: dict, cfg: TrainConfig, sw: to
         pk = fc.p_infil[:, k - 1].clamp(1e-5, 1 - 1e-5)
         y, v = b[f"y_{k}"], b[f"v_{k}"]
         w = torch.where(y > 0, torch.full_like(y, pos_weight[k]), torch.ones_like(y)) * v
+        w = w * (1.0 + (cfg.ew_weight - 1.0) * b["quiet"] * (y > 0).float())
         risk = risk + (nn.functional.binary_cross_entropy(pk, y, reduction="none") * w).sum() / w.sum().clamp(min=1.0)
     losses["risk"] = risk / len(cfg.horizons)
     if model.direct_risk is not None:
@@ -205,6 +215,7 @@ def compute_losses(model: KillChainWorldModel, b: dict, cfg: TrainConfig, sw: to
         for j, k in enumerate(cfg.horizons):
             y, v = b[f"y_{k}"], b[f"v_{k}"]
             w = torch.where(y > 0, torch.full_like(y, pos_weight[k]), torch.ones_like(y)) * v
+            w = w * (1.0 + (cfg.ew_weight - 1.0) * b["quiet"] * (y > 0).float())
             dr = dr + (nn.functional.binary_cross_entropy_with_logits(logits[:, j], y, reduction="none") * w).sum() / w.sum().clamp(min=1.0)
         losses["risk"] = losses["risk"] + dr / len(cfg.horizons)
     losses["prior"] = model.prior_penalty()
@@ -222,7 +233,7 @@ def forecast_rows(model: KillChainWorldModel, arr: Arrays, rows: np.ndarray, cfg
     pin, sm, now, prog = [], [], [], []
     for i in range(0, len(rows), batch):
         r = rows[i : i + batch]
-        x = torch.from_numpy(model_input(arr, context_index(r, cfg.context)))
+        x = torch.from_numpy(model_input(arr, context_index(r, cfg.context))).to(next(model.parameters()).device)
         H = model.encode(x)
         b0 = torch.softmax(model.nowcast(H[:, -1]), -1)
         p0 = estimate_progress(model, H)
@@ -235,10 +246,10 @@ def forecast_rows(model: KillChainWorldModel, arr: Arrays, rows: np.ndarray, cfg
             j = list(cfg.horizons).index(cfg.primary_horizon)
             ratio = (0.5 * (p_roll[:, K - 1] + d[:, j])) / p_roll[:, K - 1].clamp(min=1e-6)
             p_roll = (p_roll * ratio[:, None]).clamp(0.0, 1.0)
-        pin.append(p_roll.numpy())
-        sm.append(fc.stage_marg.numpy())
-        now.append(b0.numpy())
-        prog.append(p0.numpy())
+        pin.append(p_roll.cpu().numpy())
+        sm.append(fc.stage_marg.cpu().numpy())
+        now.append(b0.cpu().numpy())
+        prog.append(p0.cpu().numpy())
     cat = (lambda xs: np.concatenate(xs) if xs else np.zeros(0))
     return {"p_infil": cat(pin), "stage_marg": cat(sm), "nowcast": cat(now), "progress": cat(prog)}
 
@@ -248,11 +259,12 @@ def fit(arr: Arrays, train: np.ndarray, cal: np.ndarray, cfg: TrainConfig, *, n_
     torch.manual_seed(cfg.seed)
     torch.set_num_threads(cfg.threads)
     rng = np.random.default_rng(cfg.seed)
-    gen = torch.Generator().manual_seed(cfg.seed)
+    dv = _dev.get()
+    gen = torch.Generator(device=dv).manual_seed(cfg.seed)
     model = KillChainWorldModel(arr.n_features, arr.m.shape[1], n_bins=n_bins, d=cfg.d,
                                 layers=cfg.layers, heads=cfg.heads, ff=cfg.ff,
                                 dropout=cfg.dropout, max_len=cfg.context,
-                                n_direct=len(cfg.horizons) if cfg.direct_risk else 0)
+                                n_direct=len(cfg.horizons) if cfg.direct_risk else 0).to(dv)
     opt = torch.optim.AdamW(model.parameters(), lr=cfg.lr, weight_decay=cfg.weight_decay)
     batcher = Batcher(arr, cfg)
     sw = stage_weights(arr.stage[train])

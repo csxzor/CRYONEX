@@ -15,6 +15,7 @@ import numpy as np
 import torch
 from torch import nn
 
+from .. import device as _dev
 from ..data.sequences import Arrays, context_index, model_input
 
 
@@ -92,20 +93,21 @@ def fit_sequence_classifier(
     torch.set_num_threads(threads)
     rng = np.random.default_rng(seed)
     n_in = arr.n_features + arr.m.shape[1]
-    model = LSTMClassifier(n_in) if kind == "lstm" else TransformerClassifier(n_in, max_len=context)
+    dv = _dev.get()
+    model = (LSTMClassifier(n_in) if kind == "lstm" else TransformerClassifier(n_in, max_len=context)).to(dv)
     opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
     pos = float(y_train.sum())
-    crit = nn.BCEWithLogitsLoss(pos_weight=torch.tensor((len(y_train) - pos) / max(pos, 1.0)))
-    cal_x = torch.from_numpy(model_input(arr, context_index(cal, context)))
-    cal_y = torch.from_numpy(y_cal.astype(np.float32))
+    crit = nn.BCEWithLogitsLoss(pos_weight=torch.tensor((len(y_train) - pos) / max(pos, 1.0), device=dv))
+    cal_x = torch.from_numpy(model_input(arr, context_index(cal, context))).to(dv)
+    cal_y = torch.from_numpy(y_cal.astype(np.float32)).to(dv)
     best, best_state, stale = math.inf, None, 0
     for epoch in range(epochs):
         model.train()
         t0 = time.time()
         total = 0.0
         for b in _batches(len(train), batch, rng):
-            xb = torch.from_numpy(model_input(arr, context_index(train[b], context)))
-            yb = torch.from_numpy(y_train[b].astype(np.float32))
+            xb = torch.from_numpy(model_input(arr, context_index(train[b], context))).to(dv)
+            yb = torch.from_numpy(y_train[b].astype(np.float32)).to(dv)
             opt.zero_grad()
             loss = crit(model(xb).squeeze(-1), yb)
             loss.backward()
@@ -134,6 +136,6 @@ def fit_sequence_classifier(
 def predict_sequence_classifier(model: nn.Module, arr: Arrays, rows: np.ndarray, *, context: int) -> np.ndarray:
     out = []
     for i in range(0, len(rows), 512):
-        xb = torch.from_numpy(model_input(arr, context_index(rows[i:i + 512], context)))
-        out.append(torch.sigmoid(model(xb).squeeze(-1)).numpy())
+        xb = torch.from_numpy(model_input(arr, context_index(rows[i:i + 512], context))).to(next(model.parameters()).device)
+        out.append(torch.sigmoid(model(xb).squeeze(-1)).cpu().numpy())
     return np.concatenate(out) if out else np.zeros(0)

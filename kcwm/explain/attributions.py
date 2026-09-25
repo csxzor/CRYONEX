@@ -23,7 +23,7 @@ from dataclasses import dataclass
 import numpy as np
 import torch
 
-from ..features.registry import FEATURES, GROUPS
+from ..features.registry import BY_NAME, FEATURES, GROUPS
 from ..model.rollout import analytic, estimate_progress
 from ..model.world_model import KillChainWorldModel
 
@@ -46,14 +46,16 @@ class Attribution:
     per_feature: np.ndarray   # (F,)
     per_time: np.ndarray      # (N,)
     per_group: dict[str, float]
+    names: list[str] | None = None
 
     def top_features(self, k: int = 6) -> list[tuple[str, float]]:
         order = np.argsort(-np.abs(self.per_feature))[:k]
-        return [(FEATURES[i].name, float(self.per_feature[i])) for i in order]
+        names = self.names or [f.name for f in FEATURES]
+        return [(names[i], float(self.per_feature[i])) for i in order]
 
 
 def integrated_gradients(model: KillChainWorldModel, x: np.ndarray, *, horizon: int,
-                         n_features: int, steps: int = 32) -> Attribution:
+                         n_features: int, steps: int = 32, names: list[str] | None = None) -> Attribution:
     """``x``: one context (N, F+M). Mask channels are held fixed; only features are attributed."""
     model.eval()
     f = risk_fn(model, horizon)
@@ -70,9 +72,10 @@ def integrated_gradients(model: KillChainWorldModel, x: np.ndarray, *, horizon: 
         r, r0 = float(f(xt)[0]), float(f(base)[0])
     per_feature = ig.sum(0)
     groups = {g: 0.0 for g in GROUPS}
-    for i, feat in enumerate(FEATURES):
+    feats = FEATURES if names is None else [BY_NAME[n] for n in names]
+    for i, feat in enumerate(feats):
         groups[feat.group] += float(per_feature[i])
-    return Attribution(ig, r, r0, per_feature, ig.sum(1), groups)
+    return Attribution(ig, r, r0, per_feature, ig.sum(1), groups, names)
 
 
 @torch.no_grad()

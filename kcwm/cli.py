@@ -40,9 +40,13 @@ def evaluate(
     wm: str = typer.Option(None, help='world-model overrides, e.g. "epochs=2,anchors_per_epoch=2000"'),
     dev: bool = typer.Option(False, help="score on the calibration split; never touch test"),
     campaigns: bool = typer.Option(False, help="add training-split synthetic campaigns to every model's training anchors"),
+    device: str = typer.Option("cpu", help="cpu | cuda (training only; bundles always load on CPU)"),
 ) -> None:
     """Score baselines and the world model (model name ``kcwm``) under one protocol."""
+    from . import device as _dev
     from .eval.run import run
+
+    _dev.set(device)
 
     def split_list(s):
         return [x for x in s.split(",") if x] if s else None
@@ -109,6 +113,21 @@ def campaigns(
 
     for ds in dataset:
         generate(ds, per_split={"train": train, "calibration": calibration, "test": test}, seed=seed)
+
+
+@app.command()
+def refeature() -> None:
+    """Add/refresh the long-memory history features on every built capture and campaign."""
+    import polars as pl
+
+    from . import config
+    from .features.build import add_history
+
+    root = config.processed_dir()
+    files = sorted((root / "windows").glob("*.parquet")) + sorted((root / "campaigns").rglob("camp-*.parquet"))
+    for path in files:
+        add_history(pl.read_parquet(path)).write_parquet(path, compression="zstd")
+    typer.echo(f"history features added to {len(files)} files")
 
 
 @app.command()

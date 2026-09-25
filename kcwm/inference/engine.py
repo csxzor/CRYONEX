@@ -29,7 +29,7 @@ from .. import config
 from ..data.sequences import Arrays, context_index, model_input
 from ..features.build import build_capture
 from ..features.normalize import QuantileBinner, RobustScaler, transform_windows
-from ..features.registry import FEATURE_NAMES, MASK_NAMES
+from ..features.registry import MASK_NAMES
 from ..model.rollout import analytic, estimate_progress, one_step_nll
 from ..model.world_model import KillChainWorldModel
 from ..stages import STAGES
@@ -68,7 +68,8 @@ def load_bundle(path: str | Path) -> Bundle:
     ckpt = torch.load(path, map_location="cpu", weights_only=False)
     c = ckpt["config"]
     binner = QuantileBinner.from_dict(ckpt["binner"])
-    model = KillChainWorldModel(len(FEATURE_NAMES), len(MASK_NAMES), n_bins=np.asarray(ckpt["n_bins"]),
+    names = list(ckpt["scaler"]["names"])  # the bundle's own feature order (older bundles: 92)
+    model = KillChainWorldModel(len(names), len(MASK_NAMES), n_bins=np.asarray(ckpt["n_bins"]),
                                 d=c["d"], layers=c["layers"], heads=c["heads"], ff=c["ff"],
                                 dropout=0.0, max_len=c["context"],
                                 n_direct=len(c["horizons"]) if c.get("direct_risk") else 0)
@@ -133,7 +134,7 @@ def feature_observed(arr: Arrays, rows: np.ndarray) -> np.ndarray:
     """(n, F) float mask: 1 where the feature's group was observed in that window."""
     from ..features.registry import feature_mask_index
 
-    gate = np.asarray(feature_mask_index())
+    gate = np.asarray(feature_mask_index(arr.names))
     fm = np.ones((len(rows), arr.x.shape[1]), dtype=np.float32)
     for g in range(arr.m.shape[1]):
         fm[:, gate == g] = arr.m[rows, g : g + 1]
@@ -176,7 +177,8 @@ def analyze(path: str | Path, bundle: Bundle, *, internal_cidrs: list[str] | Non
     cidrs = internal_cidrs or RFC1918
     name = capture or Path(str(path)).stem
     flows_w, win = build_capture(flows, dataset="upload", capture=name, cfg=cfg, internal_cidrs=cidrs)
-    raw = win.select(FEATURE_NAMES).to_numpy().astype(np.float64)
+    names = list(bundle.scaler.names)
+    raw = win.select(names).to_numpy().astype(np.float64)
     _, session = np.unique(win["session_key"].to_numpy(), return_inverse=True)
     warm = win["warmup"].to_numpy().astype(bool)
     mode = mode or bundle.mode
@@ -186,7 +188,7 @@ def analyze(path: str | Path, bundle: Bundle, *, internal_cidrs: list[str] | Non
     arr = Arrays(x=x, m=win.select(MASK_NAMES).to_numpy().astype(np.float32),
                  stage=win["stage_now"].to_numpy().astype(np.int64), session=session.astype(np.int64),
                  pos=pos, remaining=length - 1 - pos, y={}, valid={},
-                 bins=bundle.binner.transform(x))
+                 bins=bundle.binner.transform(x), names=names)
     n, K, S = win.height, bundle.horizon, len(STAGES)
     p_infil = np.full((n, K), np.nan)
     stage_marg = np.full((n, K, S), np.nan)
