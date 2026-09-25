@@ -45,6 +45,9 @@ def main(result_json: str) -> None:
         ckpt["threshold"] = float(op["threshold"])  # already on the hybrid probability scale
     else:
         ckpt["threshold"] = float(_apply_calibrator(np.array([op["threshold"]]), ckpt["calibrator"])[0])
+    tl = rp.parent / "two_level.json"
+    if tl.exists():  # level-1 early-warning threshold on the raw world-model rollout risk
+        ckpt["early_warning_threshold"] = json.loads(tl.read_text())["seeds"][str(seed)]["early_warning_threshold_wm"]
     ckpt["meta"] = {"model": r["model"], "source_result": str(rp), "source_checkpoint": ckpt_path,
                     "auprc": r["auprc"], "fpr_budget": budget, "datasets": r["datasets"],
                     "mode": r["mode"], "campaigns": r.get("campaigns"),
@@ -55,6 +58,7 @@ def main(result_json: str) -> None:
     digest = hashlib.sha256(out.read_bytes()).hexdigest()
     (out.parent / "MANIFEST.json").write_text(json.dumps(
         {"kcwm.pt": {"sha256": digest, "bytes": out.stat().st_size, "threshold": ckpt["threshold"],
+                     "early_warning_threshold": ckpt.get("early_warning_threshold"),
                      **ckpt["meta"]}}, indent=2))
     print(f"wrote {out} ({out.stat().st_size / 1e6:.1f} MB), model {r['model']}, "
           f"threshold {ckpt['threshold']:.3f}, sha256 {digest[:12]}")

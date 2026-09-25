@@ -53,6 +53,11 @@ Flow + packet features → 92-dimensional state every 10 s → world model → r
 * **Unseen attack families** (7 leave-one-out tests): hybrid **0.78** vs LR 0.57, winning 7/7. The world model alone beats gradient boosting on 6/7.
 * **Explanations are faithful:** deleting the top-5 attributed features lowers risk **500×** more than deleting random ones.
 
+**Predicting before compromise (real held-out attacks, two-level alerts):**
+* **25% of real attacks warned before they started**, median about 3.5 min ahead. Standard detectors (gradient boosting, logistic regression) warn about 0%.
+* Cost: early warnings on 1.5% of quiet benign windows (about 3 an hour on this traffic).
+* Example on screen: a Heartbleed exploit at 18:12. The early warning fires at 18:09 and "attack in progress" at 18:11.
+
 ---
 
 ## Slide 4: Why the numbers can be trusted
@@ -70,6 +75,7 @@ Flow + packet features → 92-dimensional state every 10 s → world model → r
 
 ## Slide 5: Decision support and deployment
 
+* **Two alert levels:** ⚠️ *early warning* (the world model forecasts a compromise within 5 minutes) and 🔴 *attack in progress* (hybrid detector).
 * **Console (offline Streamlit):** risk timeline, simulated-future fan, kill-chain progress, driving features in native units, host attribution with flagged flows, and ATT&CK + D3FEND cards.
 * **Next-stage prediction on kill-chain campaigns:** about 50% vs 14% for a count-based Markov rule. No classifier can do this at all.
 * **Deployment:** `uv sync && kcwm serve`, CPU only, a 4 MB model; a 2-hour, 334k-flow capture analysed in under a minute.

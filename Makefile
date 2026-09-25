@@ -35,7 +35,7 @@ kb:               ## rebuild the offline ATT&CK/D3FEND subset (needs network onc
 	$(PY) scripts/fetch_kb.py
 
 demo:             ## offline forecast on the bundled sample
-	$(K) forecast samples/cic17_thursday_infiltration.csv.gz --internal 192.168.10.0/24
+	$(K) forecast samples/cic17_wednesday_heartbleed.csv.gz --internal 192.168.10.0/24
 
 serve:            ## operator console on http://localhost:8501
 	$(K) serve

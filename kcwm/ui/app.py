@@ -75,9 +75,17 @@ def timeline_chart(a, sel_time):
         fig.add_trace(go.Scatter(x=t["time"], y=t["detector_risk"], name="detector (gradient boosting)",
                                  line=dict(color="#9aa5b1", width=1, dash="dot")))
     fig.add_hline(y=a.threshold, line_dash="dot", line_color="#555", annotation_text="alert threshold")
-    al = t[t["alert"]]
-    fig.add_trace(go.Scatter(x=al["time"], y=al["risk"], mode="markers", name="alert",
-                             marker=dict(color="#d9534f", size=5, symbol="triangle-up")))
+    if "level" in t:
+        ew = t[t["level"] == 1]
+        fig.add_trace(go.Scatter(x=ew["time"], y=[1.0] * len(ew), mode="markers", name="EARLY WARNING (attack forecast)",
+                                 marker=dict(color="#f2a33a", size=7, symbol="diamond")))
+        ip = t[t["level"] == 2]
+        fig.add_trace(go.Scatter(x=ip["time"], y=ip["risk"], mode="markers", name="ATTACK IN PROGRESS",
+                                 marker=dict(color="#d9534f", size=5, symbol="triangle-up")))
+    else:
+        al = t[t["alert"]]
+        fig.add_trace(go.Scatter(x=al["time"], y=al["risk"], mode="markers", name="alert",
+                                 marker=dict(color="#d9534f", size=5, symbol="triangle-up")))
     if a.has_labels:
         lab = t[t["stage_now"] > 0]
         fig.add_trace(go.Scatter(x=lab["time"], y=[-0.06] * len(lab), mode="markers", name="ground truth (labels)",
@@ -108,11 +116,14 @@ def main():
     b = get_bundle(bundle_path)
     t = a.windows
     scored = t.filter(pl.col("risk").is_not_nan())
-    c1, c2, c3, c4 = st.columns(4)
+    c1, c2, c3, c4, c5 = st.columns(5)
     c1.metric("Flows", f"{a.flows.height:,}")
     c2.metric("Windows (10 s)", f"{t.height:,}")
     c3.metric("Peak risk", f"{np.nanmax(t['risk'].to_numpy()):.0%}" if scored.height else "n/a")
-    c4.metric("Alert windows", int(t["alert"].sum()))
+    c4.metric("Early warnings", int((t["level"] == 1).sum()) if "level" in t.columns else "n/a",
+              help="Level 1: the world model forecasts a compromise within 5 minutes while nothing is detected yet")
+    c5.metric("Attack-in-progress windows", int((t["level"] == 2).sum()) if "level" in t.columns else int(t["alert"].sum()),
+              help="Level 2: hybrid detector + world model above the calibrated threshold")
     if scored.height == 0:
         st.warning(f"Capture too short: the model needs {b.context} windows ({b.context * 10 // 60} min) of history.")
         return
@@ -123,6 +134,13 @@ def main():
                          format_func=lambda x: str(t.filter(pl.col("window") == x)["time"][0]))
     row = t.filter(pl.col("window") == w)
     i = int(np.flatnonzero(t["window"].to_numpy() == w)[0])
+    lvl = int(row["level"][0]) if "level" in row.columns else (2 if bool(row["alert"][0]) else 0)
+    if lvl == 2:
+        st.error(f"ATTACK IN PROGRESS at {row['time'][0]}: risk {row['risk'][0]:.0%}")
+    elif lvl == 1:
+        st.warning(f"EARLY WARNING at {row['time'][0]}: the world model forecasts a compromise within 5 minutes")
+    else:
+        st.success(f"No alert at {row['time'][0]}")
     st.plotly_chart(timeline_chart(a, row["time"][0]), width="stretch")
 
     left, right = st.columns([1.1, 1])

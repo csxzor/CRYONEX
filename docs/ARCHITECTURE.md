@@ -75,6 +75,14 @@ data because the two are complementary:
 * the detector separates networks by risk level;
 * the world model discriminates better within a network and on unseen attacks.
 
+**Two alert levels.**
+* ⚠️ *Early warning* fires when the world model's own forecast crosses a threshold set on
+  quiet benign calibration windows (3% budget). The world model carries the early signal;
+  the detector does not.
+* 🔴 *Attack in progress* fires on the hybrid score.
+
+The policy was chosen after the final test read and is reported as post-hoc.
+
 ## 4. Evaluation design (why the numbers can be trusted)
 
 * **Temporal, purged splits.** Each session is cut 60/15/25. No training horizon reaches
@@ -112,10 +120,10 @@ data because the two are complementary:
 
 ## 6. Honest limits
 
-* **No model warns before a real attack in these public datasets.** On real pre-compromise
-  windows, early-warning AUPRC stays at the base rate for every model. The attacks were
-  scheduled with no precursors. Early warning is shown only on real-traffic kill-chain
-  campaigns (P4), which are labelled as such.
+* **Early warning is partial.** On the final test, the two-level alerts warned 25% of real
+  attacks before they began (median about 3.5 min). Most attacks in public datasets were
+  launched on a schedule with no precursors, and nothing in the traffic can predict them.
+  Standard detectors (gradient boosting, logistic regression) warn about 0% in advance.
 * **New networks need a short calibration.** Ranking transfers partially (CIC-2017,
   CIC-2018), but alert thresholds do not transfer, and no model transfers to CTU-13.
 * **Near-idle networks** (DAPT2020: 49% empty windows, median 1 flow) remain hard for every

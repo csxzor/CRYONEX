@@ -11,6 +11,8 @@ Test anchors: 30,980 windows (positive rate 0.326), horizon 30 windows (5 min), 
 | Logistic regression (PS-required baseline) | 0.650 ± 0.000 | 0.726 ± 0.000 | 0.832 ± 0.000 | 0.363 ± 0.000 | 0.505 ± 0.000 | 0.036 ± 0.000 | 0.442 ± 0.000 | 0.193 ± 0.000 |
 | Logistic regression, last 6 windows | 0.726 ± 0.000 | 0.766 ± 0.000 | 0.929 ± 0.000 | 0.459 ± 0.000 | 0.614 ± 0.000 | 0.017 ± 0.000 | 0.465 ± 0.000 | 0.168 ± 0.000 |
 | Gradient boosting | 0.767 ± 0.004 | 0.826 ± 0.004 | 0.786 ± 0.013 | 0.529 ± 0.002 | 0.632 ± 0.004 | 0.070 ± 0.006 | 0.514 ± 0.001 | 0.190 ± 0.006 |
+| LSTM classifier | 0.769 ± 0.010 | 0.867 ± 0.008 | 0.818 ± 0.031 | 0.441 ± 0.025 | 0.572 ± 0.013 | 0.048 ± 0.013 | 0.517 ± 0.025 | 0.206 ± 0.023 |
+| Transformer classifier (same backbone, no dynamics) | 0.815 ± 0.020 | 0.876 ± 0.019 | 0.984 ± 0.013 | 0.262 ± 0.099 | 0.403 ± 0.123 | 0.003 ± 0.002 | 0.476 ± 0.024 | 0.150 ± 0.018 |
 | KC-WM world model alone | 0.820 ± 0.006 | 0.859 ± 0.010 | 0.861 ± 0.063 | 0.614 ± 0.072 | 0.711 ± 0.034 | 0.052 ± 0.029 | 0.516 ± 0.031 | 0.159 ± 0.023 |
 | **KC-WM hybrid (deployed)** | 0.847 ± 0.007 | 0.878 ± 0.008 | 0.894 ± 0.075 | 0.620 ± 0.077 | 0.725 ± 0.025 | 0.042 ± 0.037 | 0.552 ± 0.011 | 0.118 ± 0.001 |
 
@@ -25,8 +27,20 @@ The early-warning subset is windows with no compromise in the previous 5 minutes
 | Logistic regression (PS-required baseline) | 0.071 ± 0.000 | 0.079 | 0/216 | 0.000 ± 0.000 |
 | Logistic regression, last 6 windows | 0.088 ± 0.000 | 0.079 | 3/216 | 1.000 ± 0.000 |
 | Gradient boosting | 0.091 ± 0.002 | 0.079 | 1/216 | 0.333 ± 0.471 |
+| LSTM classifier | 0.242 ± 0.044 | 0.079 | 36/216 | 24.500 ± 4.491 |
+| Transformer classifier (same backbone, no dynamics) | 0.174 ± 0.016 | 0.079 | 0/144 | 0.000 ± 0.000 |
 | KC-WM world model alone | 0.225 ± 0.012 | 0.079 | 51/216 | 24.333 ± 8.014 |
 | **KC-WM hybrid (deployed)** | 0.183 ± 0.020 | 0.079 | 29/216 | 3.833 ± 3.009 |
+
+### Two-level alerts (deployed policy; chosen after the test read, so post-hoc)
+
+Level 1 **early warning**: the world model's forecast >= a threshold set on *quiet benign calibration windows* at a 3% budget, sustained 2 windows. Level 2 **attack in progress**: the hybrid score >= its calibrated threshold. Thresholds are from calibration only; the test numbers below use the scores saved by the final run (no retraining).
+
+| | Two-level policy | Hybrid alerts only |
+|---|---|---|
+| Real attacks warned before they started (3 seeds) | **51/207** | 29/207 |
+| Median warning time | 3.5 min | n/a |
+| Early warnings on quiet benign windows | 1.5% (~3.4 per hour) | n/a |
 
 ## 2. Stage forecasting (G5)
 
@@ -46,6 +60,8 @@ Real attack snippets from the test span, injected in ATT&CK order into real beni
 | Logistic regression (PS-required baseline) | 0.243 ± 0.000 | 0.085 ± 0.000 (0.087) | 0/198 | 0.000 ± 0.000 | 0.036 ± 0.000 |
 | Logistic regression, last 6 windows | 0.296 ± 0.000 | 0.106 ± 0.000 (0.087) | 12/198 | 4.000 ± 0.000 | 0.070 ± 0.000 |
 | Gradient boosting | 0.290 ± 0.003 | 0.112 ± 0.002 (0.087) | 0/198 | 0.000 ± 0.000 | 0.027 ± 0.003 |
+| LSTM classifier | 0.328 ± 0.041 | 0.140 ± 0.011 (0.087) | 5/198 | 6.000 ± 4.320 | 0.011 ± 0.008 |
+| Transformer classifier (same backbone, no dynamics) | 0.287 ± 0.009 | 0.141 ± 0.026 (0.087) | 1/132 | 0.500 ± 0.500 | 0.002 ± 0.002 |
 | KC-WM world model alone | 0.344 ± 0.022 | 0.148 ± 0.010 (0.087) | 14/198 | 8.000 ± 4.950 | 0.039 ± 0.028 |
 | **KC-WM hybrid (deployed)** | 0.347 ± 0.009 | 0.143 ± 0.010 (0.087) | 6/198 | 0.500 ± 0.707 | 0.028 ± 0.020 |
 

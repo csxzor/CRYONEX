@@ -164,3 +164,8 @@
 {"protocol": "final-p1", "name": "hybrid-s17", "path": "/home/csxzor/Desktop/26153/results/final-p1/hybrid-s17.json", "written": "2026-09-25 13:45:38"}
 {"protocol": "final-p1", "name": "hybrid-s23", "path": "/home/csxzor/Desktop/26153/results/final-p1/hybrid-s23.json", "written": "2026-09-25 13:45:42"}
 {"protocol": "final-p1", "name": "hybrid-s29", "path": "/home/csxzor/Desktop/26153/results/final-p1/hybrid-s29.json", "written": "2026-09-25 13:45:47"}
+{"protocol": "final-p1", "name": "lstm-s17", "path": "/home/csxzor/Desktop/26153/results/final-p1/lstm-s17.json", "written": "2026-09-25 14:01:46"}
+{"protocol": "final-p1", "name": "lstm-s23", "path": "/home/csxzor/Desktop/26153/results/final-p1/lstm-s23.json", "written": "2026-09-25 14:15:55"}
+{"protocol": "final-p1", "name": "lstm-s29", "path": "/home/csxzor/Desktop/26153/results/final-p1/lstm-s29.json", "written": "2026-09-25 14:32:51"}
+{"protocol": "final-p1", "name": "transformer_clf-s17", "path": "/home/csxzor/Desktop/26153/results/final-p1/transformer_clf-s17.json", "written": "2026-09-25 15:25:29"}
+{"protocol": "final-p1", "name": "transformer_clf-s23", "path": "/home/csxzor/Desktop/26153/results/final-p1/transformer_clf-s23.json", "written": "2026-09-25 16:17:59"}

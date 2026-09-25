@@ -31,7 +31,8 @@ def load(d: Path) -> dict[str, list[dict]]:
     out = defaultdict(list)
     for f in sorted(d.glob("*.json")):
         r = json.loads(f.read_text())
-        out[r["model"]].append(r)
+        if "model" in r:  # skip policy files such as two_level.json
+            out[r["model"]].append(r)
     return out
 
 
@@ -89,6 +90,21 @@ def final_section(lines: list[str]) -> None:
                      f"{rs[0]['early_warning']['base_rate']:.3f} | "
                      f"{sum(x['warned_before'] for x in lt)}/{sum(x['n_onsets'] for x in lt)} | "
                      f"{ms(x['median_lead_windows'] for x in lt)} |")
+    tl = R / "final-p1" / "two_level.json"
+    if tl.exists():
+        t = json.loads(tl.read_text())
+        s = t["summary"]
+        lines += ["", "### Two-level alerts (deployed policy; chosen after the test read, so post-hoc)", "",
+                  "Level 1 **early warning**: the world model's forecast >= a threshold set on *quiet benign "
+                  "calibration windows* at a 3% budget, sustained 2 windows. Level 2 **attack in progress**: "
+                  "the hybrid score >= its calibrated threshold. Thresholds are from calibration only; the test "
+                  "numbers below use the scores saved by the final run (no retraining).", "",
+                  "| | Two-level policy | Hybrid alerts only |", "|---|---|---|",
+                  f"| Real attacks warned before they started (3 seeds) | **{s['onsets_warned_two_level']}/{s['onsets_total']}** | "
+                  f"{s['onsets_warned_hybrid_only']}/{s['onsets_total']} |",
+                  f"| Median warning time | {s['median_lead_windows'] * 10 / 60:.1f} min | n/a |",
+                  f"| Early warnings on quiet benign windows | {s['early_warning_false_rate']:.1%} "
+                  f"(~{s['false_early_warnings_per_hour']:.1f} per hour) | n/a |"]
     k = res.get("kcwm", [])
     if k and k[0].get("stages"):
         lines += ["", "## 2. Stage forecasting (G5)", "",

@@ -1,8 +1,9 @@
 {
   "kcwm.pt": {
-    "sha256": "2b4af845353e57a772cc4deb06b36dafa48300a8bcf2abfb6529cd4e7e0ee761",
-    "bytes": 4074809,
+    "sha256": "77cf98a11e47cc2b8fbb91379e9227fc24687ac91794606b32aedf083b9c848f",
+    "bytes": 4074873,
     "threshold": 0.5043676246950364,
+    "early_warning_threshold": 0.7150746846199035,
     "model": "hybrid",
     "source_result": "results/final-p1/hybrid-s17.json",
     "source_checkpoint": "/home/csxzor/Desktop/26153/runs/final-p1/kcwm-s17.pt",

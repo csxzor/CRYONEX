@@ -51,6 +51,8 @@ class Bundle:
     # window, Platt-calibrated, averaged with the Platt-calibrated world-model rollout risk.
     hgb: object | None = None
     hybrid: dict | None = None
+    # Level-1 early warning: raw world-model rollout risk at or above this (scripts/two_level.py).
+    early_warning_threshold: float | None = None
 
     @property
     def context(self) -> int:
@@ -75,7 +77,8 @@ def load_bundle(path: str | Path) -> Bundle:
     return Bundle(model=model, scaler=RobustScaler.from_dict(ckpt["scaler"]), binner=binner, cfg=c,
                   mode=ckpt.get("mode", "global"), threshold=float(ckpt.get("threshold", 0.5)),
                   calibrator=ckpt.get("calibrator"), meta=ckpt.get("meta", {}),
-                  hgb=ckpt.get("hgb"), hybrid=ckpt.get("hybrid"))
+                  hgb=ckpt.get("hgb"), hybrid=ckpt.get("hybrid"),
+                  early_warning_threshold=ckpt.get("early_warning_threshold"))
 
 
 def default_bundle() -> str | None:
@@ -222,11 +225,18 @@ def analyze(path: str | Path, bundle: Bundle, *, internal_cidrs: list[str] | Non
     from ..eval.metrics import sustained
 
     sus = sustained(alert, session, int(cfg["alert"]["hysteresis"]))
+    # Two-level alerts: 2 = attack in progress (hybrid), 1 = early warning (world model forecast
+    # that a compromise is coming, while nothing is detected yet), 0 = normal.
+    level = np.where(sus, 2, 0)
+    if bundle.early_warning_threshold is not None:
+        raw = np.nan_to_num(p_infil[:, K - 1], nan=-np.inf)
+        ew = sustained(raw >= bundle.early_warning_threshold, session, int(cfg["alert"]["hysteresis"]))
+        level = np.where((level == 0) & ew, 1, level)
     timeline = win.select(
         "window", "t", "session", "pos_in_session", "n_flows", "n_attack_flows", "stage_now",
         "family_now", "warmup",
     ).with_columns(
-        pl.Series("risk", risk), pl.Series("alert", sus),
+        pl.Series("risk", risk), pl.Series("alert", sus), pl.Series("level", level.astype(np.int8)),
         pl.Series("wm_risk", wm_risk), pl.Series("detector_risk", hgb_risk),
         pl.Series("nowcast_stage", now_stage), pl.Series("progress", progress),
         pl.Series("heading_to", np.where(np.isnan(risk), -1, horizon_stage)),
@@ -247,6 +257,8 @@ def summary(a: Analysis) -> dict:
         "format": a.fmt, "windows": t.height, "flows": a.flows.height,
         "scored_windows": int(t["risk"].is_not_nan().sum()),
         "alert_windows": int(alerts.height),
+        "early_warning_windows": int((t["level"] == 1).sum()),
+        "first_early_warning": str(t.filter(pl.col("level") == 1)["time"].min()) if (t["level"] == 1).any() else None,
         "first_alert": str(first) if first is not None else None,
         "max_risk": float(np.nanmax(t["risk"].to_numpy())) if t.height else float("nan"),
         "labelled_attack_windows": int((t["stage_now"] > 0).sum()) if a.has_labels else None,

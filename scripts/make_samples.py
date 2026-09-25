@@ -8,6 +8,7 @@ it forecasts. The console ingests them exactly like a user upload.
 | file | real events inside |
 |---|---|
 | cic17_friday_scan_ddos.csv.gz | port-scan restart 18:21, DDoS 18:56 (UTC) |
+| cic17_wednesday_heartbleed.csv.gz | Heartbleed exploit 18:12 (early warning ~5 min before, release model) |
 | dapt_friday_exfiltration.csv.gz | data exfiltration 20:33, 20:40 |
 | dapt_wednesday_foothold.csv.gz | repeated foothold attempts from 21:08 |
 | ctu13_s04_c2_ddos.binetflow.gz | bot C2 and DDoS from 14:27 |
@@ -47,6 +48,8 @@ def main() -> None:
     cic = config.dataset_dir("cicids2017")
     slice_csv(cic / "friday.csv", "2017-07-07 17:30", "2017-07-07 19:30",
               "cic17_friday_scan_ddos.csv.gz", ts_col="Timestamp")
+    slice_csv(cic / "wednesday.csv", "2017-07-05 17:30", "2017-07-05 18:40",
+              "cic17_wednesday_heartbleed.csv.gz", ts_col="Timestamp")
     dapt = config.dataset_dir("dapt2020") / "csv"
     slice_csv(dapt / "enp0s3-tcpdump-friday.pcap_Flow.csv", "2019-07-19 19:40", "2019-07-19 21:10",
               "dapt_friday_exfiltration.csv.gz", ts_col="Timestamp")

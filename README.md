@@ -5,6 +5,7 @@
 KC-WM learns how a network's state evolves from flow- and packet-level traffic, and
 simulates its next 5 minutes. For every 10-second window it reports:
 
+* two alert levels: ⚠️ **early warning** (a compromise is forecast within 5 minutes) and 🔴 **attack in progress**;
 * the **probability of an infiltration** within the next 5 minutes;
 * the **MITRE ATT&CK stage** the network is in and heading into;
 * **why**: the driving flags, ports and timing features, the moments that mattered, and the
@@ -21,7 +22,7 @@ It runs **fully offline on a CPU laptop**, from a PCAP or a flow CSV.
 
 ```bash
 uv sync --all-extras                     # Python 3.12, CPU-only PyTorch (https://docs.astral.sh/uv/)
-uv run kcwm forecast samples/cic17_friday_scan_ddos.csv.gz --internal 192.168.10.0/24
+uv run kcwm forecast samples/cic17_wednesday_heartbleed.csv.gz --internal 192.168.10.0/24
 uv run kcwm serve                        # operator console at http://localhost:8501
 ```
 
@@ -30,6 +31,7 @@ The samples in `samples/` are real traffic that the model was **not trained on**
 
 | Sample | What is in it |
 |---|---|
+| `cic17_wednesday_heartbleed.csv.gz` | CIC-IDS2017: Heartbleed exploit at 18:12 UTC; early warning at 18:09 |
 | `cic17_friday_scan_ddos.csv.gz` | CIC-IDS2017: botnet C2, a port scan (18:21 UTC) and a DDoS (18:56) |
 | `ctu13_s04_c2_ddos.binetflow.gz` | CTU-13 scenario 4: botnet C2, then UDP/ICMP DDoS |
 | `dapt_friday_exfiltration.csv.gz` | DAPT2020: data exfiltration (20:33, 20:40) |
