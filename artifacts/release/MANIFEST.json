@@ -1,0 +1,21 @@
+{
+  "kcwm.pt": {
+    "sha256": "2b4af845353e57a772cc4deb06b36dafa48300a8bcf2abfb6529cd4e7e0ee761",
+    "bytes": 4074809,
+    "threshold": 0.5043676246950364,
+    "model": "hybrid",
+    "source_result": "results/final-p1/hybrid-s17.json",
+    "source_checkpoint": "/home/csxzor/Desktop/26153/runs/final-p1/kcwm-s17.pt",
+    "auprc": 0.8381903539411693,
+    "fpr_budget": 0.03,
+    "datasets": [
+      "cicids2017",
+      "cicids2018",
+      "ctu13",
+      "dapt2020"
+    ],
+    "mode": "warmup",
+    "campaigns": true,
+    "dev": false
+  }
+}

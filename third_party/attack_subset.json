@@ -1,0 +1,457 @@
+{
+ "source": "enterprise-attack.json",
+ "tactics": {
+  "TA0006": {
+   "name": "Credential Access",
+   "shortname": "credential-access",
+   "url": "https://attack.mitre.org/tactics/TA0006",
+   "description": "The adversary is trying to steal account names and passwords."
+  },
+  "TA0112": {
+   "name": "Defense Impairment",
+   "shortname": "defense-impairment",
+   "url": "https://attack.mitre.org/tactics/TA0112",
+   "description": "The adversary is trying to break security mechanisms, pipelines, and tooling so defenders can\u2019t see or trust what\u2019s happening."
+  },
+  "TA0002": {
+   "name": "Execution",
+   "shortname": "execution",
+   "url": "https://attack.mitre.org/tactics/TA0002",
+   "description": "The adversary is trying to run malicious code."
+  },
+  "TA0040": {
+   "name": "Impact",
+   "shortname": "impact",
+   "url": "https://attack.mitre.org/tactics/TA0040",
+   "description": "The adversary is trying to manipulate, interrupt, or destroy your systems and data."
+  },
+  "TA0003": {
+   "name": "Persistence",
+   "shortname": "persistence",
+   "url": "https://attack.mitre.org/tactics/TA0003",
+   "description": "The adversary is trying to maintain their foothold."
+  },
+  "TA0004": {
+   "name": "Privilege Escalation",
+   "shortname": "privilege-escalation",
+   "url": "https://attack.mitre.org/tactics/TA0004",
+   "description": "The adversary is trying to gain higher-level permissions."
+  },
+  "TA0008": {
+   "name": "Lateral Movement",
+   "shortname": "lateral-movement",
+   "url": "https://attack.mitre.org/tactics/TA0008",
+   "description": "The adversary is trying to move through your environment."
+  },
+  "TA0005": {
+   "name": "Stealth",
+   "shortname": "stealth",
+   "url": "https://attack.mitre.org/tactics/TA0005",
+   "description": "The adversary is trying to hide and conceal their actions, appearing as normal behavior."
+  },
+  "TA0010": {
+   "name": "Exfiltration",
+   "shortname": "exfiltration",
+   "url": "https://attack.mitre.org/tactics/TA0010",
+   "description": "The adversary is trying to steal data."
+  },
+  "TA0007": {
+   "name": "Discovery",
+   "shortname": "discovery",
+   "url": "https://attack.mitre.org/tactics/TA0007",
+   "description": "The adversary is trying to figure out your environment."
+  },
+  "TA0009": {
+   "name": "Collection",
+   "shortname": "collection",
+   "url": "https://attack.mitre.org/tactics/TA0009",
+   "description": "The adversary is trying to gather data of interest to their goal."
+  },
+  "TA0042": {
+   "name": "Resource Development",
+   "shortname": "resource-development",
+   "url": "https://attack.mitre.org/tactics/TA0042",
+   "description": "The adversary is trying to establish resources they can use to support operations."
+  },
+  "TA0043": {
+   "name": "Reconnaissance",
+   "shortname": "reconnaissance",
+   "url": "https://attack.mitre.org/tactics/TA0043",
+   "description": "The adversary is trying to gather information they can use to plan future operations."
+  },
+  "TA0011": {
+   "name": "Command and Control",
+   "shortname": "command-and-control",
+   "url": "https://attack.mitre.org/tactics/TA0011",
+   "description": "The adversary is trying to communicate with compromised systems to control them."
+  },
+  "TA0001": {
+   "name": "Initial Access",
+   "shortname": "initial-access",
+   "url": "https://attack.mitre.org/tactics/TA0001",
+   "description": "The adversary is trying to get into your network."
+  }
+ },
+ "techniques": {
+  "T1071": {
+   "name": "Application Layer Protocol",
+   "url": "https://attack.mitre.org/techniques/T1071",
+   "description": "Adversaries may communicate using OSI application layer protocols to avoid detection/network filtering by blending in with existing traffic. Commands to the remote system, and often the results of those commands, will be embedded within the protocol traffic between the client and server. ",
+   "tactics": [
+    "command-and-control"
+   ],
+   "mitigations": [
+    {
+     "id": "M1031",
+     "name": "Network Intrusion Prevention",
+     "url": "https://attack.mitre.org/mitigations/M1031"
+    },
+    {
+     "id": "M1037",
+     "name": "Filter Network Traffic",
+     "url": "https://attack.mitre.org/mitigations/M1037"
+    }
+   ]
+  },
+  "T1190": {
+   "name": "Exploit Public-Facing Application",
+   "url": "https://attack.mitre.org/techniques/T1190",
+   "description": "Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.",
+   "tactics": [
+    "initial-access"
+   ],
+   "mitigations": [
+    {
+     "id": "M1016",
+     "name": "Vulnerability Scanning",
+     "url": "https://attack.mitre.org/mitigations/M1016"
+    },
+    {
+     "id": "M1026",
+     "name": "Privileged Account Management",
+     "url": "https://attack.mitre.org/mitigations/M1026"
+    },
+    {
+     "id": "M1030",
+     "name": "Network Segmentation",
+     "url": "https://attack.mitre.org/mitigations/M1030"
+    },
+    {
+     "id": "M1035",
+     "name": "Limit Access to Resource Over Network",
+     "url": "https://attack.mitre.org/mitigations/M1035"
+    },
+    {
+     "id": "M1037",
+     "name": "Filter Network Traffic",
+     "url": "https://attack.mitre.org/mitigations/M1037"
+    },
+    {
+     "id": "M1048",
+     "name": "Application Isolation and Sandboxing",
+     "url": "https://attack.mitre.org/mitigations/M1048"
+    },
+    {
+     "id": "M1050",
+     "name": "Exploit Protection",
+     "url": "https://attack.mitre.org/mitigations/M1050"
+    },
+    {
+     "id": "M1051",
+     "name": "Update Software",
+     "url": "https://attack.mitre.org/mitigations/M1051"
+    }
+   ]
+  },
+  "T1021": {
+   "name": "Remote Services",
+   "url": "https://attack.mitre.org/techniques/T1021",
+   "description": "Adversaries may use [Valid Accounts](https://attack.mitre.org/techniques/T1078) to log into a service that accepts remote connections, such as telnet, SSH, and VNC. The adversary may then perform actions as the logged-on user.",
+   "tactics": [
+    "lateral-movement"
+   ],
+   "mitigations": [
+    {
+     "id": "M1018",
+     "name": "User Account Management",
+     "url": "https://attack.mitre.org/mitigations/M1018"
+    },
+    {
+     "id": "M1027",
+     "name": "Password Policies",
+     "url": "https://attack.mitre.org/mitigations/M1027"
+    },
+    {
+     "id": "M1032",
+     "name": "Multi-factor Authentication",
+     "url": "https://attack.mitre.org/mitigations/M1032"
+    },
+    {
+     "id": "M1035",
+     "name": "Limit Access to Resource Over Network",
+     "url": "https://attack.mitre.org/mitigations/M1035"
+    },
+    {
+     "id": "M1042",
+     "name": "Disable or Remove Feature or Program",
+     "url": "https://attack.mitre.org/mitigations/M1042"
+    },
+    {
+     "id": "M1047",
+     "name": "Audit",
+     "url": "https://attack.mitre.org/mitigations/M1047"
+    }
+   ]
+  },
+  "T1595": {
+   "name": "Active Scanning",
+   "url": "https://attack.mitre.org/techniques/T1595",
+   "description": "Adversaries may execute active reconnaissance scans to gather information that can be used during targeting. Active scans are those where the adversary probes victim infrastructure via network traffic, as opposed to other forms of reconnaissance that do not involve direct interaction.",
+   "tactics": [
+    "reconnaissance"
+   ],
+   "mitigations": [
+    {
+     "id": "M1056",
+     "name": "Pre-compromise",
+     "url": "https://attack.mitre.org/mitigations/M1056"
+    }
+   ]
+  },
+  "T1204": {
+   "name": "User Execution",
+   "url": "https://attack.mitre.org/techniques/T1204",
+   "description": "An adversary may rely upon specific actions by a user in order to gain execution. Users may be subjected to social engineering to get them to execute malicious code by, for example, opening a malicious document file or link. These user actions will typically be observed as follow-on behavior from forms of [Phishing](https://attack.mitre.org/techniques/T1566).",
+   "tactics": [
+    "execution"
+   ],
+   "mitigations": [
+    {
+     "id": "M1017",
+     "name": "User Training",
+     "url": "https://attack.mitre.org/mitigations/M1017"
+    },
+    {
+     "id": "M1021",
+     "name": "Restrict Web-Based Content",
+     "url": "https://attack.mitre.org/mitigations/M1021"
+    },
+    {
+     "id": "M1031",
+     "name": "Network Intrusion Prevention",
+     "url": "https://attack.mitre.org/mitigations/M1031"
+    },
+    {
+     "id": "M1033",
+     "name": "Limit Software Installation",
+     "url": "https://attack.mitre.org/mitigations/M1033"
+    },
+    {
+     "id": "M1038",
+     "name": "Execution Prevention",
+     "url": "https://attack.mitre.org/mitigations/M1038"
+    },
+    {
+     "id": "M1040",
+     "name": "Behavior Prevention on Endpoint",
+     "url": "https://attack.mitre.org/mitigations/M1040"
+    }
+   ]
+  },
+  "T1041": {
+   "name": "Exfiltration Over C2 Channel",
+   "url": "https://attack.mitre.org/techniques/T1041",
+   "description": "Adversaries may steal data by exfiltrating it over an existing command and control channel. Stolen data is encoded into the normal communications channel using the same protocol as command and control communications.",
+   "tactics": [
+    "exfiltration"
+   ],
+   "mitigations": [
+    {
+     "id": "M1031",
+     "name": "Network Intrusion Prevention",
+     "url": "https://attack.mitre.org/mitigations/M1031"
+    },
+    {
+     "id": "M1057",
+     "name": "Data Loss Prevention",
+     "url": "https://attack.mitre.org/mitigations/M1057"
+    }
+   ]
+  },
+  "T1048": {
+   "name": "Exfiltration Over Alternative Protocol",
+   "url": "https://attack.mitre.org/techniques/T1048",
+   "description": "Adversaries may steal data by exfiltrating it over a different protocol than that of the existing command and control channel. The data may also be sent to an alternate network location from the main command and control server.  ",
+   "tactics": [
+    "exfiltration"
+   ],
+   "mitigations": [
+    {
+     "id": "M1018",
+     "name": "User Account Management",
+     "url": "https://attack.mitre.org/mitigations/M1018"
+    },
+    {
+     "id": "M1022",
+     "name": "Restrict File and Directory Permissions",
+     "url": "https://attack.mitre.org/mitigations/M1022"
+    },
+    {
+     "id": "M1030",
+     "name": "Network Segmentation",
+     "url": "https://attack.mitre.org/mitigations/M1030"
+    },
+    {
+     "id": "M1031",
+     "name": "Network Intrusion Prevention",
+     "url": "https://attack.mitre.org/mitigations/M1031"
+    },
+    {
+     "id": "M1037",
+     "name": "Filter Network Traffic",
+     "url": "https://attack.mitre.org/mitigations/M1037"
+    },
+    {
+     "id": "M1057",
+     "name": "Data Loss Prevention",
+     "url": "https://attack.mitre.org/mitigations/M1057"
+    }
+   ]
+  },
+  "T1110": {
+   "name": "Brute Force",
+   "url": "https://attack.mitre.org/techniques/T1110",
+   "description": "Adversaries may use brute force techniques to gain access to accounts when passwords are unknown or when password hashes are obtained.(Citation: TrendMicro Pawn Storm Dec 2020) Without knowledge of the password for an account or set of accounts, an adversary may systematically guess the password using a repetitive or iterative mechanism.(Citation: Dragos Crashoverride 2018) Brute forcing passwords can take place via interaction with a service that will check the validity of those credentials or offline against previously acquired credential data, such as password hashes.",
+   "tactics": [
+    "credential-access"
+   ],
+   "mitigations": [
+    {
+     "id": "M1018",
+     "name": "User Account Management",
+     "url": "https://attack.mitre.org/mitigations/M1018"
+    },
+    {
+     "id": "M1027",
+     "name": "Password Policies",
+     "url": "https://attack.mitre.org/mitigations/M1027"
+    },
+    {
+     "id": "M1032",
+     "name": "Multi-factor Authentication",
+     "url": "https://attack.mitre.org/mitigations/M1032"
+    },
+    {
+     "id": "M1036",
+     "name": "Account Use Policies",
+     "url": "https://attack.mitre.org/mitigations/M1036"
+    }
+   ]
+  },
+  "T1571": {
+   "name": "Non-Standard Port",
+   "url": "https://attack.mitre.org/techniques/T1571",
+   "description": "Adversaries may communicate using a protocol and port pairing that are typically not associated. For example, HTTPS over port 8088(Citation: Symantec Elfin Mar 2019) or port 587(Citation: Fortinet Agent Tesla April 2018) as opposed to the traditional port 443. Adversaries may make changes to the standard port used by a protocol to bypass filtering or muddle analysis/parsing of network data.",
+   "tactics": [
+    "command-and-control"
+   ],
+   "mitigations": [
+    {
+     "id": "M1030",
+     "name": "Network Segmentation",
+     "url": "https://attack.mitre.org/mitigations/M1030"
+    },
+    {
+     "id": "M1031",
+     "name": "Network Intrusion Prevention",
+     "url": "https://attack.mitre.org/mitigations/M1031"
+    }
+   ]
+  },
+  "T1499": {
+   "name": "Endpoint Denial of Service",
+   "url": "https://attack.mitre.org/techniques/T1499",
+   "description": "Adversaries may perform Endpoint Denial of Service (DoS) attacks to degrade or block the availability of services to users. Endpoint DoS can be performed by exhausting the system resources those services are hosted on or exploiting the system to cause a persistent crash condition. Example services include websites, email services, DNS, and web-based applications. Adversaries have been observed conducting DoS attacks for political purposes(Citation: FireEye OpPoisonedHandover February 2016) and to support other malicious activities, including distraction(Citation: FSISAC FraudNetDoS September 2012), hacktivism, and extortion.(Citation: Symantec DDoS October 2014)",
+   "tactics": [
+    "impact"
+   ],
+   "mitigations": [
+    {
+     "id": "M1037",
+     "name": "Filter Network Traffic",
+     "url": "https://attack.mitre.org/mitigations/M1037"
+    }
+   ]
+  },
+  "T1496": {
+   "name": "Resource Hijacking",
+   "url": "https://attack.mitre.org/techniques/T1496",
+   "description": "Adversaries may leverage the resources of co-opted systems to complete resource-intensive tasks, which may impact system and/or hosted service availability. ",
+   "tactics": [
+    "impact"
+   ],
+   "mitigations": []
+  },
+  "T1498": {
+   "name": "Network Denial of Service",
+   "url": "https://attack.mitre.org/techniques/T1498",
+   "description": "Adversaries may perform Network Denial of Service (DoS) attacks to degrade or block the availability of targeted resources to users. Network DoS can be performed by exhausting the network bandwidth services rely on. Example resources include specific websites, email services, DNS, and web-based applications. Adversaries have been observed conducting network DoS attacks for political purposes(Citation: FireEye OpPoisonedHandover February 2016) and to support other malicious activities, including distraction(Citation: FSISAC FraudNetDoS September 2012), hacktivism, and extortion.(Citation: Symantec DDoS October 2014)",
+   "tactics": [
+    "impact"
+   ],
+   "mitigations": [
+    {
+     "id": "M1037",
+     "name": "Filter Network Traffic",
+     "url": "https://attack.mitre.org/mitigations/M1037"
+    }
+   ]
+  },
+  "T1046": {
+   "name": "Network Service Discovery",
+   "url": "https://attack.mitre.org/techniques/T1046",
+   "description": "Adversaries may attempt to get a listing of services running on remote hosts and local network infrastructure devices, including those that may be vulnerable to remote software exploitation. Common methods to acquire this information include port, vulnerability, and/or wordlist scans using tools that are brought onto a system.(Citation: CISA AR21-126A FIVEHANDS May 2021)   ",
+   "tactics": [
+    "discovery"
+   ],
+   "mitigations": [
+    {
+     "id": "M1030",
+     "name": "Network Segmentation",
+     "url": "https://attack.mitre.org/mitigations/M1030"
+    },
+    {
+     "id": "M1031",
+     "name": "Network Intrusion Prevention",
+     "url": "https://attack.mitre.org/mitigations/M1031"
+    },
+    {
+     "id": "M1042",
+     "name": "Disable or Remove Feature or Program",
+     "url": "https://attack.mitre.org/mitigations/M1042"
+    }
+   ]
+  },
+  "T1105": {
+   "name": "Ingress Tool Transfer",
+   "url": "https://attack.mitre.org/techniques/T1105",
+   "description": "Adversaries may transfer tools or other files from an external system into a compromised environment. Tools or files may be copied from an external adversary-controlled system to the victim network through the command and control channel or through alternate protocols such as [ftp](https://attack.mitre.org/software/S0095). Once present, adversaries may also transfer/spread tools between victim devices within a compromised environment (i.e. [Lateral Tool Transfer](https://attack.mitre.org/techniques/T1570)). ",
+   "tactics": [
+    "command-and-control"
+   ],
+   "mitigations": [
+    {
+     "id": "M1031",
+     "name": "Network Intrusion Prevention",
+     "url": "https://attack.mitre.org/mitigations/M1031"
+    },
+    {
+     "id": "M1037",
+     "name": "Filter Network Traffic",
+     "url": "https://attack.mitre.org/mitigations/M1037"
+    }
+   ]
+  }
+ },
+ "missing": []
+}

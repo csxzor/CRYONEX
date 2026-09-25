@@ -1,0 +1,95 @@
+# Dataset label -> attack family -> kill-chain stage (MITRE ATT&CK tactic) -> technique.
+#
+# The single auditable place where ground-truth stage labels are defined. It is data, not
+# code: a reviewer can check every mapping decision without reading Python, and a disputed
+# mapping changes here without touching the pipeline. Unmapped labels fail loudly.
+#
+# Stage order IS the kill-chain order used for progress p_t (ATT&CK matrix order) and is part
+# of the saved-model contract: append only, never reorder.
+
+stages:
+  Benign:            {index: 0, attack_id: null,   description: No adversary activity observed.}
+  Reconnaissance:    {index: 1, attack_id: TA0043, description: Scanning and service discovery from outside.}
+  InitialAccess:     {index: 2, attack_id: TA0001, description: Credential brute force, exploitation of exposed services, user-executed payloads.}
+  LateralMovement:   {index: 3, attack_id: TA0008, description: Discovery and movement between internal hosts after a foothold.}
+  CommandAndControl: {index: 4, attack_id: TA0011, description: Beaconing to, and tasking from, attacker infrastructure.}
+  Exfiltration:      {index: 5, attack_id: TA0010, description: Bulk outbound transfer of collected data.}
+  Impact:            {index: 6, attack_id: TA0040, description: Denial of service and abuse of victim resources.}
+
+# Stages that count as "infiltration / compromise progression" for P_infil.
+compromise_stages: [InitialAccess, LateralMovement, CommandAndControl, Exfiltration, Impact]
+
+# --- CIC-IDS2017 / CSE-CIC-IDS2018 corrected releases (Engelen et al. 2021; Liu et al. 2022) --
+# "<label> - Attempted" resolves like "<label>" and is flagged `attempted` (an ablation).
+# Matching is case-, dash- and whitespace-insensitive.
+cicids:
+  BENIGN: {family: Benign, stage: Benign, aliases: [Benign, normal]}
+
+  Portscan:
+    family: PortScan
+    stage: Reconnaissance
+    technique: T1046
+    aliases: [PortScan, Port Scan]
+
+  FTP-Patator:   {family: BruteForce, stage: InitialAccess, technique: T1110, aliases: [FTP-BruteForce, FTP Patator]}
+  SSH-Patator:   {family: BruteForce, stage: InitialAccess, technique: T1110, aliases: [SSH-BruteForce, SSH-Bruteforce, SSH Patator]}
+  "Web Attack - Brute Force": {family: WebAttack, stage: InitialAccess, technique: T1110, aliases: ["Brute Force -Web"]}
+  "Web Attack - XSS":         {family: WebAttack, stage: InitialAccess, technique: T1190, aliases: ["Brute Force -XSS"]}
+  "Web Attack - SQL Injection": {family: WebAttack, stage: InitialAccess, technique: T1190, aliases: ["Web Attack - SQL", "SQL Injection"]}
+  Heartbleed:    {family: Heartbleed, stage: InitialAccess, technique: T1190}
+
+  # CIC-IDS2017 Thursday: the only real multi-stage chain in CIC. The corrected release splits
+  # it: the victim's internal port scan is discovery toward lateral movement; the
+  # victim<->attacker session is the C2 channel; failed attempts are initial-access tries.
+  # A "Portscan" flow from an EXTERNAL source is re-staged as Reconnaissance by
+  # features.build.refine_stages (lateral movement is internal-to-internal by definition).
+  "Infiltration - Portscan":   {family: Infiltration, stage: LateralMovement, technique: T1046}
+  Infiltration:                {family: Infiltration, stage: CommandAndControl, technique: T1071, aliases: [Infilteration]}
+  # An exact key beats the generic "- Attempted" stripping, so this does not resolve as C2.
+  "Infiltration - Attempted":  {family: Infiltration, stage: InitialAccess, technique: T1204}
+  "Infiltration - Dropbox download": {family: Infiltration, stage: InitialAccess, technique: T1204}
+  "Infiltration - Cool disk - MAC":  {family: Infiltration, stage: InitialAccess, technique: T1204}
+
+  Botnet:        {family: Botnet, stage: CommandAndControl, technique: T1071, aliases: [Bot, "Botnet Ares"]}
+
+  "DoS Hulk":         {family: DoS, stage: Impact, technique: T1499, aliases: [DoS-Hulk, DoS attacks-Hulk]}
+  "DoS GoldenEye":    {family: DoS, stage: Impact, technique: T1499, aliases: [DoS-GoldenEye, DoS attacks-GoldenEye]}
+  "DoS Slowloris":    {family: DoS, stage: Impact, technique: T1499, aliases: [DoS-Slowloris, DoS attacks-Slowloris]}
+  "DoS Slowhttptest": {family: DoS, stage: Impact, technique: T1499, aliases: [DoS attacks-SlowHTTPTest]}
+  DDoS:
+    family: DDoS
+    stage: Impact
+    technique: T1498
+    aliases: ["DDoS attacks-LOIC-HTTP", "DDOS attack-LOIC-UDP", "DDOS attack-HOIC", "DDoS-LOIC-UDP", "DDoS-LOIC-HTTP", "DDoS LOIT"]
+
+# --- CTU-13 (Argus binetflow; Garcia et al. 2014) ------------------------------------------
+# Labels look like "flow=From-Botnet-V42-TCP-CC73-Not-Encrypted". Only Botnet flows are
+# attacks; "Normal" and "Background" are benign. A botnet flow is classified by the tokens of
+# its label (split on "-") with the first matching rule winning. `scenarios` limits a rule to
+# the captures whose README documents that activity (DDoS: 4, 10, 11; port scan: 3, 5, 6, 8,
+# 9, 12, 13 per the CTU-13 scenario table).
+ctu13:
+  benign_patterns: [normal, background]
+  botnet_pattern: botnet
+  # `tokens`: match when any label token equals one of these. `token_prefixes`: match a token
+  # made of the prefix followed by digits (CC73, CC106 ... are numbered C&C channels).
+  rules:
+    - {name: spam,        tokens: [spam, smtp],  family: Spam, stage: Impact, technique: T1496}
+    - {name: click_fraud, tokens: [ad],          family: ClickFraud, stage: Impact, technique: T1496}
+    - {name: c2,          tokens: [irc, p2p], token_prefixes: [cc], family: Botnet, stage: CommandAndControl, technique: T1071}
+    - {name: dns,         tokens: [dns],         family: Botnet, stage: CommandAndControl, technique: T1071}
+    - {name: ddos,        tokens: [icmp, udp], scenarios: [4, 10, 11], family: DDoS, stage: Impact, technique: T1498}
+    - {name: scan,        tokens: [attempt], scenarios: [3, 5, 6, 8, 9, 12, 13], family: PortScan, stage: Reconnaissance, technique: T1046}
+    - {name: download,    tokens: [binary],      family: Botnet, stage: CommandAndControl, technique: T1105}
+  default: {family: Botnet, stage: CommandAndControl, technique: T1071}
+
+# --- DAPT2020 (Myneni et al. 2020): the `Stage` column already names the APT phase ---------
+dapt2020:
+  Benign:                  {family: Benign, stage: Benign, aliases: [BENIGN, Normal]}
+  Reconnaissance:          {family: APT-Recon, stage: Reconnaissance, technique: T1595}
+  "Establish Foothold":    {family: APT-Foothold, stage: InitialAccess, technique: T1190, aliases: ["Establish Foothold ", Foothold, "Establishing Foothold"]}
+  "Lateral Movement":      {family: APT-Lateral, stage: LateralMovement, technique: T1021, aliases: [LateralMovement]}
+  "Data Exfiltration":     {family: APT-Exfil, stage: Exfiltration, technique: T1041, aliases: [Exfiltration, DataExfiltration]}
+
+# Families held out one at a time by leave-one-family-out (P2). Benign is never held out.
+lofo_families: [PortScan, BruteForce, WebAttack, DoS, DDoS, Botnet, Infiltration]

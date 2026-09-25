@@ -1,0 +1,88 @@
+{
+  "protocol": "g0-v1repro",
+  "name": "logreg-s17",
+  "written": "2026-09-24 18:16:56",
+  "model": "logreg",
+  "seed": 17,
+  "horizon": 12,
+  "mode": "global",
+  "target": "any",
+  "datasets": [
+    "cicids2017"
+  ],
+  "split": {
+    "train": 8305,
+    "calibration": 2142,
+    "test": 3678,
+    "fit_rows": 8815
+  },
+  "split_notes": {
+    "fractions": [
+      0.6,
+      0.15,
+      0.25
+    ],
+    "horizon": 12,
+    "warmup": 90
+  },
+  "seconds": 5.5,
+  "n_cal": 2142,
+  "n_test": 3618,
+  "test_positive_rate": 0.3322277501381979,
+  "auprc": 0.6824409838477998,
+  "roc_auc": 0.7356601098059525,
+  "auprc_ci": [
+    0.5097234324596394,
+    0.8106256775259516
+  ],
+  "operating_points": {
+    "fpr_0.01": {
+      "metrics": {
+        "precision": 0.9237057220708447,
+        "recall": 0.2820299500831947,
+        "f1": 0.43212237093690253,
+        "fpr": 0.011589403973509934,
+        "auprc": 0.6824409838477998,
+        "roc_auc": 0.7356601098059525,
+        "brier": 0.19598798715622584,
+        "ece": 0.1386307547574991,
+        "threshold": 0.8883092403411865,
+        "positives": 1202,
+        "n": 3618
+      },
+      "lead_time": {
+        "n_onsets": 3,
+        "warned_before": 0,
+        "detected_within": 0,
+        "median_lead_windows": 0.0,
+        "mean_lead_windows": 0.0,
+        "warned_before_frac": 0.0,
+        "detected_frac": 0.0
+      }
+    },
+    "fpr_0.03": {
+      "metrics": {
+        "precision": 0.8537549407114624,
+        "recall": 0.3594009983361065,
+        "f1": 0.505854800936768,
+        "fpr": 0.030629139072847682,
+        "auprc": 0.6824409838477998,
+        "roc_auc": 0.7356601098059525,
+        "brier": 0.19598798715622584,
+        "ece": 0.1386307547574991,
+        "threshold": 0.7939252853393555,
+        "positives": 1202,
+        "n": 3618
+      },
+      "lead_time": {
+        "n_onsets": 3,
+        "warned_before": 0,
+        "detected_within": 0,
+        "median_lead_windows": 0.0,
+        "mean_lead_windows": 0.0,
+        "warned_before_frac": 0.0,
+        "detected_frac": 0.0
+      }
+    }
+  }
+}

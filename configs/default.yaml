@@ -1,0 +1,75 @@
+# KC-WM default configuration. Every experiment config overrides a subset of this file.
+
+paths:
+  # Raw datasets, read-only. v1 (~/Desktop/sih) layout: <data_root>/raw/<dataset>/...
+  # Override with the KCWM_DATA_ROOT environment variable.
+  data_root: ~/Desktop/sih/data
+  # v2 outputs, relative to the repository root unless absolute.
+  processed: data/processed
+  results: results
+  runs: runs
+  release: artifacts/release
+
+window:
+  seconds: 10.0
+  # A capture is split into sessions wherever traffic stops for longer than this.
+  session_gap_seconds: 300.0
+  # First windows of every session: used for label-free normalisation only, never scored.
+  warmup_windows: 90
+  context: 64
+  horizons: [6, 12, 30]
+  primary_horizon: 30
+  # Attack windows separated by at most this many benign windows form one episode.
+  episode_merge_gap: 30
+  # An onset needs at least this many benign windows before it.
+  onset_quiet: 30
+
+split:
+  train: 0.60
+  calibration: 0.15
+  test: 0.25
+  # Keep this fraction of purely benign real training anchors (attack-bearing ones always kept).
+  benign_keep:
+    dapt2020: 0.2
+
+normalise:
+  skip_empty: true   # fit scaler/bins on windows with at least one flow
+
+alert:
+  fpr_budgets: [0.01, 0.03]
+  primary_fpr_budget: 0.03
+  hysteresis: 2
+
+seeds: [17, 23, 29]
+
+datasets:
+  cicids2017:
+    reader: cicids
+    raw: raw/cicids2017
+    files: ["monday.csv", "tuesday.csv", "wednesday.csv", "thursday.csv", "friday.csv"]
+    # 172.16.0.1 is the firewall's NAT address for the external attackers (205.174.165.0/24):
+    # it is an *external* source from the victims' point of view.
+    internal_cidrs: ["192.168.10.0/24"]
+    pcaps:
+      monday.csv: raw/cicids2017/pcaps/Monday-WorkingHours.pcap
+      tuesday.csv: raw/cicids2017/pcaps/Tuesday-WorkingHours.pcap
+      wednesday.csv: raw/cicids2017/pcaps/Wednesday-workingHours.pcap
+      thursday.csv: raw/cicids2017/pcaps/Thursday-WorkingHours.pcap
+      friday.csv: raw/cicids2017/pcaps/Friday-WorkingHours.pcap
+  cicids2018:
+    reader: cicids
+    raw: raw/cicids2018
+    files: ["Wednesday-14-02-2018.csv", "Friday-16-02-2018.csv", "Tuesday-20-02-2018.csv",
+            "Thursday-22-02-2018.csv", "Friday-23-02-2018.csv", "Friday-02-03-2018.csv"]
+    internal_cidrs: ["172.31.0.0/16"]
+  ctu13:
+    reader: ctu13
+    raw: raw/ctu13/CTU-13-Dataset
+    scenarios: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+    internal_cidrs: ["147.32.0.0/16"]
+  dapt2020:
+    reader: dapt2020
+    # Downloaded for v2, so it lives in this repo's (gitignored) data dir, not under data_root.
+    root: repo
+    raw: data/raw/dapt2020
+    internal_cidrs: ["192.168.3.0/24"]

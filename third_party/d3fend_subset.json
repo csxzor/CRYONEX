@@ -1,0 +1,1424 @@
+{
+ "source": "https://d3fend.mitre.org/api/offensive-technique/attack/<id>.json",
+ "fetched": "2026-09-24",
+ "mappings": {
+  "T1021": [
+   {
+    "id": "D3-APCA",
+    "name": "Application Protocol Command Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ApplicationProtocolCommandAnalysis/"
+   },
+   {
+    "id": "D3-CAA",
+    "name": "Connection Attempt Analysis",
+    "tactic": "Detect",
+    "artifact": "Intranet Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ConnectionAttemptAnalysis/"
+   },
+   {
+    "id": "D3-CSPP",
+    "name": "Client-server Payload Profiling",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ClientServerPayloadProfiling/"
+   },
+   {
+    "id": "D3-NTCD",
+    "name": "Network Traffic Community Deviation",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficCommunityDeviation/"
+   },
+   {
+    "id": "D3-NTSA",
+    "name": "Network Traffic Signature Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficSignatureAnalysis/"
+   },
+   {
+    "id": "D3-PHDURA",
+    "name": "Per Host Download-Upload Ratio Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:PerHostDownloadUploadRatioAnalysis/"
+   },
+   {
+    "id": "D3-PMAD",
+    "name": "Protocol Metadata Anomaly Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProtocolMetadataAnomalyDetection/"
+   },
+   {
+    "id": "D3-RTSD",
+    "name": "Remote Terminal Session Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteTerminalSessionDetection/"
+   },
+   {
+    "id": "D3-UGLPA",
+    "name": "User Geolocation Logon Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:UserGeolocationLogonPatternAnalysis/"
+   },
+   {
+    "id": "D3-ST",
+    "name": "Session Termination",
+    "tactic": "Evict",
+    "artifact": "Session",
+    "url": "https://d3fend.mitre.org/technique/d3f:SessionTermination/"
+   },
+   {
+    "id": "D3-NTF",
+    "name": "Network Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficFiltering/"
+   }
+  ],
+  "T1041": [
+   {
+    "id": "D3-DF",
+    "name": "Decoy File",
+    "tactic": "Deceive",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:DecoyFile/"
+   },
+   {
+    "id": "D3-APCA",
+    "name": "Application Protocol Command Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ApplicationProtocolCommandAnalysis/"
+   },
+   {
+    "id": "D3-CA",
+    "name": "Certificate Analysis",
+    "tactic": "Detect",
+    "artifact": "Certificate File",
+    "url": "https://d3fend.mitre.org/technique/d3f:CertificateAnalysis/"
+   },
+   {
+    "id": "D3-CSPP",
+    "name": "Client-server Payload Profiling",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ClientServerPayloadProfiling/"
+   },
+   {
+    "id": "D3-FA",
+    "name": "File Analysis",
+    "tactic": "Detect",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/"
+   },
+   {
+    "id": "D3-FIM",
+    "name": "File Integrity Monitoring",
+    "tactic": "Detect",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/"
+   },
+   {
+    "id": "D3-NTCD",
+    "name": "Network Traffic Community Deviation",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficCommunityDeviation/"
+   },
+   {
+    "id": "D3-NTSA",
+    "name": "Network Traffic Signature Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficSignatureAnalysis/"
+   },
+   {
+    "id": "D3-PHDURA",
+    "name": "Per Host Download-Upload Ratio Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:PerHostDownloadUploadRatioAnalysis/"
+   },
+   {
+    "id": "D3-PMAD",
+    "name": "Protocol Metadata Anomaly Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProtocolMetadataAnomalyDetection/"
+   },
+   {
+    "id": "D3-RTSD",
+    "name": "Remote Terminal Session Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteTerminalSessionDetection/"
+   },
+   {
+    "id": "D3-UGLPA",
+    "name": "User Geolocation Logon Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:UserGeolocationLogonPatternAnalysis/"
+   },
+   {
+    "id": "D3-FEV",
+    "name": "File Eviction",
+    "tactic": "Evict",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileEviction/"
+   },
+   {
+    "id": "D3-FE",
+    "name": "File Encryption",
+    "tactic": "Harden",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/"
+   },
+   {
+    "id": "D3-CF",
+    "name": "Content Filtering",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/"
+   },
+   {
+    "id": "D3-CM",
+    "name": "Content Modification",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/"
+   },
+   {
+    "id": "D3-CQ",
+    "name": "Content Quarantine",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/"
+   },
+   {
+    "id": "D3-LFP",
+    "name": "Local File Permissions",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/"
+   },
+   {
+    "id": "D3-NTF",
+    "name": "Network Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficFiltering/"
+   },
+   {
+    "id": "D3-RFAM",
+    "name": "Remote File Access Mediation",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteFileAccessMediation/"
+   },
+   {
+    "id": "D3-RF",
+    "name": "Restore File",
+    "tactic": "Restore",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:RestoreFile/"
+   }
+  ],
+  "T1046": [],
+  "T1048": [
+   {
+    "id": "D3-DF",
+    "name": "Decoy File",
+    "tactic": "Deceive",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:DecoyFile/"
+   },
+   {
+    "id": "D3-APCA",
+    "name": "Application Protocol Command Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ApplicationProtocolCommandAnalysis/"
+   },
+   {
+    "id": "D3-CA",
+    "name": "Certificate Analysis",
+    "tactic": "Detect",
+    "artifact": "Certificate File",
+    "url": "https://d3fend.mitre.org/technique/d3f:CertificateAnalysis/"
+   },
+   {
+    "id": "D3-CSPP",
+    "name": "Client-server Payload Profiling",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ClientServerPayloadProfiling/"
+   },
+   {
+    "id": "D3-FA",
+    "name": "File Analysis",
+    "tactic": "Detect",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/"
+   },
+   {
+    "id": "D3-FIM",
+    "name": "File Integrity Monitoring",
+    "tactic": "Detect",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/"
+   },
+   {
+    "id": "D3-NTCD",
+    "name": "Network Traffic Community Deviation",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficCommunityDeviation/"
+   },
+   {
+    "id": "D3-NTSA",
+    "name": "Network Traffic Signature Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficSignatureAnalysis/"
+   },
+   {
+    "id": "D3-PHDURA",
+    "name": "Per Host Download-Upload Ratio Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:PerHostDownloadUploadRatioAnalysis/"
+   },
+   {
+    "id": "D3-PMAD",
+    "name": "Protocol Metadata Anomaly Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProtocolMetadataAnomalyDetection/"
+   },
+   {
+    "id": "D3-RPA",
+    "name": "Relay Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Outbound Internet Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RelayPatternAnalysis/"
+   },
+   {
+    "id": "D3-RTSD",
+    "name": "Remote Terminal Session Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteTerminalSessionDetection/"
+   },
+   {
+    "id": "D3-UGLPA",
+    "name": "User Geolocation Logon Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:UserGeolocationLogonPatternAnalysis/"
+   },
+   {
+    "id": "D3-FEV",
+    "name": "File Eviction",
+    "tactic": "Evict",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileEviction/"
+   },
+   {
+    "id": "D3-FE",
+    "name": "File Encryption",
+    "tactic": "Harden",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/"
+   },
+   {
+    "id": "D3-CF",
+    "name": "Content Filtering",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/"
+   },
+   {
+    "id": "D3-CM",
+    "name": "Content Modification",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/"
+   },
+   {
+    "id": "D3-CQ",
+    "name": "Content Quarantine",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/"
+   },
+   {
+    "id": "D3-LFP",
+    "name": "Local File Permissions",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/"
+   },
+   {
+    "id": "D3-NTF",
+    "name": "Network Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficFiltering/"
+   },
+   {
+    "id": "D3-OTF",
+    "name": "Outbound Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Outbound Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:OutboundTrafficFiltering/"
+   },
+   {
+    "id": "D3-RFAM",
+    "name": "Remote File Access Mediation",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteFileAccessMediation/"
+   },
+   {
+    "id": "D3-RF",
+    "name": "Restore File",
+    "tactic": "Restore",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:RestoreFile/"
+   }
+  ],
+  "T1071": [
+   {
+    "id": "D3-DF",
+    "name": "Decoy File",
+    "tactic": "Deceive",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:DecoyFile/"
+   },
+   {
+    "id": "D3-APCA",
+    "name": "Application Protocol Command Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ApplicationProtocolCommandAnalysis/"
+   },
+   {
+    "id": "D3-CA",
+    "name": "Certificate Analysis",
+    "tactic": "Detect",
+    "artifact": "Certificate File",
+    "url": "https://d3fend.mitre.org/technique/d3f:CertificateAnalysis/"
+   },
+   {
+    "id": "D3-CSPP",
+    "name": "Client-server Payload Profiling",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ClientServerPayloadProfiling/"
+   },
+   {
+    "id": "D3-DNSTA",
+    "name": "DNS Traffic Analysis",
+    "tactic": "Detect",
+    "artifact": "Outbound Internet DNS Lookup Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:DnsTrafficAnalysis/"
+   },
+   {
+    "id": "D3-FA",
+    "name": "File Analysis",
+    "tactic": "Detect",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/"
+   },
+   {
+    "id": "D3-FC",
+    "name": "File Carving",
+    "tactic": "Detect",
+    "artifact": "File Transfer Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileCarving/"
+   },
+   {
+    "id": "D3-FIM",
+    "name": "File Integrity Monitoring",
+    "tactic": "Detect",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/"
+   },
+   {
+    "id": "D3-NTCD",
+    "name": "Network Traffic Community Deviation",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficCommunityDeviation/"
+   },
+   {
+    "id": "D3-NTSA",
+    "name": "Network Traffic Signature Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficSignatureAnalysis/"
+   },
+   {
+    "id": "D3-PHDURA",
+    "name": "Per Host Download-Upload Ratio Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:PerHostDownloadUploadRatioAnalysis/"
+   },
+   {
+    "id": "D3-PMAD",
+    "name": "Protocol Metadata Anomaly Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProtocolMetadataAnomalyDetection/"
+   },
+   {
+    "id": "D3-RPA",
+    "name": "Relay Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Outbound Internet Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RelayPatternAnalysis/"
+   },
+   {
+    "id": "D3-RTSD",
+    "name": "Remote Terminal Session Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteTerminalSessionDetection/"
+   },
+   {
+    "id": "D3-UGLPA",
+    "name": "User Geolocation Logon Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:UserGeolocationLogonPatternAnalysis/"
+   },
+   {
+    "id": "D3-FEV",
+    "name": "File Eviction",
+    "tactic": "Evict",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileEviction/"
+   },
+   {
+    "id": "D3-FE",
+    "name": "File Encryption",
+    "tactic": "Harden",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/"
+   },
+   {
+    "id": "D3-CF",
+    "name": "Content Filtering",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/"
+   },
+   {
+    "id": "D3-CM",
+    "name": "Content Modification",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/"
+   },
+   {
+    "id": "D3-CQ",
+    "name": "Content Quarantine",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/"
+   },
+   {
+    "id": "D3-DNSAL",
+    "name": "DNS Allowlisting",
+    "tactic": "Isolate",
+    "artifact": "Outbound Internet DNS Lookup Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:DnsAllowlisting/"
+   },
+   {
+    "id": "D3-DNSDL",
+    "name": "DNS Denylisting",
+    "tactic": "Isolate",
+    "artifact": "DNS Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:DnsDenylisting/"
+   },
+   {
+    "id": "D3-FRDDL",
+    "name": "Forward Resolution Domain Denylisting",
+    "tactic": "Isolate",
+    "artifact": "Outbound Internet DNS Lookup Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ForwardResolutionDomainDenylisting/"
+   },
+   {
+    "id": "D3-LFP",
+    "name": "Local File Permissions",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/"
+   },
+   {
+    "id": "D3-NTF",
+    "name": "Network Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficFiltering/"
+   },
+   {
+    "id": "D3-OTF",
+    "name": "Outbound Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Outbound Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:OutboundTrafficFiltering/"
+   },
+   {
+    "id": "D3-RFAM",
+    "name": "Remote File Access Mediation",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteFileAccessMediation/"
+   },
+   {
+    "id": "D3-RRID",
+    "name": "Reverse Resolution IP Denylisting",
+    "tactic": "Isolate",
+    "artifact": "Outbound Internet DNS Lookup Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ReverseResolutionIpDenylisting/"
+   },
+   {
+    "id": "D3-RF",
+    "name": "Restore File",
+    "tactic": "Restore",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:RestoreFile/"
+   }
+  ],
+  "T1105": [
+   {
+    "id": "D3-APCA",
+    "name": "Application Protocol Command Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ApplicationProtocolCommandAnalysis/"
+   },
+   {
+    "id": "D3-CSPP",
+    "name": "Client-server Payload Profiling",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ClientServerPayloadProfiling/"
+   },
+   {
+    "id": "D3-NTCD",
+    "name": "Network Traffic Community Deviation",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficCommunityDeviation/"
+   },
+   {
+    "id": "D3-NTSA",
+    "name": "Network Traffic Signature Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficSignatureAnalysis/"
+   },
+   {
+    "id": "D3-PHDURA",
+    "name": "Per Host Download-Upload Ratio Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:PerHostDownloadUploadRatioAnalysis/"
+   },
+   {
+    "id": "D3-PMAD",
+    "name": "Protocol Metadata Anomaly Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProtocolMetadataAnomalyDetection/"
+   },
+   {
+    "id": "D3-RPA",
+    "name": "Relay Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Outbound Internet Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RelayPatternAnalysis/"
+   },
+   {
+    "id": "D3-RTSD",
+    "name": "Remote Terminal Session Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteTerminalSessionDetection/"
+   },
+   {
+    "id": "D3-UGLPA",
+    "name": "User Geolocation Logon Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:UserGeolocationLogonPatternAnalysis/"
+   },
+   {
+    "id": "D3-NTF",
+    "name": "Network Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficFiltering/"
+   },
+   {
+    "id": "D3-OTF",
+    "name": "Outbound Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Outbound Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:OutboundTrafficFiltering/"
+   }
+  ],
+  "T1110": [
+   {
+    "id": "D3-DUC",
+    "name": "Decoy User Credential",
+    "tactic": "Deceive",
+    "artifact": "Credential",
+    "url": "https://d3fend.mitre.org/technique/d3f:DecoyUserCredential/"
+   },
+   {
+    "id": "D3-AEM",
+    "name": "Application Exception Monitoring",
+    "tactic": "Detect",
+    "artifact": "Log",
+    "url": "https://d3fend.mitre.org/technique/d3f:ApplicationExceptionMonitoring/"
+   },
+   {
+    "id": "D3-ANAA",
+    "name": "Administrative Network Activity Analysis",
+    "tactic": "Detect",
+    "artifact": "Intranet Administrative Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:AdministrativeNetworkActivityAnalysis/"
+   },
+   {
+    "id": "D3-APCA",
+    "name": "Application Protocol Command Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ApplicationProtocolCommandAnalysis/"
+   },
+   {
+    "id": "D3-CAA",
+    "name": "Connection Attempt Analysis",
+    "tactic": "Detect",
+    "artifact": "Intranet Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ConnectionAttemptAnalysis/"
+   },
+   {
+    "id": "D3-CCSA",
+    "name": "Credential Compromise Scope Analysis",
+    "tactic": "Detect",
+    "artifact": "Credential",
+    "url": "https://d3fend.mitre.org/technique/d3f:CredentialCompromiseScopeAnalysis/"
+   },
+   {
+    "id": "D3-CSPP",
+    "name": "Client-server Payload Profiling",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ClientServerPayloadProfiling/"
+   },
+   {
+    "id": "D3-NTCD",
+    "name": "Network Traffic Community Deviation",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficCommunityDeviation/"
+   },
+   {
+    "id": "D3-NTSA",
+    "name": "Network Traffic Signature Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficSignatureAnalysis/"
+   },
+   {
+    "id": "D3-OPM",
+    "name": "Operational Process Monitoring",
+    "tactic": "Detect",
+    "artifact": "Event Log",
+    "url": "https://d3fend.mitre.org/technique/d3f:OperationalProcessMonitoring/"
+   },
+   {
+    "id": "D3-PHDURA",
+    "name": "Per Host Download-Upload Ratio Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:PerHostDownloadUploadRatioAnalysis/"
+   },
+   {
+    "id": "D3-PMAD",
+    "name": "Protocol Metadata Anomaly Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProtocolMetadataAnomalyDetection/"
+   },
+   {
+    "id": "D3-RTSD",
+    "name": "Remote Terminal Session Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteTerminalSessionDetection/"
+   },
+   {
+    "id": "D3-UGLPA",
+    "name": "User Geolocation Logon Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:UserGeolocationLogonPatternAnalysis/"
+   },
+   {
+    "id": "D3-ANCI",
+    "name": "Authentication Cache Invalidation",
+    "tactic": "Evict",
+    "artifact": "Credential",
+    "url": "https://d3fend.mitre.org/technique/d3f:AuthenticationCacheInvalidation/"
+   },
+   {
+    "id": "D3-CR",
+    "name": "Credential Revocation",
+    "tactic": "Evict",
+    "artifact": "Credential",
+    "url": "https://d3fend.mitre.org/technique/d3f:CredentialRevocation/"
+   },
+   {
+    "id": "D3-CDP",
+    "name": "Change Default Password",
+    "tactic": "Harden",
+    "artifact": "Password",
+    "url": "https://d3fend.mitre.org/technique/d3f:ChangeDefaultPassword/"
+   },
+   {
+    "id": "D3-CH",
+    "name": "Credential Hardening",
+    "tactic": "Harden",
+    "artifact": "Credential",
+    "url": "https://d3fend.mitre.org/technique/d3f:CredentialHardening/"
+   },
+   {
+    "id": "D3-CRO",
+    "name": "Credential Rotation",
+    "tactic": "Harden",
+    "artifact": "Credential",
+    "url": "https://d3fend.mitre.org/technique/d3f:CredentialRotation/"
+   },
+   {
+    "id": "D3-MFA",
+    "name": "Multi-factor Authentication",
+    "tactic": "Harden",
+    "artifact": "Credential",
+    "url": "https://d3fend.mitre.org/technique/d3f:MultiFactorAuthentication/"
+   },
+   {
+    "id": "D3-OTP",
+    "name": "One-time Password",
+    "tactic": "Harden",
+    "artifact": "Password",
+    "url": "https://d3fend.mitre.org/technique/d3f:OneTimePassword/"
+   },
+   {
+    "id": "D3-PR",
+    "name": "Password Rotation",
+    "tactic": "Harden",
+    "artifact": "Password",
+    "url": "https://d3fend.mitre.org/technique/d3f:PasswordRotation/"
+   },
+   {
+    "id": "D3-PWA",
+    "name": "Password Authentication",
+    "tactic": "Harden",
+    "artifact": "Password",
+    "url": "https://d3fend.mitre.org/technique/d3f:PasswordAuthentication/"
+   },
+   {
+    "id": "D3-SPP",
+    "name": "Strong Password Policy",
+    "tactic": "Harden",
+    "artifact": "Password",
+    "url": "https://d3fend.mitre.org/technique/d3f:StrongPasswordPolicy/"
+   },
+   {
+    "id": "D3-CTS",
+    "name": "Credential Transmission Scoping",
+    "tactic": "Isolate",
+    "artifact": "Credential",
+    "url": "https://d3fend.mitre.org/technique/d3f:CredentialTransmissionScoping/"
+   },
+   {
+    "id": "D3-NTF",
+    "name": "Network Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficFiltering/"
+   },
+   {
+    "id": "D3-RIC",
+    "name": "Reissue Credential",
+    "tactic": "Restore",
+    "artifact": "Credential",
+    "url": "https://d3fend.mitre.org/technique/d3f:ReissueCredential/"
+   }
+  ],
+  "T1190": [
+   {
+    "id": "D3-APCA",
+    "name": "Application Protocol Command Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ApplicationProtocolCommandAnalysis/"
+   },
+   {
+    "id": "D3-CSPP",
+    "name": "Client-server Payload Profiling",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ClientServerPayloadProfiling/"
+   },
+   {
+    "id": "D3-DQSA",
+    "name": "Database Query String Analysis",
+    "tactic": "Detect",
+    "artifact": "Database Query",
+    "url": "https://d3fend.mitre.org/technique/d3f:DatabaseQueryStringAnalysis/"
+   },
+   {
+    "id": "D3-ISVA",
+    "name": "Inbound Session Volume Analysis",
+    "tactic": "Detect",
+    "artifact": "Inbound Internet Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:InboundSessionVolumeAnalysis/"
+   },
+   {
+    "id": "D3-NTCD",
+    "name": "Network Traffic Community Deviation",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficCommunityDeviation/"
+   },
+   {
+    "id": "D3-NTSA",
+    "name": "Network Traffic Signature Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficSignatureAnalysis/"
+   },
+   {
+    "id": "D3-PHDURA",
+    "name": "Per Host Download-Upload Ratio Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:PerHostDownloadUploadRatioAnalysis/"
+   },
+   {
+    "id": "D3-PMAD",
+    "name": "Protocol Metadata Anomaly Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProtocolMetadataAnomalyDetection/"
+   },
+   {
+    "id": "D3-RTSD",
+    "name": "Remote Terminal Session Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteTerminalSessionDetection/"
+   },
+   {
+    "id": "D3-UGLPA",
+    "name": "User Geolocation Logon Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:UserGeolocationLogonPatternAnalysis/"
+   },
+   {
+    "id": "D3-PSEP",
+    "name": "Process Segment Execution Prevention",
+    "tactic": "Harden",
+    "artifact": "Process Segment",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProcessSegmentExecutionPrevention/"
+   },
+   {
+    "id": "D3-SAOR",
+    "name": "Segment Address Offset Randomization",
+    "tactic": "Harden",
+    "artifact": "Process Segment",
+    "url": "https://d3fend.mitre.org/technique/d3f:SegmentAddressOffsetRandomization/"
+   },
+   {
+    "id": "D3-ITF",
+    "name": "Inbound Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Inbound Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:InboundTrafficFiltering/"
+   },
+   {
+    "id": "D3-NTF",
+    "name": "Network Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficFiltering/"
+   }
+  ],
+  "T1204": [
+   {
+    "id": "D3-DF",
+    "name": "Decoy File",
+    "tactic": "Deceive",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:DecoyFile/"
+   },
+   {
+    "id": "D3-APCA",
+    "name": "Application Protocol Command Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ApplicationProtocolCommandAnalysis/"
+   },
+   {
+    "id": "D3-CSPP",
+    "name": "Client-server Payload Profiling",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ClientServerPayloadProfiling/"
+   },
+   {
+    "id": "D3-DA",
+    "name": "Dynamic Analysis",
+    "tactic": "Detect",
+    "artifact": "Executable File",
+    "url": "https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/"
+   },
+   {
+    "id": "D3-EFA",
+    "name": "Emulated File Analysis",
+    "tactic": "Detect",
+    "artifact": "Executable File",
+    "url": "https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/"
+   },
+   {
+    "id": "D3-FA",
+    "name": "File Analysis",
+    "tactic": "Detect",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/"
+   },
+   {
+    "id": "D3-FIM",
+    "name": "File Integrity Monitoring",
+    "tactic": "Detect",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/"
+   },
+   {
+    "id": "D3-HD",
+    "name": "Homoglyph Detection",
+    "tactic": "Detect",
+    "artifact": "URL",
+    "url": "https://d3fend.mitre.org/technique/d3f:HomoglyphDetection/"
+   },
+   {
+    "id": "D3-IAA",
+    "name": "Identifier Activity Analysis",
+    "tactic": "Detect",
+    "artifact": "Identifier",
+    "url": "https://d3fend.mitre.org/technique/d3f:IdentifierActivityAnalysis/"
+   },
+   {
+    "id": "D3-NTCD",
+    "name": "Network Traffic Community Deviation",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficCommunityDeviation/"
+   },
+   {
+    "id": "D3-NTSA",
+    "name": "Network Traffic Signature Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficSignatureAnalysis/"
+   },
+   {
+    "id": "D3-PHDURA",
+    "name": "Per Host Download-Upload Ratio Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:PerHostDownloadUploadRatioAnalysis/"
+   },
+   {
+    "id": "D3-PMAD",
+    "name": "Protocol Metadata Anomaly Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProtocolMetadataAnomalyDetection/"
+   },
+   {
+    "id": "D3-RPA",
+    "name": "Relay Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Outbound Internet Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RelayPatternAnalysis/"
+   },
+   {
+    "id": "D3-RTSD",
+    "name": "Remote Terminal Session Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteTerminalSessionDetection/"
+   },
+   {
+    "id": "D3-UA",
+    "name": "URL Analysis",
+    "tactic": "Detect",
+    "artifact": "URL",
+    "url": "https://d3fend.mitre.org/technique/d3f:UrlAnalysis/"
+   },
+   {
+    "id": "D3-UGLPA",
+    "name": "User Geolocation Logon Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:UserGeolocationLogonPatternAnalysis/"
+   },
+   {
+    "id": "D3-URA",
+    "name": "URL Reputation Analysis",
+    "tactic": "Detect",
+    "artifact": "URL",
+    "url": "https://d3fend.mitre.org/technique/d3f:UrlReputationAnalysis/"
+   },
+   {
+    "id": "D3-FEV",
+    "name": "File Eviction",
+    "tactic": "Evict",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileEviction/"
+   },
+   {
+    "id": "D3-FE",
+    "name": "File Encryption",
+    "tactic": "Harden",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/"
+   },
+   {
+    "id": "D3-CF",
+    "name": "Content Filtering",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/"
+   },
+   {
+    "id": "D3-CM",
+    "name": "Content Modification",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/"
+   },
+   {
+    "id": "D3-CQ",
+    "name": "Content Quarantine",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/"
+   },
+   {
+    "id": "D3-EAL",
+    "name": "Executable Allowlisting",
+    "tactic": "Isolate",
+    "artifact": "Executable File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/"
+   },
+   {
+    "id": "D3-EDL",
+    "name": "Executable Denylisting",
+    "tactic": "Isolate",
+    "artifact": "Executable File",
+    "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/"
+   },
+   {
+    "id": "D3-LFP",
+    "name": "Local File Permissions",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/"
+   },
+   {
+    "id": "D3-NTF",
+    "name": "Network Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficFiltering/"
+   },
+   {
+    "id": "D3-OTF",
+    "name": "Outbound Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Outbound Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:OutboundTrafficFiltering/"
+   },
+   {
+    "id": "D3-RFAM",
+    "name": "Remote File Access Mediation",
+    "tactic": "Isolate",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteFileAccessMediation/"
+   },
+   {
+    "id": "D3-RF",
+    "name": "Restore File",
+    "tactic": "Restore",
+    "artifact": "File",
+    "url": "https://d3fend.mitre.org/technique/d3f:RestoreFile/"
+   }
+  ],
+  "T1496": [],
+  "T1498": [
+   {
+    "id": "D3-APCA",
+    "name": "Application Protocol Command Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ApplicationProtocolCommandAnalysis/"
+   },
+   {
+    "id": "D3-CSPP",
+    "name": "Client-server Payload Profiling",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ClientServerPayloadProfiling/"
+   },
+   {
+    "id": "D3-ISVA",
+    "name": "Inbound Session Volume Analysis",
+    "tactic": "Detect",
+    "artifact": "Inbound Internet Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:InboundSessionVolumeAnalysis/"
+   },
+   {
+    "id": "D3-NTCD",
+    "name": "Network Traffic Community Deviation",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficCommunityDeviation/"
+   },
+   {
+    "id": "D3-NTSA",
+    "name": "Network Traffic Signature Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficSignatureAnalysis/"
+   },
+   {
+    "id": "D3-PHDURA",
+    "name": "Per Host Download-Upload Ratio Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:PerHostDownloadUploadRatioAnalysis/"
+   },
+   {
+    "id": "D3-PMAD",
+    "name": "Protocol Metadata Anomaly Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProtocolMetadataAnomalyDetection/"
+   },
+   {
+    "id": "D3-RTSD",
+    "name": "Remote Terminal Session Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteTerminalSessionDetection/"
+   },
+   {
+    "id": "D3-UGLPA",
+    "name": "User Geolocation Logon Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:UserGeolocationLogonPatternAnalysis/"
+   },
+   {
+    "id": "D3-ITF",
+    "name": "Inbound Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Inbound Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:InboundTrafficFiltering/"
+   },
+   {
+    "id": "D3-NTF",
+    "name": "Network Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficFiltering/"
+   }
+  ],
+  "T1499": [
+   {
+    "id": "D3-APCA",
+    "name": "Application Protocol Command Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ApplicationProtocolCommandAnalysis/"
+   },
+   {
+    "id": "D3-CSPP",
+    "name": "Client-server Payload Profiling",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ClientServerPayloadProfiling/"
+   },
+   {
+    "id": "D3-ISVA",
+    "name": "Inbound Session Volume Analysis",
+    "tactic": "Detect",
+    "artifact": "Inbound Internet Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:InboundSessionVolumeAnalysis/"
+   },
+   {
+    "id": "D3-NTCD",
+    "name": "Network Traffic Community Deviation",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficCommunityDeviation/"
+   },
+   {
+    "id": "D3-NTSA",
+    "name": "Network Traffic Signature Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficSignatureAnalysis/"
+   },
+   {
+    "id": "D3-PHDURA",
+    "name": "Per Host Download-Upload Ratio Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:PerHostDownloadUploadRatioAnalysis/"
+   },
+   {
+    "id": "D3-PMAD",
+    "name": "Protocol Metadata Anomaly Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProtocolMetadataAnomalyDetection/"
+   },
+   {
+    "id": "D3-RTSD",
+    "name": "Remote Terminal Session Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteTerminalSessionDetection/"
+   },
+   {
+    "id": "D3-UGLPA",
+    "name": "User Geolocation Logon Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:UserGeolocationLogonPatternAnalysis/"
+   },
+   {
+    "id": "D3-ITF",
+    "name": "Inbound Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Inbound Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:InboundTrafficFiltering/"
+   },
+   {
+    "id": "D3-NTF",
+    "name": "Network Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficFiltering/"
+   }
+  ],
+  "T1571": [
+   {
+    "id": "D3-APCA",
+    "name": "Application Protocol Command Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ApplicationProtocolCommandAnalysis/"
+   },
+   {
+    "id": "D3-CSPP",
+    "name": "Client-server Payload Profiling",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ClientServerPayloadProfiling/"
+   },
+   {
+    "id": "D3-NTCD",
+    "name": "Network Traffic Community Deviation",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficCommunityDeviation/"
+   },
+   {
+    "id": "D3-NTSA",
+    "name": "Network Traffic Signature Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficSignatureAnalysis/"
+   },
+   {
+    "id": "D3-PHDURA",
+    "name": "Per Host Download-Upload Ratio Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:PerHostDownloadUploadRatioAnalysis/"
+   },
+   {
+    "id": "D3-PMAD",
+    "name": "Protocol Metadata Anomaly Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:ProtocolMetadataAnomalyDetection/"
+   },
+   {
+    "id": "D3-RPA",
+    "name": "Relay Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Outbound Internet Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RelayPatternAnalysis/"
+   },
+   {
+    "id": "D3-RTSD",
+    "name": "Remote Terminal Session Detection",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:RemoteTerminalSessionDetection/"
+   },
+   {
+    "id": "D3-UGLPA",
+    "name": "User Geolocation Logon Pattern Analysis",
+    "tactic": "Detect",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:UserGeolocationLogonPatternAnalysis/"
+   },
+   {
+    "id": "D3-NTF",
+    "name": "Network Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:NetworkTrafficFiltering/"
+   },
+   {
+    "id": "D3-OTF",
+    "name": "Outbound Traffic Filtering",
+    "tactic": "Isolate",
+    "artifact": "Outbound Network Traffic",
+    "url": "https://d3fend.mitre.org/technique/d3f:OutboundTrafficFiltering/"
+   }
+  ],
+  "T1595": []
+ }
+}

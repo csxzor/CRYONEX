@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+data/
+!data/.gitkeep
+runs/
+*.log
+.DS_Store
+# Large, regenerable artifacts. Released weights live in artifacts/release and are committed.
+artifacts/*
+!artifacts/release/
+samples/*.pcap
+samples/*.pcapng
+
+# Per-row score dumps (34 MB; regenerate with kcwm evaluate)
+results/**/*.npz

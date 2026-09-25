@@ -1,0 +1,9 @@
+{
+  "n": 40,
+  "k": 5,
+  "mean_drop_top": 0.7303565606474877,
+  "mean_drop_random": 0.0014596819877624513,
+  "ratio": 500.3532048559785,
+  "passes_G8": true,
+  "mean_risk_of_explained_anchors": 0.9647437334060669
+}
