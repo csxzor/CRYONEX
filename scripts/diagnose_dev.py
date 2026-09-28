@@ -1,6 +1,6 @@
 """Where does a model win or lose on the dev split? Per-dataset / per-capture AUPRC.
 
-Reloads a saved KC-WM checkpoint (no retraining), refits logistic regression, and scores
+Reloads a saved CRYONEX checkpoint (no retraining), refits logistic regression, and scores
 both on the dev test rows (second half of calibration). Never touches the test split.
 
 Usage: python scripts/diagnose_dev.py runs/dev-p1-all/kcwm-s17.pt

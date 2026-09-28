@@ -13,8 +13,8 @@ Test anchors: 30,980 windows (positive rate 0.326), horizon 30 windows (5 min), 
 | Gradient boosting | 0.767 ± 0.004 | 0.826 ± 0.004 | 0.786 ± 0.013 | 0.529 ± 0.002 | 0.632 ± 0.004 | 0.070 ± 0.006 | 0.514 ± 0.001 | 0.190 ± 0.006 |
 | LSTM classifier | 0.769 ± 0.010 | 0.867 ± 0.008 | 0.818 ± 0.031 | 0.441 ± 0.025 | 0.572 ± 0.013 | 0.048 ± 0.013 | 0.517 ± 0.025 | 0.206 ± 0.023 |
 | Transformer classifier (same backbone, no dynamics) | 0.815 ± 0.020 | 0.876 ± 0.019 | 0.984 ± 0.013 | 0.262 ± 0.099 | 0.403 ± 0.123 | 0.003 ± 0.002 | 0.476 ± 0.024 | 0.150 ± 0.018 |
-| KC-WM world model alone | 0.820 ± 0.006 | 0.859 ± 0.010 | 0.861 ± 0.063 | 0.614 ± 0.072 | 0.711 ± 0.034 | 0.052 ± 0.029 | 0.516 ± 0.031 | 0.159 ± 0.023 |
-| **KC-WM hybrid (deployed)** | 0.847 ± 0.007 | 0.878 ± 0.008 | 0.894 ± 0.075 | 0.620 ± 0.077 | 0.725 ± 0.025 | 0.042 ± 0.037 | 0.552 ± 0.011 | 0.118 ± 0.001 |
+| CRYONEX world model alone | 0.820 ± 0.006 | 0.859 ± 0.010 | 0.861 ± 0.063 | 0.614 ± 0.072 | 0.711 ± 0.034 | 0.052 ± 0.029 | 0.516 ± 0.031 | 0.159 ± 0.023 |
+| **CRYONEX hybrid (deployed)** | 0.847 ± 0.007 | 0.878 ± 0.008 | 0.894 ± 0.075 | 0.620 ± 0.077 | 0.725 ± 0.025 | 0.042 ± 0.037 | 0.552 ± 0.011 | 0.118 ± 0.001 |
 
 Block-bootstrap 95% CI (30-min blocks) of the hybrid's AUPRC, seed 17: [0.773, 0.887].
 
@@ -29,27 +29,49 @@ The early-warning subset is windows with no compromise in the previous 5 minutes
 | Gradient boosting | 0.091 ± 0.002 | 0.079 | 1/216 | 0.333 ± 0.471 |
 | LSTM classifier | 0.242 ± 0.044 | 0.079 | 36/216 | 24.500 ± 4.491 |
 | Transformer classifier (same backbone, no dynamics) | 0.174 ± 0.016 | 0.079 | 0/144 | 0.000 ± 0.000 |
-| KC-WM world model alone | 0.225 ± 0.012 | 0.079 | 51/216 | 24.333 ± 8.014 |
-| **KC-WM hybrid (deployed)** | 0.183 ± 0.020 | 0.079 | 29/216 | 3.833 ± 3.009 |
+| CRYONEX world model alone | 0.225 ± 0.012 | 0.079 | 51/216 | 24.333 ± 8.014 |
+| **CRYONEX hybrid (deployed)** | 0.183 ± 0.020 | 0.079 | 29/216 | 3.833 ± 3.009 |
 
 ### Two-level alerts (deployed policy; chosen after the test read, so post-hoc)
 
-Level 1 **early warning**: the world model's forecast >= a threshold set on *quiet benign calibration windows* at a 3% budget, sustained 2 windows. Level 2 **attack in progress**: the hybrid score >= its calibrated threshold. Thresholds are from calibration only; the test numbers below use the scores saved by the final run (no retraining).
+Level 1 **early warning**: the world model's forecast >= a threshold set on *quiet benign calibration windows* at a 5% budget, sustained 2 windows. Level 2 **attack in progress**: the hybrid score >= its calibrated threshold. Thresholds are from calibration only; the test numbers below use the scores saved by the final run (no retraining).
 
 | | Two-level policy | Hybrid alerts only |
 |---|---|---|
-| Real attacks warned before they started (3 seeds) | **51/207** | 29/207 |
-| Median warning time | 3.5 min | n/a |
-| Early warnings on quiet benign windows | 1.5% (~3.4 per hour) | n/a |
+| Real attacks warned before they started (3 seeds) | **69/207** | 29/207 |
+| Median warning time | 5.0 min | n/a |
+| Early warnings on quiet benign windows | 3.2% (~7.2 warning windows per hour) | n/a |
+
+Early-warning budget sweep (same saved scores; the budget is the share of quiet benign calibration windows allowed a warning):
+
+| Budget | Attacks warned before they started | Median warning time | False-warning windows per hour |
+|---|---|---|---|
+| 3% | 51/207 | 3.5 min | 3.4 |
+| 5% | 69/207 | 5.0 min | 7.2 |
+| 10% | 91/207 | 5.0 min | 31.5 |
+| 20% | 112/207 | 5.0 min | 78.7 |
 
 ## 2. Stage forecasting (G5)
 
 Next *new* stage at a real stage transition (forecast made one window before), and attack-step stage accuracy over the 5-minute horizon, against count-based controls.
 
-| Set | Next stage: KC-WM | Next stage: Markov table | Transitions | Attack-step: KC-WM | Attack-step: carried forward |
+| Set | Next stage: CRYONEX | Next stage: Markov table | Transitions | Attack-step: CRYONEX | Attack-step: carried forward |
 |---|---|---|---|---|---|
 | Real test data | 0.295 ± 0.112 | 0.460 ± 0.038 | 121 | 0.777 ± 0.016 | 0.764 ± 0.058 |
 | Test campaigns (P4) | 0.400 ± 0.018 | 0.396 ± 0.045 | 186 | 0.575 ± 0.034 | 0.455 ± 0.069 |
+
+### Next stage with the learned transition table (deployed; post-hoc)
+
+The rollout's stage mass alone under-uses what the training data say about which stage follows which. The deployed next-stage forecast is rollout^0.25 x table^0.75, the table P(next | current, progress) counted on training labels and read at the model's *own* current stage and progress. The blend weight was chosen on dev (frozen dev models) before this test read.
+
+| Predictor | Dev, 1 window before | Dev, 1 min before | Test, 1 window before | Test, 1 min before |
+|---|---|---|---|---|
+| Rollout alone (previous) | 0.164 | 0.157 | 0.295 | 0.289 |
+| Learned table at the model's current stage | 0.371 | 0.390 | 0.496 | 0.482 |
+| **Blend 0.25 (deployed)** | 0.396 | 0.428 | 0.504 | 0.490 |
+| Table at the TRUE current stage (upper bound) | 0.403 | 0.352 | 0.584 | 0.548 |
+
+121 real test stage changes per seed, mean of 3 seeds.
 
 ## 3. Synthetic kill-chain campaigns (P4)
 
@@ -62,8 +84,8 @@ Real attack snippets from the test span, injected in ATT&CK order into real beni
 | Gradient boosting | 0.290 ± 0.003 | 0.112 ± 0.002 (0.087) | 0/198 | 0.000 ± 0.000 | 0.027 ± 0.003 |
 | LSTM classifier | 0.328 ± 0.041 | 0.140 ± 0.011 (0.087) | 5/198 | 6.000 ± 4.320 | 0.011 ± 0.008 |
 | Transformer classifier (same backbone, no dynamics) | 0.287 ± 0.009 | 0.141 ± 0.026 (0.087) | 1/132 | 0.500 ± 0.500 | 0.002 ± 0.002 |
-| KC-WM world model alone | 0.344 ± 0.022 | 0.148 ± 0.010 (0.087) | 14/198 | 8.000 ± 4.950 | 0.039 ± 0.028 |
-| **KC-WM hybrid (deployed)** | 0.347 ± 0.009 | 0.143 ± 0.010 (0.087) | 6/198 | 0.500 ± 0.707 | 0.028 ± 0.020 |
+| CRYONEX world model alone | 0.344 ± 0.022 | 0.148 ± 0.010 (0.087) | 14/198 | 8.000 ± 4.950 | 0.039 ± 0.028 |
+| **CRYONEX hybrid (deployed)** | 0.347 ± 0.009 | 0.143 ± 0.010 (0.087) | 6/198 | 0.500 ± 0.707 | 0.028 ± 0.020 |
 
 ## 4. Unseen attack families (G6, leave-one-family-out, seed 17)
 
@@ -96,3 +118,31 @@ Train on the other three datasets; test on every window of the held-out one.
 ## 6. Explanation faithfulness (G8)
 
 On the 40 highest-risk calibration windows, deleting the top-5 features by integrated gradients lowers the forecast risk by 0.730 on average; deleting 5 random features lowers it by 0.001 (500x). Pass bar 2x: **pass**.
+
+## 7. Learned dynamics: next network state (G3)
+
+Every predictor gives a distribution over the same 16 quantile bins per feature for the window k steps ahead; the score is the negative log-likelihood of the bin the real window falls in (nats per observed feature; lower is better). The world model uses its free-running rollout, no future data. P1 test split, 4,000 sampled anchors per seed, mean over seeds 17, 23, 29. The gain is over the recent-history histogram (the last 64 windows); the last column counts the seeds whose 30-minute block-bootstrap 95% CI of the gain lies above zero.
+
+| Model | k (windows of 10 s) | World model | Recent-history histogram | Persistence | Linear autoregression | Gain vs recent history | Seeds with CI > 0 |
+|---|---|---|---|---|---|---|---|
+| frozen decoder | 1 | 1.835 | 1.202 | 2.407 | 2.738 | -0.633 | 0/3 |
+| frozen decoder | 6 | 1.885 | 1.204 | 2.395 | 2.783 | -0.682 | 0/3 |
+| frozen decoder | 30 | 2.062 | 1.231 | 2.432 | 2.805 | -0.831 | 0/3 |
+| residual decoder (history prior) | 1 | 1.190 | 1.202 | 2.407 | 2.738 | +0.012 | 3/3 |
+| residual decoder (history prior) | 6 | 1.195 | 1.204 | 2.395 | 2.783 | +0.009 | 2/3 |
+| residual decoder (history prior) | 30 | 1.235 | 1.231 | 2.432 | 2.805 | -0.004 | 0/3 |
+
+Residual-decoder run (a second read of the P1 test split, after the frozen read above; same recipe except the decoder):
+
+| Model | AUPRC | ROC-AUC | Precision | Recall | F1 | FPR |
+|---|---|---|---|---|---|---|
+| Gradient boosting | 0.767 ± 0.004 | 0.826 ± 0.004 | 0.786 ± 0.013 | 0.529 ± 0.002 | 0.632 ± 0.004 | 0.070 ± 0.006 |
+| CRYONEX world model alone | 0.826 ± 0.030 | 0.859 ± 0.026 | 0.911 ± 0.022 | 0.565 ± 0.032 | 0.697 ± 0.026 | 0.027 ± 0.007 |
+| CRYONEX hybrid | 0.840 ± 0.020 | 0.873 ± 0.014 | 0.930 ± 0.039 | 0.576 ± 0.003 | 0.711 ± 0.012 | 0.021 ± 0.013 |
+
+The trade-off: early warning (two-level policy, same thresholds rule, 3 seeds). The frozen decoder remains the released model because early warning is the problem statement's headline.
+
+| Decoder | Real attacks warned before they started | Median warning time | False early warnings per hour |
+|---|---|---|---|
+| frozen | 69/207 | 5.0 min | 7.2 |
+| residual | 24/207 | 1.6 min | 2.4 |

@@ -74,6 +74,7 @@ class TrainConfig:
     stop_on_train_tail: int = 0  # rejected in dev round 3; kept for the record
     ew_weight: float = 1.0        # extra risk-loss weight on quiet windows followed by a compromise
     direct_risk: int = 0          # 1 = fallback F-A: add a direct risk head, average with rollout
+    emit_prior: int = 0           # 1 = G3 fix: emission = recent-history histogram x learned correction
 
 
 class Batcher:
@@ -137,9 +138,10 @@ def stage_weights(stage: np.ndarray) -> torch.Tensor:
     return torch.tensor(w / w[stage].mean(), dtype=torch.float32, device=_dev.get())
 
 
-def emission_nll(model: KillChainWorldModel, h: torch.Tensor, bins: torch.Tensor, fmask: torch.Tensor) -> torch.Tensor:
+def emission_nll(model: KillChainWorldModel, h: torch.Tensor, bins: torch.Tensor, fmask: torch.Tensor,
+                 log_prior: torch.Tensor | None = None) -> torch.Tensor:
     """Mean per-observed-feature NLL of bins under p(x | h). Shapes (..., d), (..., F), (..., F)."""
-    logp = torch.log_softmax(model.emission_logits(h), dim=-1)
+    logp = torch.log_softmax(model.emission_logits(h, log_prior), dim=-1)
     ll = torch.gather(logp, -1, bins[..., None]).squeeze(-1)
     return -(ll * fmask).sum() / fmask.sum().clamp(min=1.0)
 
@@ -166,7 +168,10 @@ def compute_losses(model: KillChainWorldModel, b: dict, cfg: TrainConfig, sw: to
     pos = torch.randint(0, N - 1, (cfg.emit_positions,), generator=gen, device=dv)
     hs = H[:, pos]
     h1 = model.step(hs, model.stage_emb(z[:, pos + 1]), model.prog_emb(torch.maximum(p[:, pos], z[:, pos + 1])))
-    losses["emit"] = emission_nll(model, h1, b["bins_ctx"][:, pos + 1], b["fmask_ctx"][:, pos + 1])
+    # recent-history prior: histogram of the context up to each position (causal)
+    LH = model.context_log_hist(b["bins_ctx"]) if model.emit_prior else None
+    losses["emit"] = emission_nll(model, h1, b["bins_ctx"][:, pos + 1], b["fmask_ctx"][:, pos + 1],
+                                  LH[:, pos] if LH is not None else None)
 
     # imagination unroll with scheduled sampling
     h = H[:, -1]
@@ -188,7 +193,8 @@ def compute_losses(model: KillChainWorldModel, b: dict, cfg: TrainConfig, sw: to
         zc = zt
         imag_now.append((ce(model.nowcast(h), fut_z[:, k], weight=sw, reduction="none"), fut_v[:, k]))
         if k in emit_steps:
-            imag_emit.append(emission_nll(model, h, b["bins_fut"][:, k], b["fmask_fut"][:, k]))
+            imag_emit.append(emission_nll(model, h, b["bins_fut"][:, k], b["fmask_fut"][:, k],
+                                          LH[:, -1] if LH is not None else None))
 
     def masked_mean(pairs):
         num = sum((loss * v.float()).sum() for loss, v in pairs)
@@ -264,7 +270,8 @@ def fit(arr: Arrays, train: np.ndarray, cal: np.ndarray, cfg: TrainConfig, *, n_
     model = KillChainWorldModel(arr.n_features, arr.m.shape[1], n_bins=n_bins, d=cfg.d,
                                 layers=cfg.layers, heads=cfg.heads, ff=cfg.ff,
                                 dropout=cfg.dropout, max_len=cfg.context,
-                                n_direct=len(cfg.horizons) if cfg.direct_risk else 0).to(dv)
+                                n_direct=len(cfg.horizons) if cfg.direct_risk else 0,
+                                emit_prior=bool(cfg.emit_prior)).to(dv)
     opt = torch.optim.AdamW(model.parameters(), lr=cfg.lr, weight_decay=cfg.weight_decay)
     batcher = Batcher(arr, cfg)
     sw = stage_weights(arr.stage[train])
@@ -278,7 +285,7 @@ def fit(arr: Arrays, train: np.ndarray, cal: np.ndarray, cfg: TrainConfig, *, n_
     cal_v = cal[arr.valid[Kp][cal]]
     history, best, best_state, stale = [], -1.0, None, 0
     n_params = sum(p.numel() for p in model.parameters())
-    log(f"  KC-WM {n_params / 1e6:.2f}M params; train anchors {len(train)}, cal {len(cal_v)}; pos_weight {pos_weight}")
+    log(f"  CRYONEX {n_params / 1e6:.2f}M params; train anchors {len(train)}, cal {len(cal_v)}; pos_weight {pos_weight}")
     for epoch in range(cfg.epochs):
         model.train()
         t0 = time.time()

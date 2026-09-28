@@ -48,7 +48,13 @@ class Prepared:
 
 def prepare(win: pl.DataFrame, split: Split, cfg: dict, *, mode: str = "global",
             with_bins: bool = False) -> Prepared:
-    raw = win.select(FEATURE_NAMES).to_numpy().astype(np.float64)
+    # Feature groups can be switched off in the config (``features.exclude_groups``). The frozen
+    # recipe excludes the long-memory "history" group (docs/DEV_HISTORY.md, Kaggle experiments).
+    from ..features.registry import names_in_group
+
+    drop = {n for g in cfg.get("features", {}).get("exclude_groups", []) for n in names_in_group(g)}
+    names = [n for n in FEATURE_NAMES if n not in drop]
+    raw = win.select(names).to_numpy().astype(np.float64)
     # Statistics describe *active* traffic: an empty window is a trivial all-zero state, and
     # a near-idle network (DAPT2020: 49% empty windows) would otherwise drag every dataset's
     # medians and quantile bins toward zero.
@@ -57,7 +63,7 @@ def prepare(win: pl.DataFrame, split: Split, cfg: dict, *, mode: str = "global",
         active = win["n_flows"].to_numpy()[fit_rows] > 0
         if active.sum() >= 100:
             fit_rows = fit_rows[active]
-    scaler = RobustScaler.fit(raw[fit_rows])
+    scaler = RobustScaler.fit(raw[fit_rows], names=names)
     horizons = list(cfg["window"]["horizons"])
     arr = build_arrays(win, scaler, mode=mode, horizons=horizons)
     binner = None

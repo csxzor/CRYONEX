@@ -1,6 +1,6 @@
 """Build the offline knowledge base (run once, with network; the outputs are committed).
 
-* ``third_party/attack_subset.json``: the ATT&CK tactics and techniques KC-WM can emit,
+* ``third_party/attack_subset.json``: the ATT&CK tactics and techniques CRYONEX can emit,
   with names, descriptions, URLs and mitigations. Extracted from the full Enterprise STIX
   bundle (``enterprise-attack.json``, ~50 MB, not committed).
 * ``third_party/d3fend_subset.json``: the D3FEND countermeasures mapped to each of those

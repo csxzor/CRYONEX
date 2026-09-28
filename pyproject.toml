@@ -27,7 +27,8 @@ explain = ["shap>=0.46", "matplotlib>=3.9"]
 dev = ["pytest>=8.0", "ruff>=0.6"]
 
 [project.scripts]
-kcwm = "kcwm.cli:app"
+cryonex = "kcwm.cli:app"
+kcwm = "kcwm.cli:app"  # original name, kept as an alias
 
 [build-system]
 requires = ["hatchling"]

@@ -12,7 +12,7 @@ Speaker-ready content. Numbers are from `docs/BENCHMARKS.md` (the final test spl
 * Recon, then access, then C2, then lateral movement, exfiltration and impact.
 * A defender needs to know *where the network is heading*, not only what just happened.
 
-**KC-WM, the Kill-Chain World Model.** It learns `P(S_t+1 | S_t)` over network states, simulates
+**CRYONEX, the Kill-Chain World Model.** It learns `P(S_t+1 | S_t)` over network states, simulates
 the next 5 minutes, and reports:
 
 1. infiltration risk;
@@ -45,8 +45,8 @@ Flow + packet features → 92-dimensional state every 10 s → world model → r
 
 | | AUPRC | vs required LR |
 |---|---|---|
-| **KC-WM hybrid** | **0.847** | **+0.20** |
-| KC-WM world model alone | 0.820 | +0.17 |
+| **CRYONEX hybrid** | **0.847** | **+0.20** |
+| CRYONEX world model alone | 0.820 | +0.17 |
 | Gradient boosting | 0.767 | +0.12 |
 | Logistic regression (required) | 0.650 | — |
 
@@ -78,5 +78,5 @@ Flow + packet features → 92-dimensional state every 10 s → world model → r
 * **Two alert levels:** ⚠️ *early warning* (the world model forecasts a compromise within 5 minutes) and 🔴 *attack in progress* (hybrid detector).
 * **Console (offline Streamlit):** risk timeline, simulated-future fan, kill-chain progress, driving features in native units, host attribution with flagged flows, and ATT&CK + D3FEND cards.
 * **Next-stage prediction on kill-chain campaigns:** about 50% vs 14% for a count-based Markov rule. No classifier can do this at all.
-* **Deployment:** `uv sync && kcwm serve`, CPU only, a 4 MB model; a 2-hour, 334k-flow capture analysed in under a minute.
+* **Deployment:** `uv sync && cryonex serve`, CPU only, a 4 MB model; a 2-hour, 334k-flow capture analysed in under a minute.
 * **For CII:** ingests NetFlow, CICFlowMeter or PCAP; calibrate once on 15 min of normal traffic; every alert carries its explanation and ATT&CK/D3FEND mapping.

@@ -1,6 +1,6 @@
 # Demo video script (2:00)
 
-Record from `kcwm serve` with the release bundle (`artifacts/release/kcwm.pt`), normalisation
+Record from `cryonex serve` with the release bundle (`artifacts/release/kcwm.pt`), normalisation
 `warmup`. Both samples are real CIC-IDS2017 traffic from **outside the model's training
 period**. Every number said aloud is on screen or in `docs/BENCHMARKS.md`.
 
@@ -8,7 +8,7 @@ period**. Every number said aloud is on screen or in `docs/BENCHMARKS.md`.
 
 | Time | Screen | Narration |
 |---|---|---|
-| 0:00–0:15 | Console title | "Intrusion detectors look at one moment at a time. An attack is a process. KC-WM is a world model: it learns how a network evolves and simulates its next five minutes, to warn *before* compromise." |
+| 0:00–0:15 | Console title | "Intrusion detectors look at one moment at a time. An attack is a process. CRYONEX is a world model: it learns how a network evolves and simulates its next five minutes, to warn *before* compromise." |
 | 0:15–0:30 | Metrics row; risk timeline | "This is 70 minutes of real traffic the model never trained on, parsed offline on a laptop." |
 | 0:30–0:40 | Slider to 17:45 (amber) | "At 17:45 there is an early warning with no attack: a false alarm. We show it because we measure false alarms, about 3 an hour on this traffic." |
 | 0:40–1:05 | Slider to 18:09 (amber), 18:11 (red), 18:12 (ground-truth marker) | "At 18:09 the world model's simulated futures converge on compromise: **early warning**. At 18:11, **attack in progress**. The Heartbleed exploit starts at 18:12, three minutes after the first warning." |

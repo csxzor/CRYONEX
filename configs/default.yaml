@@ -1,4 +1,4 @@
-# KC-WM default configuration. Every experiment config overrides a subset of this file.
+# CRYONEX default configuration. Every experiment config overrides a subset of this file.
 
 paths:
   # Raw datasets, read-only. v1 (~/Desktop/sih) layout: <data_root>/raw/<dataset>/...
@@ -32,6 +32,11 @@ split:
   benign_keep:
     dapt2020: 0.2
 
+features:
+  # Feature groups left out of the model input. "history" (30 min / 2 h rolling maxima) cost
+  # ~0.03 pooled AUPRC on dev for a small early-warning gain (docs/DEV_HISTORY.md).
+  exclude_groups: [history]
+
 normalise:
   skip_empty: true   # fit scaler/bins on windows with at least one flow
 
@@ -39,6 +44,14 @@ alert:
   fpr_budgets: [0.01, 0.03]
   primary_fpr_budget: 0.03
   hysteresis: 2
+  # Level-1 early warning: share of quiet benign calibration windows allowed a warning
+  # (3% warned 51/207 real attacks; 5% warns 69/207 at ~2% false-warning time; post-hoc choice).
+  early_warning_budget: 0.05
+
+stages:
+  # Next-stage forecast = world-model rollout^w x learned transition table^(1-w), the table
+  # read at the model's own current stage and progress. w chosen on dev (docs/DEV_HISTORY.md).
+  next_stage_blend: 0.25
 
 seeds: [17, 23, 29]
 
@@ -73,3 +86,12 @@ datasets:
     root: repo
     raw: data/raw/dapt2020
     internal_cidrs: ["192.168.3.0/24"]
+  darpa2000:
+    reader: darpa2000
+    # MIT LL DARPA 2000 LLDOS 1.0 / 2.0.2 (PCAP + per-phase session lists). Held out: never
+    # trained or tuned on; used only to test kill-chain forecasting on an unseen network.
+    root: repo
+    raw: data/raw/darpa2000
+    holdout: true
+    internal_cidrs: ["172.16.0.0/16"]
+

@@ -1,0 +1,720 @@
+{
+  "lead_1": {
+    "chain_steps": {
+      "all": {
+        "n": 105,
+        "attack_prior": {
+          "top1": 0.4666666666666667,
+          "top2": 0.6761904761904762
+        },
+        "markov": {
+          "top1": 0.5047619047619047,
+          "top2": 0.8476190476190476
+        },
+        "majority": {
+          "top1": 0.22857142857142856,
+          "top2": 0.6095238095238096
+        },
+        "attack_prior_deployable": {
+          "top1": 0.41904761904761906,
+          "top2": 0.6285714285714286
+        },
+        "kcwm_deployable": {
+          "top1": 0.4095238095238095,
+          "top2": 0.6571428571428571
+        },
+        "kcwm_oracle": {
+          "top1": 0.5619047619047619,
+          "top2": 0.780952380952381
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.37142857142857144,
+          "top2": 0.6
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.5238095238095238,
+          "top2": 0.7523809523809524
+        }
+      },
+      "cicids2017": {
+        "n": 18,
+        "attack_prior": {
+          "top1": 0.2777777777777778,
+          "top2": 0.5
+        },
+        "markov": {
+          "top1": 0.6666666666666666,
+          "top2": 0.7777777777777778
+        },
+        "majority": {
+          "top1": 0.2777777777777778,
+          "top2": 0.3888888888888889
+        },
+        "attack_prior_deployable": {
+          "top1": 0.5,
+          "top2": 0.6111111111111112
+        },
+        "kcwm_deployable": {
+          "top1": 0.5,
+          "top2": 0.6111111111111112
+        },
+        "kcwm_oracle": {
+          "top1": 0.5555555555555556,
+          "top2": 0.5555555555555556
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.16666666666666666,
+          "top2": 0.3888888888888889
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.6111111111111112,
+          "top2": 0.7222222222222222
+        }
+      },
+      "cicids2018": {
+        "n": 1,
+        "attack_prior": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "markov": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "majority": {
+          "top1": 0.0,
+          "top2": 1.0
+        },
+        "attack_prior_deployable": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "kcwm_deployable": {
+          "top1": 0.0,
+          "top2": 1.0
+        },
+        "kcwm_oracle": {
+          "top1": 1.0,
+          "top2": 1.0
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.0,
+          "top2": 0.0
+        }
+      },
+      "ctu13": {
+        "n": 86,
+        "attack_prior": {
+          "top1": 0.5116279069767442,
+          "top2": 0.7209302325581395
+        },
+        "markov": {
+          "top1": 0.47674418604651164,
+          "top2": 0.872093023255814
+        },
+        "majority": {
+          "top1": 0.22093023255813954,
+          "top2": 0.6511627906976745
+        },
+        "attack_prior_deployable": {
+          "top1": 0.4069767441860465,
+          "top2": 0.6395348837209303
+        },
+        "kcwm_deployable": {
+          "top1": 0.3953488372093023,
+          "top2": 0.6627906976744186
+        },
+        "kcwm_oracle": {
+          "top1": 0.5581395348837209,
+          "top2": 0.8255813953488372
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.4186046511627907,
+          "top2": 0.6511627906976745
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.5116279069767442,
+          "top2": 0.7674418604651163
+        }
+      }
+    },
+    "first_steps": {
+      "all": {
+        "n": 62,
+        "attack_prior": {
+          "top1": 0.0967741935483871,
+          "top2": 0.1774193548387097
+        },
+        "markov": {
+          "top1": 0.0967741935483871,
+          "top2": 0.1774193548387097
+        },
+        "majority": {
+          "top1": 0.4838709677419355,
+          "top2": 0.6451612903225806
+        },
+        "attack_prior_deployable": {
+          "top1": 0.27419354838709675,
+          "top2": 0.3387096774193548
+        },
+        "kcwm_deployable": {
+          "top1": 0.6935483870967742,
+          "top2": 0.7903225806451613
+        },
+        "kcwm_oracle": {
+          "top1": 0.43548387096774194,
+          "top2": 0.6451612903225806
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.08064516129032258,
+          "top2": 0.25806451612903225
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.0967741935483871,
+          "top2": 0.1774193548387097
+        }
+      }
+    },
+    "hazard": {
+      "all": {
+        "5m": {
+          "n": 227725,
+          "base_rate": 0.0005181688440004391,
+          "deployable": {
+            "auprc": 0.0009872986023311743,
+            "steps_warned_at_0.01": "2/137",
+            "steps_warned_at_0.05": "15/137"
+          },
+          "oracle": {
+            "auprc": 0.004492380701470549,
+            "steps_warned_at_0.01": "21/137",
+            "steps_warned_at_0.05": "32/137"
+          }
+        },
+        "1h": {
+          "n": 216276,
+          "base_rate": 0.004485009894764098,
+          "deployable": {
+            "auprc": 0.01060048456204063,
+            "steps_warned_at_0.01": "1/137",
+            "steps_warned_at_0.05": "6/137"
+          },
+          "oracle": {
+            "auprc": 0.04101875932214377,
+            "steps_warned_at_0.01": "37/137",
+            "steps_warned_at_0.05": "55/137"
+          }
+        },
+        "24h": {
+          "n": 83531,
+          "base_rate": 0.039865439178269145,
+          "deployable": {
+            "auprc": 0.21163485830633536,
+            "steps_warned_at_0.01": "25/137",
+            "steps_warned_at_0.05": "27/137"
+          },
+          "oracle": {
+            "auprc": 0.2421757639285348,
+            "steps_warned_at_0.01": "30/137",
+            "steps_warned_at_0.05": "86/137"
+          }
+        }
+      },
+      "cicids2017": {
+        "5m": {
+          "n": 7397,
+          "base_rate": 0.0036501284304447748,
+          "deployable": {
+            "auprc": 0.003943943542767366,
+            "steps_warned_at_0.01": "0/28",
+            "steps_warned_at_0.05": "0/28"
+          },
+          "oracle": {
+            "auprc": 0.0035861158333528303,
+            "steps_warned_at_0.01": "0/28",
+            "steps_warned_at_0.05": "0/28"
+          }
+        },
+        "1h": {
+          "n": 7232,
+          "base_rate": 0.03857853982300885,
+          "deployable": {
+            "auprc": 0.045998641473987,
+            "steps_warned_at_0.01": "0/28",
+            "steps_warned_at_0.05": "1/28"
+          },
+          "oracle": {
+            "auprc": 0.034327869133219314,
+            "steps_warned_at_0.01": "0/28",
+            "steps_warned_at_0.05": "1/28"
+          }
+        },
+        "24h": {
+          "n": 6114,
+          "base_rate": 0.31386980700032713,
+          "deployable": {
+            "auprc": 0.8411377152151974,
+            "steps_warned_at_0.01": "22/28",
+            "steps_warned_at_0.05": "26/28"
+          },
+          "oracle": {
+            "auprc": 0.8696721187925986,
+            "steps_warned_at_0.01": "24/28",
+            "steps_warned_at_0.05": "25/28"
+          }
+        }
+      },
+      "cicids2018": {
+        "5m": {
+          "n": 54384,
+          "base_rate": 0.0002390408943807002,
+          "deployable": {
+            "auprc": 0.0003026114040139183,
+            "steps_warned_at_0.01": "0/13",
+            "steps_warned_at_0.05": "0/13"
+          },
+          "oracle": {
+            "auprc": 0.0003566497135876204,
+            "steps_warned_at_0.01": "1/13",
+            "steps_warned_at_0.05": "1/13"
+          }
+        },
+        "1h": {
+          "n": 54240,
+          "base_rate": 0.0028761061946902654,
+          "deployable": {
+            "auprc": 0.003648387707829021,
+            "steps_warned_at_0.01": "0/13",
+            "steps_warned_at_0.05": "5/13"
+          },
+          "oracle": {
+            "auprc": 0.005756338417502324,
+            "steps_warned_at_0.01": "2/13",
+            "steps_warned_at_0.05": "2/13"
+          }
+        },
+        "24h": {
+          "n": 45015,
+          "base_rate": 0.007042097078751528,
+          "deployable": {
+            "auprc": 0.007756444426849505,
+            "steps_warned_at_0.01": "0/13",
+            "steps_warned_at_0.05": "0/13"
+          },
+          "oracle": {
+            "auprc": 0.015279576102106555,
+            "steps_warned_at_0.01": "0/13",
+            "steps_warned_at_0.05": "1/13"
+          }
+        }
+      },
+      "ctu13": {
+        "5m": {
+          "n": 165944,
+          "base_rate": 0.0004700380851371547,
+          "deployable": {
+            "auprc": 0.0009491106121855083,
+            "steps_warned_at_0.01": "1/96",
+            "steps_warned_at_0.05": "10/96"
+          },
+          "oracle": {
+            "auprc": 0.007164794348484557,
+            "steps_warned_at_0.01": "19/96",
+            "steps_warned_at_0.05": "32/96"
+          }
+        },
+        "1h": {
+          "n": 154804,
+          "base_rate": 0.003455983049533604,
+          "deployable": {
+            "auprc": 0.01935498875538394,
+            "steps_warned_at_0.01": "1/96",
+            "steps_warned_at_0.05": "16/96"
+          },
+          "oracle": {
+            "auprc": 0.07479237382522945,
+            "steps_warned_at_0.01": "34/96",
+            "steps_warned_at_0.05": "52/96"
+          }
+        },
+        "24h": {
+          "n": 32402,
+          "base_rate": 0.03376334794148509,
+          "deployable": {
+            "auprc": 0.08354380100416509,
+            "steps_warned_at_0.01": "5/96",
+            "steps_warned_at_0.05": "9/96"
+          },
+          "oracle": {
+            "auprc": 0.35268542296810196,
+            "steps_warned_at_0.01": "17/96",
+            "steps_warned_at_0.05": "67/96"
+          }
+        }
+      }
+    }
+  },
+  "lead_360": {
+    "chain_steps": {
+      "all": {
+        "n": 69,
+        "attack_prior": {
+          "top1": 0.4492753623188406,
+          "top2": 0.7246376811594203
+        },
+        "markov": {
+          "top1": 0.5652173913043478,
+          "top2": 0.782608695652174
+        },
+        "majority": {
+          "top1": 0.2608695652173913,
+          "top2": 0.6956521739130435
+        },
+        "attack_prior_deployable": {
+          "top1": 0.5072463768115942,
+          "top2": 0.6231884057971014
+        },
+        "kcwm_deployable": {
+          "top1": 0.4927536231884058,
+          "top2": 0.7246376811594203
+        },
+        "kcwm_oracle": {
+          "top1": 0.5072463768115942,
+          "top2": 0.7391304347826086
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.43478260869565216,
+          "top2": 0.5652173913043478
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.5652173913043478,
+          "top2": 0.6666666666666666
+        }
+      },
+      "cicids2017": {
+        "n": 17,
+        "attack_prior": {
+          "top1": 0.29411764705882354,
+          "top2": 0.5294117647058824
+        },
+        "markov": {
+          "top1": 0.7058823529411765,
+          "top2": 0.8235294117647058
+        },
+        "majority": {
+          "top1": 0.29411764705882354,
+          "top2": 0.4117647058823529
+        },
+        "attack_prior_deployable": {
+          "top1": 0.47058823529411764,
+          "top2": 0.5882352941176471
+        },
+        "kcwm_deployable": {
+          "top1": 0.4117647058823529,
+          "top2": 0.6470588235294118
+        },
+        "kcwm_oracle": {
+          "top1": 0.7058823529411765,
+          "top2": 0.7058823529411765
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.17647058823529413,
+          "top2": 0.4117647058823529
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.5882352941176471,
+          "top2": 0.7647058823529411
+        }
+      },
+      "cicids2018": {
+        "n": 1,
+        "attack_prior": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "markov": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "majority": {
+          "top1": 0.0,
+          "top2": 1.0
+        },
+        "attack_prior_deployable": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "kcwm_deployable": {
+          "top1": 0.0,
+          "top2": 1.0
+        },
+        "kcwm_oracle": {
+          "top1": 1.0,
+          "top2": 1.0
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.0,
+          "top2": 0.0
+        }
+      },
+      "ctu13": {
+        "n": 51,
+        "attack_prior": {
+          "top1": 0.5098039215686274,
+          "top2": 0.803921568627451
+        },
+        "markov": {
+          "top1": 0.5294117647058824,
+          "top2": 0.7843137254901961
+        },
+        "majority": {
+          "top1": 0.2549019607843137,
+          "top2": 0.7843137254901961
+        },
+        "attack_prior_deployable": {
+          "top1": 0.5294117647058824,
+          "top2": 0.6470588235294118
+        },
+        "kcwm_deployable": {
+          "top1": 0.5294117647058824,
+          "top2": 0.7450980392156863
+        },
+        "kcwm_oracle": {
+          "top1": 0.43137254901960786,
+          "top2": 0.7450980392156863
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.5294117647058824,
+          "top2": 0.6274509803921569
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.5686274509803921,
+          "top2": 0.6470588235294118
+        }
+      }
+    },
+    "first_steps": {
+      "all": {
+        "n": 31,
+        "attack_prior": {
+          "top1": 0.0967741935483871,
+          "top2": 0.22580645161290322
+        },
+        "markov": {
+          "top1": 0.0967741935483871,
+          "top2": 0.22580645161290322
+        },
+        "majority": {
+          "top1": 0.4838709677419355,
+          "top2": 0.5161290322580645
+        },
+        "attack_prior_deployable": {
+          "top1": 0.41935483870967744,
+          "top2": 0.5161290322580645
+        },
+        "kcwm_deployable": {
+          "top1": 0.5483870967741935,
+          "top2": 0.7419354838709677
+        },
+        "kcwm_oracle": {
+          "top1": 0.41935483870967744,
+          "top2": 0.5161290322580645
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.0967741935483871,
+          "top2": 0.3870967741935484
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.0967741935483871,
+          "top2": 0.22580645161290322
+        }
+      }
+    },
+    "hazard": {
+      "all": {
+        "5m": {
+          "n": 227725,
+          "base_rate": 0.0005181688440004391,
+          "deployable": {
+            "auprc": 0.0009872986023311743,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          },
+          "oracle": {
+            "auprc": 0.004492380701470549,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          }
+        },
+        "1h": {
+          "n": 216276,
+          "base_rate": 0.004485009894764098,
+          "deployable": {
+            "auprc": 0.01060048456204063,
+            "steps_warned_at_0.01": "0/13",
+            "steps_warned_at_0.05": "0/13"
+          },
+          "oracle": {
+            "auprc": 0.04101875932214377,
+            "steps_warned_at_0.01": "0/13",
+            "steps_warned_at_0.05": "2/13"
+          }
+        },
+        "24h": {
+          "n": 83531,
+          "base_rate": 0.039865439178269145,
+          "deployable": {
+            "auprc": 0.21163485830633536,
+            "steps_warned_at_0.01": "25/88",
+            "steps_warned_at_0.05": "27/88"
+          },
+          "oracle": {
+            "auprc": 0.2421757639285348,
+            "steps_warned_at_0.01": "10/88",
+            "steps_warned_at_0.05": "34/88"
+          }
+        }
+      },
+      "cicids2017": {
+        "5m": {
+          "n": 7397,
+          "base_rate": 0.0036501284304447748,
+          "deployable": {
+            "auprc": 0.003943943542767366,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          },
+          "oracle": {
+            "auprc": 0.0035861158333528303,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          }
+        },
+        "1h": {
+          "n": 7232,
+          "base_rate": 0.03857853982300885,
+          "deployable": {
+            "auprc": 0.045998641473987,
+            "steps_warned_at_0.01": "0/6",
+            "steps_warned_at_0.05": "0/6"
+          },
+          "oracle": {
+            "auprc": 0.034327869133219314,
+            "steps_warned_at_0.01": "0/6",
+            "steps_warned_at_0.05": "0/6"
+          }
+        },
+        "24h": {
+          "n": 6114,
+          "base_rate": 0.31386980700032713,
+          "deployable": {
+            "auprc": 0.8411377152151974,
+            "steps_warned_at_0.01": "21/26",
+            "steps_warned_at_0.05": "24/26"
+          },
+          "oracle": {
+            "auprc": 0.8696721187925986,
+            "steps_warned_at_0.01": "9/26",
+            "steps_warned_at_0.05": "18/26"
+          }
+        }
+      },
+      "cicids2018": {
+        "5m": {
+          "n": 54384,
+          "base_rate": 0.0002390408943807002,
+          "deployable": {
+            "auprc": 0.0003026114040139183,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          },
+          "oracle": {
+            "auprc": 0.0003566497135876204,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          }
+        },
+        "1h": {
+          "n": 54240,
+          "base_rate": 0.0028761061946902654,
+          "deployable": {
+            "auprc": 0.003648387707829021,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          },
+          "oracle": {
+            "auprc": 0.005756338417502324,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          }
+        },
+        "24h": {
+          "n": 45015,
+          "base_rate": 0.007042097078751528,
+          "deployable": {
+            "auprc": 0.007756444426849505,
+            "steps_warned_at_0.01": "0/13",
+            "steps_warned_at_0.05": "0/13"
+          },
+          "oracle": {
+            "auprc": 0.015279576102106555,
+            "steps_warned_at_0.01": "1/13",
+            "steps_warned_at_0.05": "1/13"
+          }
+        }
+      },
+      "ctu13": {
+        "5m": {
+          "n": 165944,
+          "base_rate": 0.0004700380851371547,
+          "deployable": {
+            "auprc": 0.0009491106121855083,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          },
+          "oracle": {
+            "auprc": 0.007164794348484557,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          }
+        },
+        "1h": {
+          "n": 154804,
+          "base_rate": 0.003455983049533604,
+          "deployable": {
+            "auprc": 0.01935498875538394,
+            "steps_warned_at_0.01": "0/7",
+            "steps_warned_at_0.05": "0/7"
+          },
+          "oracle": {
+            "auprc": 0.07479237382522945,
+            "steps_warned_at_0.01": "0/7",
+            "steps_warned_at_0.05": "2/7"
+          }
+        },
+        "24h": {
+          "n": 32402,
+          "base_rate": 0.03376334794148509,
+          "deployable": {
+            "auprc": 0.08354380100416509,
+            "steps_warned_at_0.01": "6/49",
+            "steps_warned_at_0.05": "18/49"
+          },
+          "oracle": {
+            "auprc": 0.35268542296810196,
+            "steps_warned_at_0.01": "8/49",
+            "steps_warned_at_0.05": "27/49"
+          }
+        }
+      }
+    }
+  }
+}

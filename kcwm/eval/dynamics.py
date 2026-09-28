@@ -35,7 +35,7 @@ EPS = 1e-4
 
 
 def _feature_mask(arr: Arrays, rows: np.ndarray) -> np.ndarray:
-    gate = np.asarray(feature_mask_index())
+    gate = np.asarray(feature_mask_index(arr.names))
     fm = np.ones((len(rows), arr.x.shape[1]), dtype=np.float64)
     for g in range(arr.m.shape[1]):
         fm[:, gate == g] = arr.m[rows, g : g + 1]
@@ -115,7 +115,9 @@ def world_model_probs(model: KillChainWorldModel, arr: Arrays, anchors: np.ndarr
     out = {k: [] for k in horizons}
     for i in range(0, len(anchors), batch):
         r = anchors[i : i + batch]
-        H = model.encode(torch.from_numpy(model_input(arr, context_index(r, context))))
+        ctx = context_index(r, context)
+        H = model.encode(torch.from_numpy(model_input(arr, ctx)))
+        lp = model.context_log_hist(torch.from_numpy(arr.bins[ctx]))[:, -1] if model.emit_prior else None
         b0 = torch.softmax(model.nowcast(H[:, -1]), -1)
         p0 = estimate_progress(model, H)
         # replay the analytic path, keeping latents
@@ -125,7 +127,7 @@ def world_model_probs(model: KillChainWorldModel, arr: Arrays, anchors: np.ndarr
             z_m, p_m = fc.stage_marg[:, k - 1], fc.progress_marg[:, k - 1]
             h = model.step(h, z_m @ model.stage_emb.weight, p_m @ model.prog_emb.weight)
             if k in out:
-                out[k].append(torch.softmax(model.emission_logits(h), -1).numpy())
+                out[k].append(torch.softmax(model.emission_logits(h, lp), -1).numpy())
     return {k: np.concatenate(v) for k, v in out.items()}
 
 

@@ -4,7 +4,7 @@ Both sources are committed JSON (``scripts/fetch_kb.py``): the ATT&CK subset is 
 from MITRE's Enterprise STIX bundle, and the countermeasures come from MITRE's D3FEND API.
 Nothing here is written from memory.
 
-D3FEND has no mapping for three techniques KC-WM can emit: T1046 (network service
+D3FEND has no mapping for three techniques CRYONEX can emit: T1046 (network service
 discovery), T1595 (active scanning) and T1496 (resource hijacking). For those,
 ``CURATED_FALLBACK`` lists countermeasures chosen by us; every ID in it appears verbatim in
 D3FEND's mappings for other techniques (checked in ``tests/test_kb.py``). The UI labels them

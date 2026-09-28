@@ -1,0 +1,8 @@
+{
+  "tag": "chain-heldout-darpa",
+  "seed": 17,
+  "folds": [
+    "darpa2000"
+  ],
+  "seconds": 295.47693610191345
+}

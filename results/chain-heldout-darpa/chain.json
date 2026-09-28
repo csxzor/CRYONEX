@@ -1,0 +1,404 @@
+{
+  "lead_1": {
+    "chain_steps": {
+      "all": {
+        "n": 10,
+        "attack_prior": {
+          "top1": 0.9,
+          "top2": 0.9
+        },
+        "markov": {
+          "top1": 0.4,
+          "top2": 0.4
+        },
+        "majority": {
+          "top1": 0.0,
+          "top2": 0.4
+        },
+        "attack_prior_deployable": {
+          "top1": 0.2,
+          "top2": 0.4
+        },
+        "kcwm_deployable": {
+          "top1": 0.1,
+          "top2": 0.3
+        },
+        "kcwm_oracle": {
+          "top1": 0.4,
+          "top2": 0.6
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.2,
+          "top2": 0.4
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.9,
+          "top2": 0.9
+        }
+      },
+      "darpa2000": {
+        "n": 10,
+        "attack_prior": {
+          "top1": 0.9,
+          "top2": 0.9
+        },
+        "markov": {
+          "top1": 0.4,
+          "top2": 0.4
+        },
+        "majority": {
+          "top1": 0.0,
+          "top2": 0.4
+        },
+        "attack_prior_deployable": {
+          "top1": 0.2,
+          "top2": 0.4
+        },
+        "kcwm_deployable": {
+          "top1": 0.1,
+          "top2": 0.3
+        },
+        "kcwm_oracle": {
+          "top1": 0.4,
+          "top2": 0.6
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.2,
+          "top2": 0.4
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.9,
+          "top2": 0.9
+        }
+      }
+    },
+    "first_steps": {
+      "all": {
+        "n": 20,
+        "attack_prior": {
+          "top1": 0.9,
+          "top2": 0.9
+        },
+        "markov": {
+          "top1": 0.9,
+          "top2": 0.9
+        },
+        "majority": {
+          "top1": 0.9,
+          "top2": 0.9
+        },
+        "attack_prior_deployable": {
+          "top1": 0.5,
+          "top2": 0.65
+        },
+        "kcwm_deployable": {
+          "top1": 0.55,
+          "top2": 0.7
+        },
+        "kcwm_oracle": {
+          "top1": 0.05,
+          "top2": 0.15
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.5,
+          "top2": 0.65
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.9,
+          "top2": 0.9
+        }
+      }
+    },
+    "hazard": {
+      "all": {
+        "5m": {
+          "n": 1142,
+          "base_rate": 0.010507880910683012,
+          "deployable": {
+            "auprc": 0.014370054598286204,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "0/12"
+          },
+          "oracle": {
+            "auprc": 0.01652766055588414,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "1/12"
+          }
+        },
+        "1h": {
+          "n": 755,
+          "base_rate": 0.1152317880794702,
+          "deployable": {
+            "auprc": 0.1351253047074618,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "1/12"
+          },
+          "oracle": {
+            "auprc": 0.09315566023790836,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "0/12"
+          }
+        },
+        "24h": {
+          "n": 96,
+          "base_rate": 1.0,
+          "deployable": {
+            "auprc": NaN,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "0/12"
+          },
+          "oracle": {
+            "auprc": NaN,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "0/12"
+          }
+        }
+      },
+      "darpa2000": {
+        "5m": {
+          "n": 1142,
+          "base_rate": 0.010507880910683012,
+          "deployable": {
+            "auprc": 0.014370054598286204,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "0/12"
+          },
+          "oracle": {
+            "auprc": 0.01652766055588414,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "1/12"
+          }
+        },
+        "1h": {
+          "n": 755,
+          "base_rate": 0.1152317880794702,
+          "deployable": {
+            "auprc": 0.1351253047074618,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "1/12"
+          },
+          "oracle": {
+            "auprc": 0.09315566023790836,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "0/12"
+          }
+        },
+        "24h": {
+          "n": 96,
+          "base_rate": 1.0,
+          "deployable": {
+            "auprc": NaN,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "0/12"
+          },
+          "oracle": {
+            "auprc": NaN,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "0/12"
+          }
+        }
+      }
+    }
+  },
+  "lead_360": {
+    "chain_steps": {
+      "all": {
+        "n": 7,
+        "attack_prior": {
+          "top1": 1.0,
+          "top2": 1.0
+        },
+        "markov": {
+          "top1": 0.42857142857142855,
+          "top2": 0.42857142857142855
+        },
+        "majority": {
+          "top1": 0.0,
+          "top2": 0.42857142857142855
+        },
+        "attack_prior_deployable": {
+          "top1": 0.2857142857142857,
+          "top2": 0.7142857142857143
+        },
+        "kcwm_deployable": {
+          "top1": 0.14285714285714285,
+          "top2": 0.42857142857142855
+        },
+        "kcwm_oracle": {
+          "top1": 0.5714285714285714,
+          "top2": 0.7142857142857143
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.2857142857142857,
+          "top2": 0.7142857142857143
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.0,
+          "top2": 0.42857142857142855
+        }
+      },
+      "darpa2000": {
+        "n": 7,
+        "attack_prior": {
+          "top1": 1.0,
+          "top2": 1.0
+        },
+        "markov": {
+          "top1": 0.42857142857142855,
+          "top2": 0.42857142857142855
+        },
+        "majority": {
+          "top1": 0.0,
+          "top2": 0.42857142857142855
+        },
+        "attack_prior_deployable": {
+          "top1": 0.2857142857142857,
+          "top2": 0.7142857142857143
+        },
+        "kcwm_deployable": {
+          "top1": 0.14285714285714285,
+          "top2": 0.42857142857142855
+        },
+        "kcwm_oracle": {
+          "top1": 0.5714285714285714,
+          "top2": 0.7142857142857143
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.2857142857142857,
+          "top2": 0.7142857142857143
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.0,
+          "top2": 0.42857142857142855
+        }
+      }
+    },
+    "first_steps": {
+      "all": {
+        "n": 1,
+        "attack_prior": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "markov": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "majority": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "attack_prior_deployable": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "kcwm_deployable": {
+          "top1": 0.0,
+          "top2": 1.0
+        },
+        "kcwm_oracle": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.0,
+          "top2": 0.0
+        }
+      }
+    },
+    "hazard": {
+      "all": {
+        "5m": {
+          "n": 1142,
+          "base_rate": 0.010507880910683012,
+          "deployable": {
+            "auprc": 0.014370054598286204,
+            "steps_warned_at_0.01": "0/3",
+            "steps_warned_at_0.05": "0/3"
+          },
+          "oracle": {
+            "auprc": 0.01652766055588414,
+            "steps_warned_at_0.01": "1/3",
+            "steps_warned_at_0.05": "1/3"
+          }
+        },
+        "1h": {
+          "n": 755,
+          "base_rate": 0.1152317880794702,
+          "deployable": {
+            "auprc": 0.1351253047074618,
+            "steps_warned_at_0.01": "0/8",
+            "steps_warned_at_0.05": "0/8"
+          },
+          "oracle": {
+            "auprc": 0.09315566023790836,
+            "steps_warned_at_0.01": "1/8",
+            "steps_warned_at_0.05": "1/8"
+          }
+        },
+        "24h": {
+          "n": 96,
+          "base_rate": 1.0,
+          "deployable": {
+            "auprc": NaN,
+            "steps_warned_at_0.01": "0/8",
+            "steps_warned_at_0.05": "0/8"
+          },
+          "oracle": {
+            "auprc": NaN,
+            "steps_warned_at_0.01": "0/8",
+            "steps_warned_at_0.05": "0/8"
+          }
+        }
+      },
+      "darpa2000": {
+        "5m": {
+          "n": 1142,
+          "base_rate": 0.010507880910683012,
+          "deployable": {
+            "auprc": 0.014370054598286204,
+            "steps_warned_at_0.01": "0/3",
+            "steps_warned_at_0.05": "0/3"
+          },
+          "oracle": {
+            "auprc": 0.01652766055588414,
+            "steps_warned_at_0.01": "1/3",
+            "steps_warned_at_0.05": "1/3"
+          }
+        },
+        "1h": {
+          "n": 755,
+          "base_rate": 0.1152317880794702,
+          "deployable": {
+            "auprc": 0.1351253047074618,
+            "steps_warned_at_0.01": "0/8",
+            "steps_warned_at_0.05": "0/8"
+          },
+          "oracle": {
+            "auprc": 0.09315566023790836,
+            "steps_warned_at_0.01": "1/8",
+            "steps_warned_at_0.05": "1/8"
+          }
+        },
+        "24h": {
+          "n": 96,
+          "base_rate": 1.0,
+          "deployable": {
+            "auprc": NaN,
+            "steps_warned_at_0.01": "0/8",
+            "steps_warned_at_0.05": "0/8"
+          },
+          "oracle": {
+            "auprc": NaN,
+            "steps_warned_at_0.01": "0/8",
+            "steps_warned_at_0.05": "0/8"
+          }
+        }
+      }
+    }
+  }
+}

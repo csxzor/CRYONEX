@@ -12,6 +12,8 @@ it forecasts. The console ingests them exactly like a user upload.
 | dapt_friday_exfiltration.csv.gz | data exfiltration 20:33, 20:40 |
 | dapt_wednesday_foothold.csv.gz | repeated foothold attempts from 21:08 |
 | ctu13_s04_c2_ddos.binetflow.gz | bot C2 and DDoS from 14:27 |
+| darpa2000_lldos2_inside.pcap | DARPA 2000 LLDOS 2.0.2, held out: recon 19:05, break-in 19:17, tool upload 19:29, lateral move mill -> pascal 19:42, DDoS 20:05 (UTC) |
+| darpa2000_lldos1_inside.pcap | DARPA 2000 LLDOS 1.0, held out: sweep, probe, break-in of three hosts, mstream install, DDoS |
 """
 
 from __future__ import annotations
@@ -41,6 +43,21 @@ def slice_csv(src, start: str, end: str, name: str, *, ts_col: str, header=None)
     print(f"{name}: {cut.height:,} flows, {(OUT / name).stat().st_size / 1e6:.1f} MB")
 
 
+def darpa_samples() -> None:
+    """Held-out DARPA 2000 PCAPs, with their phase labels as a sidecar (truth ribbon only)."""
+    import shutil
+
+    from kcwm.ingest.darpa import SCENARIOS, write_sidecar
+
+    root = config.dataset_dir("darpa2000")
+    for name, sc in SCENARIOS.items():
+        src = root / sc["dir"] / sc["pcap"]
+        dst = OUT / f"darpa2000_{name}_inside.pcap"
+        shutil.copyfile(src, dst)
+        write_sidecar(name, root, dst.with_name(dst.name + ".labels.csv"))
+        print(f"{dst.name}: {dst.stat().st_size / 1e6:.0f} MB (+ labels sidecar)")
+
+
 def main() -> None:
     OUT.mkdir(exist_ok=True)
     for old in OUT.glob("*"):
@@ -61,4 +78,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+
+    darpa_samples() if "darpa" in sys.argv[1:] else (main(), darpa_samples())

@@ -1,0 +1,16 @@
+{
+  "tag": "chain-dev-v2",
+  "seed": 17,
+  "folds": [
+    "ctu-A",
+    "ctu-B",
+    "ctu-C",
+    "cic17-monday",
+    "cic17-tuesday",
+    "cic17-wednesday",
+    "cic17-thursday",
+    "cic17-friday",
+    "cicids2018"
+  ],
+  "seconds": 7054.930166959763
+}

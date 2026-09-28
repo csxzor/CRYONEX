@@ -81,3 +81,50 @@ def test_surprise_is_finite_and_mask_aware():
     with torch.no_grad():
         u = one_step_nll(m, h, torch.zeros(4, dtype=torch.long), torch.zeros(4, dtype=torch.long), bins, mask)
     assert torch.isfinite(u).all() and (u > 0).all()
+
+
+def test_residual_emission_starts_at_recent_history():
+    """G3 fix: an untrained emit_prior model predicts exactly the context histogram, and the
+    histogram at position t uses only windows 0..t."""
+    from kcwm.eval.dynamics import context_hist_probs
+    from kcwm.features.normalize import QuantileBinner
+
+    torch.manual_seed(0)
+    nb = np.array([8] * (F - 2) + [5, 3])
+    m = KillChainWorldModel(F, M, n_bins=nb, d=32, layers=1, heads=2, ff=64, max_len=16, emit_prior=True).eval()
+    rng = np.random.default_rng(0)
+    bins = np.stack([rng.integers(0, nb[f], size=(4, 16)) for f in range(F)], axis=-1)   # (B, T, F)
+    lh = m.context_log_hist(torch.from_numpy(bins))
+    p = torch.softmax(m.emission_logits(torch.randn(4, 32), lh[:, -1]), -1).detach().numpy()
+
+    class _B:  # the binner interface context_hist_probs needs
+        def n_bins_per_feature(self):
+            return nb
+
+    ref = context_hist_probs(_B(), bins)
+    np.testing.assert_allclose(p, ref, atol=1e-5)
+    # causal: changing a later window leaves earlier positions' histograms unchanged
+    b2 = bins.copy()
+    b2[:, 10:] = 0
+    lh2 = m.context_log_hist(torch.from_numpy(b2))
+    torch.testing.assert_close(lh[:, :10], lh2[:, :10])
+    del QuantileBinner
+
+
+def test_next_stage_blend_excludes_current_and_benign():
+    from types import SimpleNamespace
+
+    from kcwm.inference.engine import next_stage_probs
+
+    rng = np.random.default_rng(0)
+    sm = rng.random((5, 30, S))
+    now = np.eye(S)[[0, 1, 2, 4, 1]]
+    prog = np.array([0, 1, 2, 4, 3])
+    table = rng.random((S, S, S))
+    for bundle in (SimpleNamespace(transition_table=None, next_stage_blend=1.0),
+                   SimpleNamespace(transition_table=table, next_stage_blend=0.25)):
+        p = next_stage_probs(sm, now, prog, bundle)
+        np.testing.assert_allclose(p.sum(1), 1.0)
+        assert (p[:, 0] == 0).all()
+        cur = now.argmax(1)
+        assert all(p[i, c] == 0 for i, c in enumerate(cur) if c > 0)

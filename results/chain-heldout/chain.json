@@ -1,0 +1,562 @@
+{
+  "lead_1": {
+    "chain_steps": {
+      "all": {
+        "n": 23,
+        "attack_prior": {
+          "top1": 0.43478260869565216,
+          "top2": 0.6086956521739131
+        },
+        "markov": {
+          "top1": 0.391304347826087,
+          "top2": 0.5217391304347826
+        },
+        "majority": {
+          "top1": 0.17391304347826086,
+          "top2": 0.2608695652173913
+        },
+        "attack_prior_deployable": {
+          "top1": 0.21739130434782608,
+          "top2": 0.43478260869565216
+        },
+        "kcwm_deployable": {
+          "top1": 0.13043478260869565,
+          "top2": 0.34782608695652173
+        },
+        "kcwm_oracle": {
+          "top1": 0.2608695652173913,
+          "top2": 0.4782608695652174
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.17391304347826086,
+          "top2": 0.391304347826087
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.30434782608695654,
+          "top2": 0.4782608695652174
+        }
+      },
+      "dapt2020": {
+        "n": 10,
+        "attack_prior": {
+          "top1": 0.1,
+          "top2": 0.5
+        },
+        "markov": {
+          "top1": 0.4,
+          "top2": 0.7
+        },
+        "majority": {
+          "top1": 0.3,
+          "top2": 0.5
+        },
+        "attack_prior_deployable": {
+          "top1": 0.1,
+          "top2": 0.4
+        },
+        "kcwm_deployable": {
+          "top1": 0.1,
+          "top2": 0.3
+        },
+        "kcwm_oracle": {
+          "top1": 0.2,
+          "top2": 0.5
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.1,
+          "top2": 0.4
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.1,
+          "top2": 0.5
+        }
+      },
+      "darpa2000": {
+        "n": 13,
+        "attack_prior": {
+          "top1": 0.6923076923076923,
+          "top2": 0.6923076923076923
+        },
+        "markov": {
+          "top1": 0.38461538461538464,
+          "top2": 0.38461538461538464
+        },
+        "majority": {
+          "top1": 0.07692307692307693,
+          "top2": 0.07692307692307693
+        },
+        "attack_prior_deployable": {
+          "top1": 0.3076923076923077,
+          "top2": 0.46153846153846156
+        },
+        "kcwm_deployable": {
+          "top1": 0.15384615384615385,
+          "top2": 0.38461538461538464
+        },
+        "kcwm_oracle": {
+          "top1": 0.3076923076923077,
+          "top2": 0.46153846153846156
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.23076923076923078,
+          "top2": 0.38461538461538464
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.46153846153846156,
+          "top2": 0.46153846153846156
+        }
+      }
+    },
+    "first_steps": {
+      "all": {
+        "n": 20,
+        "attack_prior": {
+          "top1": 0.9,
+          "top2": 0.95
+        },
+        "markov": {
+          "top1": 0.9,
+          "top2": 0.95
+        },
+        "majority": {
+          "top1": 0.9,
+          "top2": 0.95
+        },
+        "attack_prior_deployable": {
+          "top1": 0.5,
+          "top2": 0.7
+        },
+        "kcwm_deployable": {
+          "top1": 0.5,
+          "top2": 0.7
+        },
+        "kcwm_oracle": {
+          "top1": 0.05,
+          "top2": 0.15
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.5,
+          "top2": 0.8
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.9,
+          "top2": 0.95
+        }
+      }
+    },
+    "hazard": {
+      "all": {
+        "5m": {
+          "n": 4872,
+          "base_rate": 0.004310344827586207,
+          "deployable": {
+            "auprc": 0.004432994819436735,
+            "steps_warned_at_0.01": "0/21",
+            "steps_warned_at_0.05": "0/21"
+          },
+          "oracle": {
+            "auprc": 0.007149725341109172,
+            "steps_warned_at_0.01": "0/21",
+            "steps_warned_at_0.05": "1/21"
+          }
+        },
+        "1h": {
+          "n": 4507,
+          "base_rate": 0.041047259818060795,
+          "deployable": {
+            "auprc": 0.036834610938229186,
+            "steps_warned_at_0.01": "0/21",
+            "steps_warned_at_0.05": "0/21"
+          },
+          "oracle": {
+            "auprc": 0.0687452499830634,
+            "steps_warned_at_0.01": "0/21",
+            "steps_warned_at_0.05": "2/21"
+          }
+        },
+        "24h": {
+          "n": 3813,
+          "base_rate": 0.2134801993181222,
+          "deployable": {
+            "auprc": 0.18536634988281167,
+            "steps_warned_at_0.01": "3/21",
+            "steps_warned_at_0.05": "3/21"
+          },
+          "oracle": {
+            "auprc": 0.2922029756660201,
+            "steps_warned_at_0.01": "0/21",
+            "steps_warned_at_0.05": "3/21"
+          }
+        }
+      },
+      "dapt2020": {
+        "5m": {
+          "n": 3271,
+          "base_rate": 0.0027514521553041885,
+          "deployable": {
+            "auprc": 0.004113361724665882,
+            "steps_warned_at_0.01": "0/9",
+            "steps_warned_at_0.05": "0/9"
+          },
+          "oracle": {
+            "auprc": 0.007182942834060068,
+            "steps_warned_at_0.01": "0/9",
+            "steps_warned_at_0.05": "1/9"
+          }
+        },
+        "1h": {
+          "n": 3205,
+          "base_rate": 0.030577223088923557,
+          "deployable": {
+            "auprc": 0.03027300834931353,
+            "steps_warned_at_0.01": "0/9",
+            "steps_warned_at_0.05": "0/9"
+          },
+          "oracle": {
+            "auprc": 0.09255662539743074,
+            "steps_warned_at_0.01": "0/9",
+            "steps_warned_at_0.05": "2/9"
+          }
+        },
+        "24h": {
+          "n": 2711,
+          "base_rate": 0.2648469199557359,
+          "deployable": {
+            "auprc": 0.20155754173266277,
+            "steps_warned_at_0.01": "0/9",
+            "steps_warned_at_0.05": "0/9"
+          },
+          "oracle": {
+            "auprc": 0.6151050252521072,
+            "steps_warned_at_0.01": "0/9",
+            "steps_warned_at_0.05": "6/9"
+          }
+        }
+      },
+      "darpa2000": {
+        "5m": {
+          "n": 1601,
+          "base_rate": 0.007495315427857589,
+          "deployable": {
+            "auprc": 0.008634995244518353,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "0/12"
+          },
+          "oracle": {
+            "auprc": 0.010797389166282447,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "0/12"
+          }
+        },
+        "1h": {
+          "n": 1302,
+          "base_rate": 0.06682027649769585,
+          "deployable": {
+            "auprc": 0.08767157102660987,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "0/12"
+          },
+          "oracle": {
+            "auprc": 0.06734525543309128,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "1/12"
+          }
+        },
+        "24h": {
+          "n": 1102,
+          "base_rate": 0.08711433756805807,
+          "deployable": {
+            "auprc": 0.20531743460212337,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "3/12"
+          },
+          "oracle": {
+            "auprc": 0.08092514749104654,
+            "steps_warned_at_0.01": "0/12",
+            "steps_warned_at_0.05": "1/12"
+          }
+        }
+      }
+    }
+  },
+  "lead_360": {
+    "chain_steps": {
+      "all": {
+        "n": 23,
+        "attack_prior": {
+          "top1": 0.43478260869565216,
+          "top2": 0.6086956521739131
+        },
+        "markov": {
+          "top1": 0.391304347826087,
+          "top2": 0.5217391304347826
+        },
+        "majority": {
+          "top1": 0.17391304347826086,
+          "top2": 0.2608695652173913
+        },
+        "attack_prior_deployable": {
+          "top1": 0.21739130434782608,
+          "top2": 0.5652173913043478
+        },
+        "kcwm_deployable": {
+          "top1": 0.13043478260869565,
+          "top2": 0.2608695652173913
+        },
+        "kcwm_oracle": {
+          "top1": 0.21739130434782608,
+          "top2": 0.5217391304347826
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.17391304347826086,
+          "top2": 0.5217391304347826
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.043478260869565216,
+          "top2": 0.34782608695652173
+        }
+      },
+      "dapt2020": {
+        "n": 10,
+        "attack_prior": {
+          "top1": 0.1,
+          "top2": 0.5
+        },
+        "markov": {
+          "top1": 0.4,
+          "top2": 0.7
+        },
+        "majority": {
+          "top1": 0.3,
+          "top2": 0.5
+        },
+        "attack_prior_deployable": {
+          "top1": 0.1,
+          "top2": 0.5
+        },
+        "kcwm_deployable": {
+          "top1": 0.1,
+          "top2": 0.3
+        },
+        "kcwm_oracle": {
+          "top1": 0.1,
+          "top2": 0.6
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.1,
+          "top2": 0.5
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.1,
+          "top2": 0.5
+        }
+      },
+      "darpa2000": {
+        "n": 13,
+        "attack_prior": {
+          "top1": 0.6923076923076923,
+          "top2": 0.6923076923076923
+        },
+        "markov": {
+          "top1": 0.38461538461538464,
+          "top2": 0.38461538461538464
+        },
+        "majority": {
+          "top1": 0.07692307692307693,
+          "top2": 0.07692307692307693
+        },
+        "attack_prior_deployable": {
+          "top1": 0.3076923076923077,
+          "top2": 0.6153846153846154
+        },
+        "kcwm_deployable": {
+          "top1": 0.15384615384615385,
+          "top2": 0.23076923076923078
+        },
+        "kcwm_oracle": {
+          "top1": 0.3076923076923077,
+          "top2": 0.46153846153846156
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.23076923076923078,
+          "top2": 0.5384615384615384
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.0,
+          "top2": 0.23076923076923078
+        }
+      }
+    },
+    "first_steps": {
+      "all": {
+        "n": 3,
+        "attack_prior": {
+          "top1": 0.3333333333333333,
+          "top2": 0.6666666666666666
+        },
+        "markov": {
+          "top1": 0.3333333333333333,
+          "top2": 0.6666666666666666
+        },
+        "majority": {
+          "top1": 0.3333333333333333,
+          "top2": 0.6666666666666666
+        },
+        "attack_prior_deployable": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "kcwm_deployable": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "kcwm_oracle": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "kcwm_table_deployable": {
+          "top1": 0.0,
+          "top2": 0.0
+        },
+        "kcwm_table_oracle": {
+          "top1": 0.3333333333333333,
+          "top2": 0.6666666666666666
+        }
+      }
+    },
+    "hazard": {
+      "all": {
+        "5m": {
+          "n": 4872,
+          "base_rate": 0.004310344827586207,
+          "deployable": {
+            "auprc": 0.004432994819436735,
+            "steps_warned_at_0.01": "0/3",
+            "steps_warned_at_0.05": "0/3"
+          },
+          "oracle": {
+            "auprc": 0.007149725341109172,
+            "steps_warned_at_0.01": "1/3",
+            "steps_warned_at_0.05": "1/3"
+          }
+        },
+        "1h": {
+          "n": 4507,
+          "base_rate": 0.041047259818060795,
+          "deployable": {
+            "auprc": 0.036834610938229186,
+            "steps_warned_at_0.01": "0/8",
+            "steps_warned_at_0.05": "0/8"
+          },
+          "oracle": {
+            "auprc": 0.0687452499830634,
+            "steps_warned_at_0.01": "1/8",
+            "steps_warned_at_0.05": "1/8"
+          }
+        },
+        "24h": {
+          "n": 3813,
+          "base_rate": 0.2134801993181222,
+          "deployable": {
+            "auprc": 0.18536634988281167,
+            "steps_warned_at_0.01": "0/17",
+            "steps_warned_at_0.05": "0/17"
+          },
+          "oracle": {
+            "auprc": 0.2922029756660201,
+            "steps_warned_at_0.01": "0/17",
+            "steps_warned_at_0.05": "1/17"
+          }
+        }
+      },
+      "dapt2020": {
+        "5m": {
+          "n": 3271,
+          "base_rate": 0.0027514521553041885,
+          "deployable": {
+            "auprc": 0.004113361724665882,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          },
+          "oracle": {
+            "auprc": 0.007182942834060068,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          }
+        },
+        "1h": {
+          "n": 3205,
+          "base_rate": 0.030577223088923557,
+          "deployable": {
+            "auprc": 0.03027300834931353,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          },
+          "oracle": {
+            "auprc": 0.09255662539743074,
+            "steps_warned_at_0.01": "0/0",
+            "steps_warned_at_0.05": "0/0"
+          }
+        },
+        "24h": {
+          "n": 2711,
+          "base_rate": 0.2648469199557359,
+          "deployable": {
+            "auprc": 0.20155754173266277,
+            "steps_warned_at_0.01": "0/9",
+            "steps_warned_at_0.05": "0/9"
+          },
+          "oracle": {
+            "auprc": 0.6151050252521072,
+            "steps_warned_at_0.01": "2/9",
+            "steps_warned_at_0.05": "5/9"
+          }
+        }
+      },
+      "darpa2000": {
+        "5m": {
+          "n": 1601,
+          "base_rate": 0.007495315427857589,
+          "deployable": {
+            "auprc": 0.008634995244518353,
+            "steps_warned_at_0.01": "0/3",
+            "steps_warned_at_0.05": "0/3"
+          },
+          "oracle": {
+            "auprc": 0.010797389166282447,
+            "steps_warned_at_0.01": "1/3",
+            "steps_warned_at_0.05": "1/3"
+          }
+        },
+        "1h": {
+          "n": 1302,
+          "base_rate": 0.06682027649769585,
+          "deployable": {
+            "auprc": 0.08767157102660987,
+            "steps_warned_at_0.01": "0/8",
+            "steps_warned_at_0.05": "0/8"
+          },
+          "oracle": {
+            "auprc": 0.06734525543309128,
+            "steps_warned_at_0.01": "1/8",
+            "steps_warned_at_0.05": "1/8"
+          }
+        },
+        "24h": {
+          "n": 1102,
+          "base_rate": 0.08711433756805807,
+          "deployable": {
+            "auprc": 0.20531743460212337,
+            "steps_warned_at_0.01": "0/8",
+            "steps_warned_at_0.05": "0/8"
+          },
+          "oracle": {
+            "auprc": 0.08092514749104654,
+            "steps_warned_at_0.01": "0/8",
+            "steps_warned_at_0.05": "0/8"
+          }
+        }
+      }
+    }
+  }
+}

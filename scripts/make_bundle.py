@@ -27,6 +27,20 @@ from kcwm import config
 from kcwm.inference.engine import _apply_calibrator
 
 
+def transition_table(r: dict) -> np.ndarray:
+    """P(next new stage | current stage, progress) counted on the run's training labels."""
+    from kcwm.eval.run import assemble
+    from kcwm.eval.stages import markov_table
+
+    win, split, _, _, _ = assemble(protocol="p1", tag="x", datasets=r["datasets"], horizon=r["horizon"],
+                                   dev=bool(r["split_notes"].get("dev")), campaigns=bool(r.get("campaigns")),
+                                   log=lambda *_: None)
+    _, session = np.unique(win["session_key"].to_numpy(), return_inverse=True)
+    t = markov_table(win["stage_now"].to_numpy().astype(int), session, win["is_stage_onset"].to_numpy().astype(bool),
+                     split.train, int(r["world_model"]["config"]["context"]) if "world_model" in r else 64)
+    return t / t.sum(-1, keepdims=True)
+
+
 def main(result_json: str) -> None:
     cfg = config.load()
     rp = Path(result_json)
@@ -48,6 +62,8 @@ def main(result_json: str) -> None:
     tl = rp.parent / "two_level.json"
     if tl.exists():  # level-1 early-warning threshold on the raw world-model rollout risk
         ckpt["early_warning_threshold"] = json.loads(tl.read_text())["seeds"][str(seed)]["early_warning_threshold_wm"]
+    ckpt["transition_table"] = transition_table(r).tolist()
+    ckpt["next_stage_blend"] = float(cfg["stages"]["next_stage_blend"])
     ckpt["meta"] = {"model": r["model"], "source_result": str(rp), "source_checkpoint": ckpt_path,
                     "auprc": r["auprc"], "fpr_budget": budget, "datasets": r["datasets"],
                     "mode": r["mode"], "campaigns": r.get("campaigns"),

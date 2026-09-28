@@ -1,0 +1,109 @@
+{
+  "seeds": {
+    "17": {
+      "1": {
+        "lambda_from_calibration": 0.0,
+        "nll_recent_history": 1.1823870468963407,
+        "nll_world_model_alone": 1.91457920608591,
+        "nll_mixture": 1.1823870468963407,
+        "gain": 0.0,
+        "gain_ci": [
+          0.0,
+          0.0
+        ]
+      },
+      "6": {
+        "lambda_from_calibration": 0.0,
+        "nll_recent_history": 1.1890610608119574,
+        "nll_world_model_alone": 2.0170600203924387,
+        "nll_mixture": 1.1890610608119574,
+        "gain": 0.0,
+        "gain_ci": [
+          0.0,
+          0.0
+        ]
+      },
+      "30": {
+        "lambda_from_calibration": 0.05,
+        "nll_recent_history": 1.2201045698435207,
+        "nll_world_model_alone": 2.2034693947505586,
+        "nll_mixture": 1.2260658860306382,
+        "gain": -0.005961316187117545,
+        "gain_ci": [
+          -0.008372405628718271,
+          -0.003264953926505172
+        ]
+      }
+    },
+    "23": {
+      "1": {
+        "lambda_from_calibration": 0.0,
+        "nll_recent_history": 1.1856290313910294,
+        "nll_world_model_alone": 1.8888687194927822,
+        "nll_mixture": 1.1856290313910294,
+        "gain": 0.0,
+        "gain_ci": [
+          0.0,
+          0.0
+        ]
+      },
+      "6": {
+        "lambda_from_calibration": 0.0,
+        "nll_recent_history": 1.1944612087776953,
+        "nll_world_model_alone": 1.914798723298,
+        "nll_mixture": 1.1944612087776953,
+        "gain": 0.0,
+        "gain_ci": [
+          0.0,
+          0.0
+        ]
+      },
+      "30": {
+        "lambda_from_calibration": 0.0,
+        "nll_recent_history": 1.2221319088320648,
+        "nll_world_model_alone": 2.0388022671273314,
+        "nll_mixture": 1.2221319088320648,
+        "gain": 0.0,
+        "gain_ci": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "29": {
+      "1": {
+        "lambda_from_calibration": 0.15000000000000002,
+        "nll_recent_history": 1.1820431001881655,
+        "nll_world_model_alone": 1.6324071815965944,
+        "nll_mixture": 1.1940851422847554,
+        "gain": -0.012042042096589956,
+        "gain_ci": [
+          -0.016997336701220816,
+          -0.007910537738754171
+        ]
+      },
+      "6": {
+        "lambda_from_calibration": 0.2,
+        "nll_recent_history": 1.1955290434674997,
+        "nll_world_model_alone": 1.676954587786195,
+        "nll_mixture": 1.2139563551410657,
+        "gain": -0.01842731167356614,
+        "gain_ci": [
+          -0.025625908430333525,
+          -0.011424390770047404
+        ]
+      },
+      "30": {
+        "lambda_from_calibration": 0.2,
+        "nll_recent_history": 1.2185432004092305,
+        "nll_world_model_alone": 1.8965690013317082,
+        "nll_mixture": 1.2427532962168535,
+        "gain": -0.024210095807622792,
+        "gain_ci": [
+          -0.0320993898916566,
+          -0.01617458302375925
+        ]
+      }
+    }
+  }
+}

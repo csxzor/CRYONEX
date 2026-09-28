@@ -31,7 +31,8 @@ console = Console()
 
 
 def _capture_name(dataset: str, stem: str) -> str:
-    short = {"cicids2017": "cic17", "cicids2018": "cic18", "ctu13": "ctu", "dapt2020": "dapt"}[dataset]
+    short = {"cicids2017": "cic17", "cicids2018": "cic18", "ctu13": "ctu", "dapt2020": "dapt",
+             "darpa2000": "darpa"}[dataset]
     return f"{short}-{stem.lower()}"
 
 
@@ -57,6 +58,14 @@ def iter_captures(dataset: str, cfg: dict) -> Iterator[tuple[str, Path, callable
             raise FileNotFoundError(f"DAPT2020: no CSVs under {root} (download: docs/DATASETS.md)")
         for path in files:
             yield _capture_name(dataset, path.stem.replace(" ", "_")), path, read_dapt2020
+    elif spec["reader"] == "darpa2000":
+        from .ingest.darpa import SCENARIOS, read_darpa
+
+        for name, sc in SCENARIOS.items():
+            path = root / sc["dir"] / sc["pcap"]
+            if not path.exists():
+                raise FileNotFoundError(f"DARPA 2000: {path} missing (download: docs/DATASETS.md)")
+            yield _capture_name(dataset, name), path, lambda p, n=name: read_darpa(p, scenario=n)
     else:
         raise KeyError(spec["reader"])
 
@@ -118,7 +127,8 @@ def build_dataset(dataset: str, cfg: dict | None = None, *, only: list[str] | No
 
 
 def load_windows(cfg: dict | None = None, *, datasets: list[str] | None = None) -> pl.DataFrame:
-    """All built windows, sorted by (capture, window)."""
+    """All built windows, sorted by (capture, window). Held-out datasets (``holdout: true``
+    in the config, e.g. DARPA 2000) are included only when named explicitly."""
     cfg = cfg or config.load()
     files = sorted((config.processed_dir(cfg) / "windows").glob("*.parquet"))
     if not files:
@@ -127,4 +137,7 @@ def load_windows(cfg: dict | None = None, *, datasets: list[str] | None = None) 
     df = pl.concat(frames, how="diagonal_relaxed")
     if datasets:
         df = df.filter(pl.col("dataset").is_in(datasets))
+    else:
+        held = [k for k, v in cfg["datasets"].items() if v.get("holdout")]
+        df = df.filter(~pl.col("dataset").is_in(held))
     return df.sort(["capture", "window"])

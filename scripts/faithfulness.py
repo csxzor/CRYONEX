@@ -1,6 +1,6 @@
 """Gate G8: are the explanations faithful?
 
-For the highest-risk evaluation anchors of a saved KC-WM checkpoint, delete (reset to the
+For the highest-risk evaluation anchors of a saved CRYONEX checkpoint, delete (reset to the
 baseline) the top-5 features by integrated gradients, and separately 5 random features, over
 the whole context. Pass bar: the top-5 deletion lowers P_infil at least 2x more than the random
 one. Uses the calibration split only (never test).

@@ -1,0 +1,48 @@
+{
+  "budget": 0.03,
+  "post_hoc": true,
+  "test_windows": 30980,
+  "test_hours": 86.05555555555556,
+  "real_onsets": 69,
+  "seeds": {
+    "17": {
+      "early_warning_threshold_wm": 0.7240494155883789,
+      "in_progress_threshold_hybrid": 0.5047472005798712,
+      "onsets_warned_before_two_level": 6,
+      "onsets_warned_before_hybrid_only": 4,
+      "median_lead_windows_two_level": 19.5,
+      "early_warning_false_rate_on_quiet_benign": 0.004053422023592995,
+      "early_warning_hit_rate_on_quiet_positive": 0.04515352197471403,
+      "false_early_warnings_per_hour": 0.9063912201420271
+    },
+    "23": {
+      "early_warning_threshold_wm": 0.6332775211334226,
+      "in_progress_threshold_hybrid": 0.4214085971131887,
+      "onsets_warned_before_two_level": 5,
+      "onsets_warned_before_hybrid_only": 1,
+      "median_lead_windows_two_level": 3.0,
+      "early_warning_false_rate_on_quiet_benign": 0.015486150808086057,
+      "early_warning_hit_rate_on_quiet_positive": 0.05358217940999398,
+      "false_early_warnings_per_hour": 3.4628792769528727
+    },
+    "29": {
+      "early_warning_threshold_wm": 0.8940322613716124,
+      "in_progress_threshold_hybrid": 0.5116330677290873,
+      "onsets_warned_before_two_level": 13,
+      "onsets_warned_before_hybrid_only": 4,
+      "median_lead_windows_two_level": 7.0,
+      "early_warning_false_rate_on_quiet_benign": 0.013147638102167021,
+      "early_warning_hit_rate_on_quiet_positive": 0.13305237808549067,
+      "false_early_warnings_per_hour": 2.9399612653324727
+    }
+  },
+  "summary": {
+    "onsets_warned_two_level": 24,
+    "onsets_warned_hybrid_only": 9,
+    "onsets_total": 207,
+    "median_lead_windows": 9.833333333333334,
+    "early_warning_false_rate": 0.01089573697794869,
+    "early_warning_hit_rate": 0.07726269315673288,
+    "false_early_warnings_per_hour": 2.4364105874757906
+  }
+}

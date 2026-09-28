@@ -40,7 +40,7 @@ def carve_tail(train: np.ndarray, win, horizon: int, frac: float = 0.1) -> tuple
 
 def train_world_model(p, cfg: dict, *, train_all, cal_all, seed: int, tag: str, log,
                       overrides: dict | None = None, extra_rows=None) -> dict:
-    """Fit KC-WM on the split's training anchors; forecast calibration + test anchors; save it."""
+    """Fit CRYONEX on the split's training anchors; forecast calibration + test anchors; save it."""
     import torch
 
     from ..model.train import TrainConfig, fit, forecast_rows

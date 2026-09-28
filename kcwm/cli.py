@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import typer
 
-app = typer.Typer(add_completion=False, help="KC-WM: kill-chain world model for network attack forecasting")
+app = typer.Typer(add_completion=False, help="CRYONEX: kill-chain world model for network attack forecasting")
 
 
 @app.callback()
 def _main() -> None:
-    """KC-WM command group."""
+    """CRYONEX command group."""
 
 
 @app.command()

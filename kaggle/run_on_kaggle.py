@@ -1,4 +1,4 @@
-"""Run KC-WM improvement experiments on a Kaggle GPU (dev split only; test is never read).
+"""Run CRYONEX improvement experiments on a Kaggle GPU (dev split only; test is never read).
 
 In a Kaggle notebook (Settings: Accelerator = GPU T4, Internet = On), attach the uploaded
 dataset, then run in one cell:

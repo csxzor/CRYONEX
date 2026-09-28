@@ -1,4 +1,4 @@
-"""The Kill-Chain World Model (KC-WM).
+"""The Kill-Chain World Model (CRYONEX).
 
 World state ``s_t = (h_t, z_t, p_t)``:
 
@@ -89,6 +89,7 @@ class KillChainWorldModel(nn.Module):
         max_len: int = 64,
         stage_dim: int = 32,
         n_direct: int = 0,
+        emit_prior: bool = False,
     ):
         super().__init__()
         self.n_features, self.n_masks = n_features, n_masks
@@ -117,6 +118,15 @@ class KillChainWorldModel(nn.Module):
         self.decoder = nn.Sequential(
             nn.Linear(d, 2 * d), nn.GELU(), nn.Linear(2 * d, n_features * self.max_bins)
         )
+        # Residual emission (G3 fix): p(x' | h') ∝ recent-history histogram × exp(decoder(h')).
+        # Traffic features are close to stationary over minutes, so the histogram of the
+        # context is a strong predictor on its own; the decoder learns how the next state
+        # departs from it. Zero-initialised, the untrained model *is* that histogram, so any
+        # gain over it is learned dynamics.
+        self.emit_prior = bool(emit_prior)
+        if self.emit_prior:
+            nn.init.zeros_(self.decoder[-1].weight)
+            nn.init.zeros_(self.decoder[-1].bias)
         # Bins a feature does not have are masked to -inf.
         valid = torch.arange(self.max_bins)[None, :] < torch.as_tensor(n_bins)[:, None]
         self.register_buffer("bin_mask", torch.where(valid, 0.0, float("-inf")))
@@ -143,10 +153,23 @@ class KillChainWorldModel(nn.Module):
     def step(self, h: torch.Tensor, z_emb: torch.Tensor, p_emb: torch.Tensor) -> torch.Tensor:
         return self.dyn_norm(h + self.dynamics(torch.cat([h, z_emb, p_emb], dim=-1)))
 
-    def emission_logits(self, h: torch.Tensor) -> torch.Tensor:
-        """(..., d) -> (..., F, max_bins) with invalid bins at -inf."""
-        out = self.decoder(h).view(*h.shape[:-1], self.n_features, self.max_bins)
-        return out + self.bin_mask
+    def emission_logits(self, h: torch.Tensor, log_prior: torch.Tensor | None = None) -> torch.Tensor:
+        """(..., d) -> (..., F, max_bins) with invalid bins at -inf. With ``emit_prior``,
+        ``log_prior`` (..., F, max_bins) is the recent-history log histogram (``context_log_hist``)."""
+        out = self.decoder(h).view(*h.shape[:-1], self.n_features, self.max_bins) + self.bin_mask
+        if self.emit_prior:
+            if log_prior is None:
+                raise ValueError("this model's emission needs the context histogram (log_prior)")
+            out = out + log_prior
+        return out
+
+    def context_log_hist(self, bins: torch.Tensor, alpha: float = 0.5) -> torch.Tensor:
+        """Causal log histogram of observed bins: (B, T, F) int -> (B, T, F, max_bins), where
+        position t counts windows 0..t (Laplace ``alpha`` on every valid bin)."""
+        onehot = nn.functional.one_hot(bins.long(), self.max_bins).float()
+        counts = onehot.cumsum(dim=1) + alpha * torch.isfinite(self.bin_mask).float()
+        logc = torch.log(counts.clamp(min=1e-12)) + self.bin_mask
+        return logc - torch.logsumexp(logc, dim=-1, keepdim=True)
 
     def prior_penalty(self) -> torch.Tensor:
         """KL(A0 || A) per row, plus L2 on B's drift: keep the kill chain recognisable."""
