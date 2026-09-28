@@ -21,13 +21,13 @@ dependencies = [
 
 [project.optional-dependencies]
 # Packet capture parsing. Split out because nfstream pulls native deps (libpcap).
-pcap = ["nfstream>=6.5", "scapy>=2.5"]
-ui = ["streamlit>=1.38", "plotly>=5.24", "networkx>=3.3"]
-explain = ["shap>=0.46", "matplotlib>=3.9"]
+pcap = ["nfstream>=6.5"]
+ui = ["streamlit>=1.38", "plotly>=5.24"]
 dev = ["pytest>=8.0", "ruff>=0.6"]
 
 [project.scripts]
-kcwm = "kcwm.cli:app"
+cryonex = "kcwm.cli:app"
+kcwm = "kcwm.cli:app"  # original name, kept as an alias
 
 [build-system]
 requires = ["hatchling"]

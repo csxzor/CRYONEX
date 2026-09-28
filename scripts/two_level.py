@@ -28,7 +28,9 @@ from kcwm.eval.protocols import compromise_onsets, prepare, quiet_anchors
 from kcwm.eval.run import assemble
 
 
-def main(d: str = "results/final-p1", budget: float = 0.03) -> None:
+def main(d: str = "results/final-p1", budget: float = 0.03, out_name: str = "two_level.json") -> None:
+    """``budget``: share of quiet benign calibration windows allowed a level-1 warning. Level 2
+    always uses the hybrid's primary operating point (3%)."""
     rd = Path(d)
     r0 = json.loads((rd / "hybrid-s17.json").read_text())
     K = r0["horizon"]
@@ -58,7 +60,7 @@ def main(d: str = "results/final-p1", budget: float = 0.03) -> None:
 
         wm, hy = load("kcwm"), load("hybrid")
         hy_r = json.loads((rd / f"hybrid-s{seed}.json").read_text())
-        thr2 = hy_r["operating_points"][f"fpr_{budget}"]["metrics"]["threshold"]
+        thr2 = hy_r["operating_points"]["fpr_0.03"]["metrics"]["threshold"]
         qb = cal[quiet[cal] & ~y[cal]]  # quiet benign calibration windows
         thr1 = float(np.quantile(wm[qb], 1 - budget))
         full_wm = np.nan_to_num(wm, nan=-np.inf)
@@ -91,9 +93,12 @@ def main(d: str = "results/final-p1", budget: float = 0.03) -> None:
         "early_warning_hit_rate": float(np.mean([x["early_warning_hit_rate_on_quiet_positive"] for x in s.values()])),
         "false_early_warnings_per_hour": float(np.mean([x["false_early_warnings_per_hour"] for x in s.values()])),
     }
-    (rd / "two_level.json").write_text(json.dumps(out, indent=2))
+    (rd / out_name).write_text(json.dumps(out, indent=2))
     print(json.dumps(out["summary"], indent=2))
 
 
 if __name__ == "__main__":
-    main(*(sys.argv[1:2] or ["results/final-p1"]), *(map(float, sys.argv[2:3])))
+    from kcwm import config
+
+    budget = float(sys.argv[2]) if len(sys.argv) > 2 else float(config.load()["alert"]["early_warning_budget"])
+    main(sys.argv[1] if len(sys.argv) > 1 else "results/final-p1", budget)

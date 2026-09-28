@@ -1,17 +1,18 @@
 """Gate G8: are the explanations faithful?
 
-For the highest-risk evaluation anchors of a saved KC-WM checkpoint, delete (reset to the
+For the highest-risk evaluation anchors of a saved CRYONEX checkpoint, delete (reset to the
 baseline) the top-5 features by integrated gradients, and separately 5 random features, over
 the whole context. Pass bar: the top-5 deletion lowers P_infil at least 2x more than the random
 one. Uses the calibration split only (never test).
 
-Usage: python scripts/faithfulness.py runs/dev-r3-kcwm/kcwm-s17.pt [n_anchors]
+Usage: python scripts/faithfulness.py runs/final-p1/kcwm-s17.pt 40   (the published result)
 """
 
 from __future__ import annotations
 
 import json
 import sys
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -27,7 +28,7 @@ from kcwm.model.train import TrainConfig, forecast_rows
 from kcwm.pipeline import load_windows
 
 
-def main(ckpt: str, n: int = 60) -> None:
+def main(ckpt: str, n: int = 40) -> None:
     cfg = config.load()
     raw = torch.load(ckpt, map_location="cpu", weights_only=False)
     b = load_bundle(ckpt)
@@ -44,6 +45,7 @@ def main(ckpt: str, n: int = 60) -> None:
     contexts = [model_input(arr, context_index(np.array([r]), tc.context))[0] for r in top]
     out = deletion_test(b.model, contexts, horizon=K, n_features=N_FEATURES, k=5)
     out["mean_risk_of_explained_anchors"] = float(np.sort(risk)[-n:].mean())
+    out["checkpoint"] = str(Path(ckpt).relative_to(config.REPO_ROOT)) if Path(ckpt).is_absolute() else ckpt
     path = config.results_dir() / "g8_faithfulness.json"
     path.write_text(json.dumps(out, indent=2))
     print(json.dumps(out, indent=2))

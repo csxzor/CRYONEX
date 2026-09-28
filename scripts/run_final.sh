@@ -8,7 +8,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export PYTHONUNBUFFERED=1
-K=.venv/bin/kcwm
+K=.venv/bin/cryonex
 DS=cicids2017,cicids2018,ctu13,dapt2020
 SEEDS=17,23,29
 REG="epochs=15,anchors_per_epoch=8000,patience=4,d=96,layers=3,dropout=0.2,weight_decay=0.05,direct_risk=1"

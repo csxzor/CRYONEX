@@ -1,0 +1,51 @@
+{
+  "split": "P1 dev test (calibration span)",
+  "horizons_windows": [
+    1,
+    6,
+    30
+  ],
+  "seeds": {
+    "17": {
+      "1": {
+        "n": 4000,
+        "nll_world_model": 1.3743290659743257,
+        "nll_context_hist": 1.3949066194309616,
+        "nll_persistence": 2.7492550901991883,
+        "nll_ridge_ar": 2.916674176074465,
+        "gain_vs_context_hist": 0.020577553456635967,
+        "gain_ci": [
+          0.014983338262675162,
+          0.02563370130832082
+        ],
+        "gain_vs_ridge_ar": 1.54234511010014
+      },
+      "6": {
+        "n": 4000,
+        "nll_world_model": 1.397723825027381,
+        "nll_context_hist": 1.4112368675799303,
+        "nll_persistence": 2.769141470573824,
+        "nll_ridge_ar": 2.957431806507835,
+        "gain_vs_context_hist": 0.013513042552549632,
+        "gain_ci": [
+          0.00886537789036992,
+          0.018375480466279383
+        ],
+        "gain_vs_ridge_ar": 1.5597079814804542
+      },
+      "30": {
+        "n": 4000,
+        "nll_world_model": 1.4386129313582752,
+        "nll_context_hist": 1.4385526132279898,
+        "nll_persistence": 2.7846599886627046,
+        "nll_ridge_ar": 2.9870583828196007,
+        "gain_vs_context_hist": -6.031813028530797e-05,
+        "gain_ci": [
+          -0.004718175586530181,
+          0.004601913415658307
+        ],
+        "gain_vs_ridge_ar": 1.5484454514613255
+      }
+    }
+  }
+}

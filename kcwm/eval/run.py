@@ -18,29 +18,9 @@ TABULAR = {"logreg", "logreg_stack", "hgb"}
 SEQUENCE = {"lstm", "transformer_clf"}
 
 
-def carve_tail(train: np.ndarray, win, horizon: int, frac: float = 0.1) -> tuple[np.ndarray, np.ndarray]:
-    """Split training anchors into (fit, early_stop): the last ``frac`` of each session's
-    training anchors (purged by the horizon) is used only to pick the epoch. Calibration stays
-    reserved for thresholds, so the epoch-selection set never sets an alarm threshold (that
-    overlap made thresholds too low and inflated false alarms). Synthetic campaign anchors
-    stay in ``fit``."""
-    keys = win["session_key"].to_numpy()
-    pos = win["pos_in_session"].to_numpy()
-    synth = win["synthetic"].fill_null(False).to_numpy() if "synthetic" in win.columns else np.zeros(win.height, bool)
-    fit_, stop = [train[synth[train]]], []
-    real = train[~synth[train]]
-    for s in np.unique(keys[real]):
-        r = real[keys[real] == s]
-        lo, hi = pos[r].min(), pos[r].max()
-        cut = hi - int((hi - lo) * frac)
-        fit_.append(r[pos[r] + horizon < cut])
-        stop.append(r[pos[r] >= cut])
-    return np.concatenate(fit_), np.concatenate(stop)
-
-
 def train_world_model(p, cfg: dict, *, train_all, cal_all, seed: int, tag: str, log,
                       overrides: dict | None = None, extra_rows=None) -> dict:
-    """Fit KC-WM on the split's training anchors; forecast calibration + test anchors; save it."""
+    """Fit CRYONEX on the split's training anchors; forecast calibration + test anchors; save it."""
     import torch
 
     from ..model.train import TrainConfig, fit, forecast_rows
@@ -50,14 +30,9 @@ def train_world_model(p, cfg: dict, *, train_all, cal_all, seed: int, tag: str, 
                      horizons=tuple(w["horizons"]), primary_horizon=int(w["primary_horizon"]),
                      seed=seed, **(overrides or {}))
     arr = p.arr
-    # Training anchors need the full unroll inside nothing but their session; the purge
-    # already keeps horizons inside the training span.
-    if (overrides or {}).get("stop_on_train_tail"):
-        # Tried in dev round 3 and rejected: it removed the training data nearest the
-        # evaluation period and collapsed CTU-13 (AUPRC 0.963 -> 0.871, FPR 1% -> 24%).
-        fit_rows, stop_rows = carve_tail(np.asarray(train_all), p.win, tc.primary_horizon)
-    else:
-        fit_rows, stop_rows = np.asarray(train_all), np.asarray(cal_all)
+    # Training anchors need the full unroll inside their session; the purge already keeps
+    # horizons inside the training span. Early stopping reads the calibration anchors.
+    fit_rows, stop_rows = np.asarray(train_all), np.asarray(cal_all)
     model, info = fit(arr, fit_rows, stop_rows, tc, n_bins=p.binner.n_bins_per_feature(), log=log)
     rows = np.concatenate([cal_all, p.split.test] + ([np.asarray(extra_rows)] if extra_rows is not None and len(extra_rows) else []))
     fc = forecast_rows(model, arr, rows, tc)
@@ -80,7 +55,7 @@ def dev_split(split, win, horizon: int, tail: float = 0.2):
     early-stopping / threshold set, and the *whole* calibration split becomes the dev test.
     An earlier version cut calibration in half. That left ~30 min per capture, mostly one
     class, and a dev score that measured cross-network risk levels rather than
-    discrimination (see scripts/diagnose_dev.py). Test is scored only without ``dev``, once
+    discrimination. Test is scored only without ``dev``, once
     per frozen recipe.
     """
     from ..data.splits import Split
@@ -101,7 +76,7 @@ def dev_split(split, win, horizon: int, tail: float = 0.2):
 
 def assemble(*, protocol: str, tag: str, datasets, horizon: int, dev: bool, campaigns: bool,
              family=None, train_datasets=None, test_dataset=None, cfg: dict | None = None, log=print):
-    """Windows, split and P4 rows exactly as a run sees them (shared with scripts/rescore.py)."""
+    """Windows, split and P4 rows exactly as a run sees them (shared with the analysis scripts)."""
     cfg = cfg or config.load()
     win = load_windows(cfg, datasets=datasets)
     split = make_split(protocol, win, cfg, horizon=horizon, family=family,

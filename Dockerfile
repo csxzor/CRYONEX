@@ -12,4 +12,4 @@ COPY samples ./samples
 RUN uv sync --all-extras --frozen --no-dev
 ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1
 EXPOSE 8501
-CMD ["kcwm", "serve"]
+CMD ["cryonex", "serve"]

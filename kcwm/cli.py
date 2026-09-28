@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import typer
 
-app = typer.Typer(add_completion=False, help="KC-WM: kill-chain world model for network attack forecasting")
+app = typer.Typer(add_completion=False, help="CRYONEX: kill-chain world model for network attack forecasting")
 
 
 @app.callback()
 def _main() -> None:
-    """KC-WM command group."""
+    """CRYONEX command group."""
 
 
 @app.command()
@@ -113,21 +113,6 @@ def campaigns(
 
     for ds in dataset:
         generate(ds, per_split={"train": train, "calibration": calibration, "test": test}, seed=seed)
-
-
-@app.command()
-def refeature() -> None:
-    """Add/refresh the long-memory history features on every built capture and campaign."""
-    import polars as pl
-
-    from . import config
-    from .features.build import add_history
-
-    root = config.processed_dir()
-    files = sorted((root / "windows").glob("*.parquet")) + sorted((root / "campaigns").rglob("camp-*.parquet"))
-    for path in files:
-        add_history(pl.read_parquet(path)).write_parquet(path, compression="zstd")
-    typer.echo(f"history features added to {len(files)} files")
 
 
 @app.command()

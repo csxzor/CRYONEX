@@ -14,6 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -t kcwm .
+      - run: docker build -t cryonex .
       # the console and CLI must work with no network at all
-      - run: docker run --rm --network none kcwm kcwm --help
+      - run: docker run --rm --network none cryonex cryonex --help

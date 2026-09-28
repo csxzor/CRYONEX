@@ -26,7 +26,7 @@ class Feature:
 # Groups. Masks are per group: "packet" is absent on CSV input, "ip" when a source carries
 # no addresses, "lookback" until the context holds enough history.
 GROUPS = ["volume", "flags", "protocol", "timing", "ports", "hosts", "packet",
-          "access", "lateral", "c2", "exfil", "lookback", "history"]
+          "access", "lateral", "c2", "exfil", "lookback"]
 MASKED_GROUPS = {"packet": "packet", "lateral": "ip", "exfil": "ip", "lookback": "lookback"}
 
 _F = Feature
@@ -135,19 +135,6 @@ FEATURES: list[Feature] = [
     _F("beacon_max", "lookback", False, "strongest periodic (beacon-like) connection pattern"),
     _F("beacon_pairs", "lookback", True, "connection pairs with beacon-like periodicity", "pairs"),
 ]
-
-# --- v2.1: long memory. Precursors (a scan, a login burst, a beacon) often sit 15-30+ min
-# before the compromise, beyond the model's 64-window (~11 min) context. For each attack
-# signature, the strongest value in the last 30 min and 2 h (causal rolling max, per session).
-HISTORY_SOURCES = ["half_open_max", "seq_port_score", "auth_conn_max", "web_conn_max",
-                   "icmp_sweep_max", "int_scan_max", "int_fanout_max", "beacon_max", "dns_max",
-                   "unanswered_syn_frac", "out_asym_max", "new_int_pairs"]
-HISTORY_SPANS = {"h30": 180, "h120": 720}  # windows of 10 s
-_by = {f.name: f for f in FEATURES}
-for _tag, _n in HISTORY_SPANS.items():
-    for _src in HISTORY_SOURCES:
-        FEATURES.append(_F(f"{_tag}_{_src}", "history", _by[_src].log,
-                           f"max over the last {_n * 10 // 60} min of: {_by[_src].desc}", _by[_src].unit))
 
 FEATURE_NAMES: list[str] = [f.name for f in FEATURES]
 N_FEATURES = len(FEATURES)

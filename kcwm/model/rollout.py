@@ -148,7 +148,8 @@ def monte_carlo(
 
 
 def one_step_nll(model: KillChainWorldModel, h_prev: torch.Tensor, stage_prev: torch.Tensor,
-                 progress_prev: torch.Tensor, bins_next: torch.Tensor, feat_mask: torch.Tensor) -> torch.Tensor:
+                 progress_prev: torch.Tensor, bins_next: torch.Tensor, feat_mask: torch.Tensor,
+                 log_prior: torch.Tensor | None = None) -> torch.Tensor:
     """Surprise: -log p(x_t | h_{t-1}), marginalised over the unknown next stage.
 
     ``h_prev`` (B, d); ``stage_prev``/``progress_prev`` (B,) int; ``bins_next`` (B, F) int;
@@ -160,7 +161,8 @@ def one_step_nll(model: KillChainWorldModel, h_prev: torch.Tensor, stage_prev: t
     ps = torch.maximum(progress_prev.repeat_interleave(S), zs)
     hs = h_prev.repeat_interleave(S, dim=0)
     h1 = model.step(hs, model.stage_emb(zs), model.prog_emb(ps))
-    logp = torch.log_softmax(model.emission_logits(h1), -1)            # (B*S, F, bins)
+    lp = log_prior.repeat_interleave(S, dim=0) if log_prior is not None else None
+    logp = torch.log_softmax(model.emission_logits(h1, lp), -1)        # (B*S, F, bins)
     tgt = bins_next.repeat_interleave(S, dim=0)[..., None]
     ll = torch.gather(logp, -1, tgt).squeeze(-1)                       # (B*S, F)
     ll = (ll * feat_mask.repeat_interleave(S, dim=0)).sum(-1).view(Bsz, S)

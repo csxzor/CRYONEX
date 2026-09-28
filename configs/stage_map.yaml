@@ -10,9 +10,9 @@
 stages:
   Benign:            {index: 0, attack_id: null,   description: No adversary activity observed.}
   Reconnaissance:    {index: 1, attack_id: TA0043, description: Scanning and service discovery from outside.}
-  InitialAccess:     {index: 2, attack_id: TA0001, description: Credential brute force, exploitation of exposed services, user-executed payloads.}
+  InitialAccess:     {index: 2, attack_id: TA0001, description: "Credential brute force, exploitation of exposed services, user-executed payloads."}
   LateralMovement:   {index: 3, attack_id: TA0008, description: Discovery and movement between internal hosts after a foothold.}
-  CommandAndControl: {index: 4, attack_id: TA0011, description: Beaconing to, and tasking from, attacker infrastructure.}
+  CommandAndControl: {index: 4, attack_id: TA0011, description: "Beaconing to, and tasking from, attacker infrastructure."}
   Exfiltration:      {index: 5, attack_id: TA0010, description: Bulk outbound transfer of collected data.}
   Impact:            {index: 6, attack_id: TA0040, description: Denial of service and abuse of victim resources.}
 

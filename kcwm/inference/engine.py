@@ -53,6 +53,10 @@ class Bundle:
     hybrid: dict | None = None
     # Level-1 early warning: raw world-model rollout risk at or above this (scripts/two_level.py).
     early_warning_threshold: float | None = None
+    # Next-stage forecast: learned transition table P(next | current, progress), blended with the
+    # rollout's stage mass (weight ``next_stage_blend`` on the rollout).
+    transition_table: np.ndarray | None = None
+    next_stage_blend: float = 1.0
 
     @property
     def context(self) -> int:
@@ -72,14 +76,17 @@ def load_bundle(path: str | Path) -> Bundle:
     model = KillChainWorldModel(len(names), len(MASK_NAMES), n_bins=np.asarray(ckpt["n_bins"]),
                                 d=c["d"], layers=c["layers"], heads=c["heads"], ff=c["ff"],
                                 dropout=0.0, max_len=c["context"],
-                                n_direct=len(c["horizons"]) if c.get("direct_risk") else 0)
+                                n_direct=len(c["horizons"]) if c.get("direct_risk") else 0,
+                                emit_prior=bool(c.get("emit_prior", 0)))
     model.load_state_dict(ckpt["state_dict"])
     model.eval()
     return Bundle(model=model, scaler=RobustScaler.from_dict(ckpt["scaler"]), binner=binner, cfg=c,
                   mode=ckpt.get("mode", "global"), threshold=float(ckpt.get("threshold", 0.5)),
                   calibrator=ckpt.get("calibrator"), meta=ckpt.get("meta", {}),
                   hgb=ckpt.get("hgb"), hybrid=ckpt.get("hybrid"),
-                  early_warning_threshold=ckpt.get("early_warning_threshold"))
+                  early_warning_threshold=ckpt.get("early_warning_threshold"),
+                  transition_table=np.asarray(ckpt["transition_table"]) if "transition_table" in ckpt else None,
+                  next_stage_blend=float(ckpt.get("next_stage_blend", 1.0)))
 
 
 def default_bundle() -> str | None:
@@ -139,6 +146,27 @@ def feature_observed(arr: Arrays, rows: np.ndarray) -> np.ndarray:
     for g in range(arr.m.shape[1]):
         fm[:, gate == g] = arr.m[rows, g : g + 1]
     return fm
+
+
+def next_stage_probs(stage_marg: np.ndarray, nowcast: np.ndarray, progress: np.ndarray, bundle: Bundle) -> np.ndarray:
+    """(n, S) probability of the next *new* attack stage (Benign and the current stage get 0).
+
+    rollout^w · table^(1-w): the rollout's stage mass over the horizon, and the learned
+    transition table read at the model's current stage and progress (gate G5: on real test
+    stage changes 29% -> 50% top-1; docs/BENCHMARKS.md)."""
+    n = stage_marg.shape[0]
+    cur = np.where(np.isnan(nowcast).any(1), 0, np.nan_to_num(nowcast).argmax(1))
+    prog = np.maximum(np.where(progress < 0, 0, progress), cur).astype(int)
+    wm = np.nan_to_num(stage_marg).sum(1)
+    out = wm
+    if bundle.transition_table is not None:
+        tab = bundle.transition_table[cur, prog]
+        w = bundle.next_stage_blend
+        out = np.exp(w * np.log(np.clip(wm, 1e-6, None)) + (1 - w) * np.log(np.clip(tab, 1e-6, None)))
+    out = out.copy()
+    out[:, 0] = 0
+    out[np.arange(n), cur] = np.where(cur > 0, 0, out[np.arange(n), cur])
+    return out / np.clip(out.sum(1, keepdims=True), 1e-12, None)
 
 
 def _apply_calibrator(p: np.ndarray, cal: dict | None) -> np.ndarray:
@@ -211,8 +239,12 @@ def analyze(path: str | Path, bundle: Bundle, *, internal_cidrs: list[str] | Non
         prev_stage = torch.softmax(m.nowcast(H[:, -2]), -1).argmax(-1)
         prev_prog = estimate_progress(m, H[:, :-1])
         fm = torch.from_numpy(feature_observed(arr, r))
+        lp = None
+        if m.emit_prior:
+            ctx_bins = torch.from_numpy(arr.bins[context_index(r, bundle.context)][:, :-1])
+            lp = m.context_log_hist(ctx_bins)[:, -1]
         surprise[r] = one_step_nll(m, H[:, -2], prev_stage, prev_prog,
-                                   torch.from_numpy(arr.bins[r]), fm).numpy()
+                                   torch.from_numpy(arr.bins[r]), fm, log_prior=lp).numpy()
     wm_risk = _apply_calibrator(p_infil[:, K - 1], bundle.calibrator)
     risk = wm_risk
     hgb_risk = np.full(n, np.nan)
@@ -222,7 +254,8 @@ def analyze(path: str | Path, bundle: Bundle, *, internal_cidrs: list[str] | Non
         wm_cal = _apply_calibrator(p_infil[:, K - 1], pr["kcwm"])
         risk = 0.5 * hgb_risk + 0.5 * wm_cal
     now_stage = np.where(np.isnan(nowcast).any(1), -1, np.nan_to_num(nowcast).argmax(1))
-    horizon_stage = np.nanargmax(np.nan_to_num(stage_marg[:, :, 1:]).sum(1), axis=1) + 1
+    next_probs = next_stage_probs(stage_marg, nowcast, progress, bundle)
+    horizon_stage = np.nanargmax(next_probs, axis=1)
     alert = (risk >= bundle.threshold) & ~np.isnan(risk)
     from ..eval.metrics import sustained
 
@@ -242,6 +275,7 @@ def analyze(path: str | Path, bundle: Bundle, *, internal_cidrs: list[str] | Non
         pl.Series("wm_risk", wm_risk), pl.Series("detector_risk", hgb_risk),
         pl.Series("nowcast_stage", now_stage), pl.Series("progress", progress),
         pl.Series("heading_to", np.where(np.isnan(risk), -1, horizon_stage)),
+        pl.Series("heading_to_p", np.where(np.isnan(risk), np.nan, next_probs.max(1))),
         pl.Series("surprise", surprise),
         pl.from_epoch(pl.col("t").cast(pl.Int64)).alias("time"),
     )

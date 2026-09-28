@@ -16,8 +16,8 @@ NAMES = {
     "hgb": "Gradient boosting",
     "lstm": "LSTM classifier",
     "transformer_clf": "Transformer classifier (same backbone, no dynamics)",
-    "kcwm": "KC-WM (world model alone)",
-    "hybrid": "**KC-WM hybrid (world model + gradient boosting)**",
+    "kcwm": "CRYONEX (world model alone)",
+    "hybrid": "**CRYONEX hybrid (world model + gradient boosting)**",
 }
 
 

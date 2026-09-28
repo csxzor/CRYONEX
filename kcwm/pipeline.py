@@ -122,7 +122,7 @@ def load_windows(cfg: dict | None = None, *, datasets: list[str] | None = None) 
     cfg = cfg or config.load()
     files = sorted((config.processed_dir(cfg) / "windows").glob("*.parquet"))
     if not files:
-        raise FileNotFoundError("no built windows; run `kcwm build` first")
+        raise FileNotFoundError("no built windows; run `cryonex build` first")
     frames = [pl.read_parquet(f) for f in files]
     df = pl.concat(frames, how="diagonal_relaxed")
     if datasets:

@@ -172,3 +172,15 @@
 {"protocol": "dev-smoke-dev", "name": "kcwm-s17", "path": "/home/csxzor/Desktop/26153/results/dev-smoke-dev/kcwm-s17.json", "written": "2026-09-25 17:13:56"}
 {"protocol": "dev-smoke-dev", "name": "transformer_clf-s17", "path": "/home/csxzor/Desktop/26153/results/dev-smoke-dev/transformer_clf-s17.json", "written": "2026-09-25 17:22:54"}
 {"protocol": "dev-smoke-ew", "name": "kcwm-s17", "path": "/home/csxzor/Desktop/26153/results/dev-smoke-ew/kcwm-s17.json", "written": "2026-09-25 17:26:04"}
+{"protocol": "dev-r7-emitprior", "name": "hgb-s17", "path": "/home/csxzor/Desktop/26153/results/dev-r7-emitprior/hgb-s17.json", "written": "2026-09-26 03:43:46"}
+{"protocol": "dev-r7-emitprior", "name": "kcwm-s17", "path": "/home/csxzor/Desktop/26153/results/dev-r7-emitprior/kcwm-s17.json", "written": "2026-09-26 03:53:58"}
+{"protocol": "dev-r7-emitprior", "name": "hybrid-s17", "path": "/home/csxzor/Desktop/26153/results/dev-r7-emitprior/hybrid-s17.json", "written": "2026-09-26 03:54:02"}
+{"protocol": "final-p1-g3", "name": "hgb-s17", "path": "/home/csxzor/Desktop/26153/results/final-p1-g3/hgb-s17.json", "written": "2026-09-26 03:55:35"}
+{"protocol": "final-p1-g3", "name": "hgb-s23", "path": "/home/csxzor/Desktop/26153/results/final-p1-g3/hgb-s23.json", "written": "2026-09-26 03:56:16"}
+{"protocol": "final-p1-g3", "name": "hgb-s29", "path": "/home/csxzor/Desktop/26153/results/final-p1-g3/hgb-s29.json", "written": "2026-09-26 03:56:57"}
+{"protocol": "final-p1-g3", "name": "kcwm-s17", "path": "/home/csxzor/Desktop/26153/results/final-p1-g3/kcwm-s17.json", "written": "2026-09-26 04:05:19"}
+{"protocol": "final-p1-g3", "name": "kcwm-s23", "path": "/home/csxzor/Desktop/26153/results/final-p1-g3/kcwm-s23.json", "written": "2026-09-26 04:16:01"}
+{"protocol": "final-p1-g3", "name": "kcwm-s29", "path": "/home/csxzor/Desktop/26153/results/final-p1-g3/kcwm-s29.json", "written": "2026-09-26 04:28:57"}
+{"protocol": "final-p1-g3", "name": "hybrid-s17", "path": "/home/csxzor/Desktop/26153/results/final-p1-g3/hybrid-s17.json", "written": "2026-09-26 04:29:02"}
+{"protocol": "final-p1-g3", "name": "hybrid-s23", "path": "/home/csxzor/Desktop/26153/results/final-p1-g3/hybrid-s23.json", "written": "2026-09-26 04:29:07"}
+{"protocol": "final-p1-g3", "name": "hybrid-s29", "path": "/home/csxzor/Desktop/26153/results/final-p1-g3/hybrid-s29.json", "written": "2026-09-26 04:29:12"}

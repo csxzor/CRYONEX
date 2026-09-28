@@ -6,6 +6,10 @@ purged tail of calibration; from round 2 on, the dev test is the full calibratio
 thresholds come from a purged tail of training. Single-seed dev AUPRC has a block-bootstrap
 CI of about ±0.1, so rounds 1-3 are indicative and rounds 4-6 use 3 seeds.
 
+The per-round result files, the dev-queue scripts, the Kaggle GPU package and the parked
+host kill-chain experiment were removed from `main` to keep the submission focused; all of
+them are preserved, unchanged, on the git branch `archive/pre-cleanup`.
+
 ## Findings that shaped the design
 
 | Finding | Evidence | Decision |
@@ -19,15 +23,15 @@ CI of about ±0.1, so rounds 1-3 are indicative and rounds 4-6 use 3 seeds.
 
 ## Rounds
 
-| Round | Change | KC-WM dev AUPRC | Best control | Outcome |
+| Round | Change | CRYONEX dev AUPRC | Best control | Outcome |
 |---|---|---|---|---|
 | 1 | first all-dataset run, global normalisation | 0.534 | LR 0.696 | Diagnosed as a network-level offset, not discrimination |
-| 1b | warm-up normalisation | 0.843 | HGB 0.873, Transformer 0.845 | Warm-up helps every model; KC-WM ties its Transformer twin |
+| 1b | warm-up normalisation | 0.843 | HGB 0.873, Transformer 0.845 | Warm-up helps every model; CRYONEX ties its Transformer twin |
 | 2 | + campaigns, stage metrics, regularisation, direct-risk head | 0.848 (FPR 7.4%) | HGB 0.857 | Best on P4 (next stage 52% vs Markov 14%); kept |
 | 3 | early stopping on a training tail | 0.750 | Transformer 0.814 | **Rejected**: collapsed CTU-13 (0.963 → 0.871, FPR 1% → 24%) |
 | 4 | + DAPT2020 (3 seeds) | 0.723 | HGB 0.82, Transformer 0.742 | DAPT's near-idle traffic (49% empty windows) hurts sequence models |
-| 5 | scaling on non-empty windows; DAPT benign down-sampling (3 seeds) | 0.752 | HGB 0.822, Transformer 0.710, LSTM 0.673 | KC-WM beats its Transformer twin; HGB still best pooled |
-| 6 | **hybrid** = calibrated mean of KC-WM and HGB (3 seeds) | **hybrid 0.832** | HGB 0.822 | Best pooled, stable across seeds (0.827 / 0.837 / 0.833): **frozen recipe** |
+| 5 | scaling on non-empty windows; DAPT benign down-sampling (3 seeds) | 0.752 | HGB 0.822, Transformer 0.710, LSTM 0.673 | CRYONEX beats its Transformer twin; HGB still best pooled |
+| 6 | **hybrid** = calibrated mean of CRYONEX and HGB (3 seeds) | **hybrid 0.832** | HGB 0.822 | Best pooled, stable across seeds (0.827 / 0.837 / 0.833): **frozen recipe** |
 
 ## Gates checked on held-out data before the final test
 
@@ -49,3 +53,78 @@ CI of about ±0.1, so rounds 1-3 are indicative and rounds 4-6 use 3 seeds.
   distribution shift, not flicker.
 * Isotonic calibration for display: its step output (0.09, 0.33, 0.91) reads as arbitrary.
   Replaced by Platt scaling (equal Brier, lower ECE).
+
+## After the freeze: can early warning improve? (Kaggle GPU, dev split, 3 seeds)
+
+| Experiment | Hybrid dev AUPRC | Early-warning AUPRC (chance 0.054) | Real onsets warned (3 seeds) | Campaign onsets warned |
+|---|---|---|---|---|
+| frozen recipe (round 6) | 0.832 | 0.060 (world model 0.064) | world model 4/75 | 35/198 |
+| E1 + long-memory features (30 min / 2 h rolling maxima) | ~0.80 | 0.080 (world model 0.073) | world model **11/75** | 32/198 |
+| E2 + early-warning loss weight 5 | ~0.79 | 0.078 (0.088) | 9/75 | 1–3/198 |
+| E3 + early-warning loss weight 10 | ~0.81 | 0.081 (0.089) | 8/75 | 2–3/198 |
+
+Long memory helps warning a little on every seed, and costs about 0.03 of pooled detection;
+extra early-warning weight trades campaign warnings away and is rejected. The finding that
+matters: within-10-minute network windows cannot see chains whose stages are hours or days
+apart (DAPT2020: one stage per day). That motivated the host kill-chain layer below.
+
+## Host kill-chain layer (parked experiment, code on branch `archive/pre-cleanup`)
+
+Protocol: leave-one-group-out (CTU-13 in three scenario blocks, each CIC-IDS2017 day,
+CIC-IDS2018, DAPT2020, DARPA 2000 test-only). A *chain step* is a host starting an ATT&CK
+stage different from the one it was most recently doing. Design choices were made on the dev
+folds (CTU-13, CIC-IDS2017, CIC-IDS2018); DAPT2020 and DARPA 2000 were scored once afterwards.
+
+| Round | Change | Dev next-stage top-1 (deployable / true history) | Outcome |
+|---|---|---|---|
+| v1 | nowcast on raw host counts; episodes ordered by start | 0.40 / 0.48 (lookup table 0.55) | CIC nowcast misses 10-per-10 s brute force (learned CIC-2018's 320) |
+| v2 | + scale-free shares and 1/5-min host activity; previous stage = most recently active | 0.41 / **0.56** (table 0.50, ATT&CK rule 0.47; rule at the inferred state 0.42) | frozen |
+| — | Bayesian transition table instead of the learned model | 0.37 / 0.52 | rejected |
+
+Held-out, scored once (lead 1 window):
+
+| Chain | Steps | Learned model, inferred history | Learned model, true history | ATT&CK rule, true history | Lookup table, true history |
+|---|---|---|---|---|---|
+| DAPT2020 (week-long APT) | 10 | 0.10 | 0.20 | 0.10 | 0.40 |
+| DARPA 2000 LLDOS 1.0 + 2.0.2 | 10 | 0.10 | 0.40 | **0.90** | 0.40 |
+
+The per-host stage nowcast recognises 15% (DAPT) and 8% (DARPA) of attack host-windows on
+these unseen networks (62–86% on held-out CTU-13 blocks): a DARPA victim sees one ping and a few
+RPC calls, far below anything in training. With the true history, the textbook ATT&CK order
+predicts DARPA's chain almost perfectly, but the learned model, trained mostly on CTU-13 botnet
+cycles, overrides it. Timing (compromise step within 24 h) has skill on dev (AUPRC 0.21 vs base
+0.04) and none on the held-out chains. Bug fixed after the first held-out read (a definition,
+not a model change): DARPA's two scenarios were one timeline, so March's memory leaked into
+April's separate experiment; each scenario is now its own timeline, as CTU-13's are.
+
+## G3 (learned dynamics) and the residual decoder
+
+G3 had never been run on the frozen models. On the P1 test split their next-state predictions
+beat persistence (NLL 1.84 vs 2.41 at 10 s) and linear autoregression (2.74), but lose to the
+histogram of the last 64 windows (1.20): traffic features are close to stationary over
+minutes. A calibrated mixture with that histogram put all its weight on the histogram, so the
+decoder added nothing. Fix (the pre-registered G3 fallback, "increase decoder capacity"): the
+emission became recent-history histogram x learned correction, zero-initialised, so any gain
+is learned dynamics (`emit_prior=1`). Dev (seed 17): gain +0.021 [+0.015, +0.026] at 10 s,
++0.014 [+0.009, +0.018] at 1 min, tie at 5 min; risk AUPRC unchanged (hybrid 0.825 vs 0.827).
+
+Test (a second read, 3 seeds): the gain holds at 10 s (3/3 seeds) and 1 min (2/3); hybrid
+AUPRC 0.840 ± 0.020 (frozen 0.847), FPR 2.1% (frozen 4.2%). The rule set before the run (ship
+if AUPRC is within ±0.02) did not consider early warning, and that regressed: 24/207 attacks
+warned before they started (frozen 51/207), median lead 1.6 min (3.5), and the Heartbleed demo
+gains a false "attack in progress" 27 minutes early. **Decision: the frozen model stays the
+release** (early warning is the problem statement's headline); the residual decoder is reported
+as a tested variant (BENCHMARKS section 7) and kept at artifacts/kcwm-residual-decoder.pt.
+
+## Early-warning budget and next-stage table (post-hoc, after the test read)
+
+* **Next stage.** The rollout's stage mass got 16% of real dev stage changes right; a transition
+  table P(next | current, progress) counted on training labels and read at the model's own
+  current stage got 37–39%, and rollout^0.25 x table^0.75 got 40–43% (chosen on dev, frozen dev
+  models, 3 seeds). One test read: 29% -> **50%** (1 window before) and 29% -> 49% (1 min
+  before); the table at the true current stage, an upper bound, is 58%.
+* **Early-warning budget** 3% -> 5% of quiet benign calibration windows: 51 -> 69 of 207 real
+  attacks warned before they started, median lead 3.5 -> 5.0 min, false early warnings 1.5% ->
+  3.2% of quiet test time. The sweep (10%, 20%) shows false warnings exploding beyond that.
+  On the Heartbleed demo capture the 5% threshold gives ~17 minutes of false early warnings
+  before the real one (3%: ~4 minutes).

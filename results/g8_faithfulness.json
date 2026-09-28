@@ -5,5 +5,6 @@
   "mean_drop_random": 0.0014596819877624513,
   "ratio": 500.3532048559785,
   "passes_G8": true,
-  "mean_risk_of_explained_anchors": 0.9647437334060669
+  "mean_risk_of_explained_anchors": 0.9647437334060669,
+  "checkpoint": "runs/final-p1/kcwm-s17.pt"
 }

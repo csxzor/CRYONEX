@@ -1,6 +1,6 @@
 # Datasets
 
-KC-WM trains and evaluates on public datasets only. None are redistributed. Raw data is read
+CRYONEX trains and evaluates on public datasets only. None are redistributed. Raw data is read
 from `paths.data_root` (`configs/default.yaml`, or the `KCWM_DATA_ROOT` environment variable),
 laid out as `<data_root>/raw/<dataset>/...`.
 
@@ -35,7 +35,7 @@ CIC-IDS2017 attack against UNB's published schedule.
 ## Building
 
 ```bash
-kcwm build cicids2017 cicids2018 ctu13   # ~10 min on 12 cores; 2018 needs ~9 GB RAM peak
-kcwm build dapt2020                      # after downloading DAPT2020
+cryonex build cicids2017 cicids2018 ctu13   # ~10 min on 12 cores; 2018 needs ~9 GB RAM peak
+cryonex build dapt2020                      # after downloading DAPT2020
 python scripts/label_audit.py            # gate G1
 ```
