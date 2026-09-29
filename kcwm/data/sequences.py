@@ -15,7 +15,7 @@ import numpy as np
 import polars as pl
 
 from ..features.normalize import QuantileBinner, RobustScaler, transform_windows
-from ..features.registry import FEATURE_NAMES, MASK_NAMES
+from ..features.registry import MASK_NAMES
 
 
 @dataclass
