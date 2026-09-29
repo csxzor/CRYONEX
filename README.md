@@ -9,8 +9,11 @@ that caused the warning, and the D3FEND response. It runs **fully offline on an 
 
 ![CRYONEX dashboard: live risk timeline with early warnings before the real Heartbleed exploit](docs/images/dashboard-live-risk.png)
 
-*Real, held-out traffic (CIC-IDS2017 Heartbleed). The model had never seen a Heartbleed attack.
-Early warning at 18:08, attack confirmed at 18:11, the real exploit starts at 18:12.*
+*Real, held-out traffic (CIC-IDS2017 Heartbleed); the model had never seen a Heartbleed attack.
+The real exploit starts at 18:12; the attack is confirmed at 18:11 and warned at 18:08. The
+screenshots use the released model at its default early-warning budget of 5%, which also raises
+false early warnings on this capture: the first at 17:43:10, and 10.5 minutes of them in all
+before the exploit (the amber bands before 18:08). See [section 3](#3-results).*
 
 ---
 
@@ -63,28 +66,68 @@ For every 10 seconds of traffic, CRYONEX reports:
 
 ## 3. Results
 
-Held-out test data from 4 public datasets, mean of 3 training seeds. Every number is generated
-from `results/`; the full tables are in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
+Held-out test data from 4 public datasets, mean of 3 training seeds unless stated. Every number
+is generated from `results/`; the full tables are in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
+
+**How often the test split was read.** The frozen model was scored on it once. The
+residual-decoder variant (below) was a second read. The two-level alert policy, its 5% budget
+and the next-stage table were chosen afterwards, on the saved test scores, so they are
+**post-hoc** and marked as such. No further design choices use the test split.
+
+### Detection (5-minute infiltration forecast, 3% false-positive budget)
 
 | Model (same features, same split) | AUPRC | Precision | Recall | F1 | False-positive rate |
 |---|---|---|---|---|---|
 | Logistic regression (**required baseline**) | 0.650 | 0.832 | 0.363 | 0.505 | 3.6% |
+| Logistic regression, last 6 windows | 0.726 | 0.929 | 0.459 | 0.614 | 1.7% |
 | Gradient boosting | 0.767 | 0.786 | 0.529 | 0.632 | 7.0% |
 | LSTM classifier | 0.769 | 0.818 | 0.441 | 0.572 | 4.8% |
+| Transformer classifier, same backbone, no dynamics (2 seeds) | 0.815 | 0.984 | 0.262 | 0.403 | 0.3% |
 | CRYONEX world model alone | 0.820 | 0.861 | 0.614 | 0.711 | 5.2% |
 | **CRYONEX hybrid (deployed)** | **0.847** | **0.894** | **0.620** | **0.725** | 4.2% |
 
-| Beyond detection | Result |
+The world model alone ranks attacks only slightly better than a Transformer classifier with the
+same backbone and no dynamics (AUPRC 0.820 vs 0.815). The 6-window logistic regression has a
+lower false-positive rate than the deployed hybrid (1.7% vs 4.2%) at lower recall.
+
+### Early warning (post-hoc)
+
+Real attacks warned **before they started**, by early-warning budget (the share of quiet benign
+calibration windows allowed a warning). The deployed default is 5%; it was moved from 3% after
+the test read, so the 69/207 figure is post-hoc.
+
+| Early-warning budget | Attacks warned before they started | Median lead | False early warnings (windows per hour of quiet traffic) |
+|---|---|---|---|
+| 3% | 51 / 207 | 3.5 min | 3.4 |
+| **5% (deployed)** | **69 / 207** | **5.0 min** | **7.2** |
+| 10% | 91 / 207 | 5.0 min | 31.5 |
+| 20% | 112 / 207 | 5.0 min | 78.7 |
+
+**Unreconciled:** on dev, the frozen recipe's early-warning AUPRC on real data was at chance
+(world model 0.064, hybrid 0.060, chance 0.054), while on test it was 0.225 (hybrid 0.183). We
+have not explained this gap, so treat the early-warning result with caution.
+
+### Next ATT&CK stage (post-hoc)
+
+At real stage changes, forecast one window before:
+
+| Predictor | Correct |
 |---|---|
-| Real attacks warned **before they started** | **69 of 207**, median 5 minutes ahead (logistic regression: none) |
-| Next ATT&CK stage predicted correctly at real stage changes | **50%** (the simulation alone: 29%) |
-| Attack families never seen in training | **0.782** AUPRC vs 0.569 for the baseline |
-| Learned dynamics: next-state prediction, 10 s ahead (lower is better) | **1.835** vs 2.407 ("nothing changes") and 2.738 (autoregression) |
+| World-model rollout alone | 29.5% |
+| Plain Markov table, read at the **true** current stage | 46.0% |
+| Learned transition table, read at the model's own current stage | 49.6% |
+| **Deployed blend** (rollout^0.25 × table^0.75) | **50.4%** |
+
+The deployed number is **mostly the table**: the rollout adds 0.8 points to it.
+
+### Other checks
+
+| Check | Result |
+|---|---|
+| Attack families never seen in training (each hidden in turn) | **0.782** AUPRC vs 0.569 for the baseline, 7 of 7 families |
+| Learned dynamics: next-state prediction, 10 s ahead (NLL, lower is better) | released decoder **1.835**; beats "nothing changes" (2.407) and autoregression (2.738), but **loses to the recent-history histogram (1.202) on 3 of 3 seeds**. A residual-decoder variant beats the histogram (1.190) but halves early warnings, so it is **not released** |
 | Explanation faithfulness | removing the top-5 named features cuts the risk **500×** more than removing 5 random ones |
 | Speed | 2 hours of traffic (334k flows) analysed in about 7 s on a laptop CPU |
-
-The test split was read once, for the frozen model. The two-level alert policy and the next-stage
-table were added afterwards and are labelled *post-hoc* in the benchmarks.
 
 ## 4. Setup (about 10 minutes)
 
@@ -130,7 +173,7 @@ Add `?t=HH:MM:SS` to the address to open the dashboard at a chosen moment:
 
 | Open this | What you will see |
 |---|---|
-| http://localhost:8501/?t=18:08:10 | ⚠️ **Early warning**, 4 minutes before the exploit; *Attack Forecast* says **Initial Access next** (Heartbleed is Initial Access); *Response Guidance* lists **T1190 Exploit Public-Facing Application** |
+| http://localhost:8501/?t=18:08:10 | ⚠️ **Early warning**, 4 minutes before the exploit (earlier warnings from 17:43 are false alarms at the 5% budget); *Attack Forecast* says **Initial Access next** (Heartbleed is Initial Access); *Response Guidance* lists **T1190 Exploit Public-Facing Application** |
 | http://localhost:8501/?t=18:12:50 | ⛔ **Attack in progress** at peak risk; *Investigation Context* shows the traffic behind it (data leaving an internal host on long outbound flows, which is what Heartbleed's memory leak looks like) |
 
 ### Docker (alternative, no Python setup)
@@ -270,13 +313,17 @@ The Python package is named `kcwm` (Kill-Chain World Model), the project's inter
 
 ## 10. Honest limits
 
-* **Early warning is partial.** About 1 in 3 real attacks is warned before it starts, minutes (not
-  hours) ahead. Many attacks in public datasets start with no warning sign in the traffic, which no
-  model can forecast. False early warnings fire on about 3% of quiet time; the sensitivity is one
-  setting (`alert.early_warning_budget`).
+* **Early warning is partial and post-hoc.** At the deployed 5% budget, 69 of 207 real attacks
+  are warned before they start, minutes (not hours) ahead, at 7.2 false early-warning windows per
+  hour of quiet traffic. The budget was chosen after the test read, and on dev the early-warning
+  score was at chance; this gap is unexplained. Many attacks in public datasets start with no
+  warning sign in the traffic. The sensitivity is one setting (`alert.early_warning_budget`).
+* **The learned dynamics lose to a simple baseline.** The released decoder predicts the next
+  network state worse than the histogram of the last 64 windows (NLL 1.835 vs 1.202).
+* **Next-stage prediction is right about half the time**, and most of that comes from the learned
+  transition table rather than the simulation (rollout alone: 29.5%).
 * **New networks need the 15-minute calibration.** Risk ranking partly transfers between
   networks; alert thresholds do not transfer without it.
-* **Next-stage prediction is right about half the time** at real stage changes.
 * On the demo capture, the *contributing hosts* at peak risk are ordinary busy hosts, not the
   Heartbleed attacker: the attack is 11 long, quiet connections among thousands.
 
@@ -290,6 +337,7 @@ The Python package is named `kcwm` (Kill-Chain World Model), the project's inter
 | Benchmarks vs logistic regression | [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) |
 | Datasets and label audit | [`docs/DATASETS.md`](docs/DATASETS.md), [`docs/LABEL_AUDIT.md`](docs/LABEL_AUDIT.md) |
 | Development history | [`docs/DEV_HISTORY.md`](docs/DEV_HISTORY.md) |
+| Removed experiments, dev scripts and results | branch [`archive/pre-cleanup`](https://github.com/csxzor/CRYONEX/tree/archive/pre-cleanup) |
 
 **Licence:** Apache-2.0 (see [`LICENSE`](LICENSE)). Datasets are public and not redistributed;
 the demo samples are short excerpts for evaluation.

@@ -128,3 +128,41 @@ as a tested variant (BENCHMARKS section 7) and kept at artifacts/kcwm-residual-d
   3.2% of quiet test time. The sweep (10%, 20%) shows false warnings exploding beyond that.
   On the Heartbleed demo capture the 5% threshold gives ~17 minutes of false early warnings
   before the real one (3%: ~4 minutes).
+
+## External review, phase 1 (documentation only; no compute, test split not read)
+
+Rule from here on: the P1 test split has been read three times (the frozen model; the residual
+decoder, a second read; the post-hoc alert policy and next-stage table, scored on saved test
+scores). It is treated as burned. No further tuning, selection or re-runs against it; every
+later design choice uses dev data only, with pass/fail criteria written here before running.
+
+Phase 1 changes the README and docs only, and is complete when (criteria): every number it adds
+matches `results/` exactly; no headline number changes; `make benchmarks` leaves
+`docs/BENCHMARKS.md` unchanged; the tests pass. Numbers added, all from existing results:
+
+* Controls in the README table: logistic regression over the last 6 windows (F1 0.614, FPR 1.7%,
+  AUPRC 0.726) and the Transformer classifier with the same backbone and no dynamics (AUPRC 0.815
+  vs 0.820 for the world model alone; **2 seeds**, not 3: seed 29 did not complete).
+* Learned dynamics, stated in full: the released decoder beats persistence and autoregression but
+  loses to the recent-history histogram (NLL 1.835 vs 1.202 at 10 s; 0 of 3 seeds better).
+* Next stage, decomposed: rollout alone 0.295; plain Markov table at the true current stage 0.460
+  (stage report); learned table at the model's own current stage 0.496; deployed blend 0.504.
+  The deployed number is mostly the table.
+* Early warning: 69/207 is post-hoc (the budget moved from 3% to 5% after the test read).
+  Dev vs test is unreconciled: the world model's early-warning AUPRC was 0.064 on dev (hybrid
+  0.060, chance 0.054) but 0.225 on test (hybrid 0.183).
+
+Correction: the earlier entry "~17 minutes of false early warnings" on the Heartbleed capture
+measured a span (17:43 to 18:00), not warning time. Measured on the release bundle (5% budget):
+first early warning 17:43:10; 13.5 minutes of early-warning windows before the exploit's first
+labelled window (18:12:10), of which 3.0 minutes fall in the 5 minutes before it and 10.5
+minutes are false.
+
+## External review, phase 2 (tooling; no compute)
+
+`scripts/check_readme_numbers.py` parses the README's results tables and headline sentences and
+fails if any number differs from `results/` at the precision the README prints (73 numbers). It
+runs in CI and at the end of `make checks`; `make readme-check` runs it alone. Criteria: passes on
+the current README; fails on planted errors. Result: pass (0 mismatches); six planted errors (a
+detection metric, a sweep count, the next-stage blend, the faithfulness ratio, the dev chance
+rate, a deleted table row) were each caught.

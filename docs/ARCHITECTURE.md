@@ -52,30 +52,33 @@ About 645k parameters; one model trains in about 15 minutes on a laptop CPU.
   labelled flows. Synthetic kill-chain campaigns (real attack snippets injected in ATT&CK order into
   real benign traffic) augment training; they never enter headline numbers.
 * **Split:** each recording is cut in time into train / calibration / test (60/15/25), purged so no
-  training horizon reaches later data. All design choices were made on development data; **the test
-  split was read once** for the frozen model (`scripts/run_final.sh`). Later additions are labelled
-  post-hoc in the benchmarks.
+  training horizon reaches later data. Design choices were made on development data. The frozen
+  model was scored on the test split **once** (`scripts/run_final.sh`); the residual decoder was a
+  second read; the alert policy, its 5% budget and the next-stage table were chosen afterwards on
+  the saved test scores (**post-hoc**).
 * **Controls on identical data:** logistic regression (the required baseline), gradient boosting,
-  an LSTM, and a Transformer classifier with the same backbone but no dynamics. 3 seeds each.
+  an LSTM, and a Transformer classifier with the same backbone but no dynamics (AUPRC 0.815 vs
+  0.820 for the world model alone). 3 seeds each (the Transformer classifier: 2).
 
 | Result (held-out test data) | CRYONEX | Baseline |
 |---|---|---|
 | F1 / recall / AUPRC (hybrid vs logistic regression, same features) | **0.725 / 0.620 / 0.847** | 0.505 / 0.363 / 0.650 |
 | Unseen attack families (each hidden from training; 7 of 7 won) | **0.782** AUPRC | 0.569 |
-| Real attacks warned before they started (two-level alerts) | **69 / 207**, median 5 min ahead | none (logistic regression) |
-| Next ATT&CK stage at real stage changes | **50%** | 29% (simulation alone) |
+| Real attacks warned before they started (two-level alerts, 5% budget; post-hoc) | **69 / 207**, median 5 min ahead | LR at its alert threshold: 0 / 216 |
+| Next ATT&CK stage at real stage changes (post-hoc) | **50.4%**, mostly from the learned table (49.6% alone) | 29.5% rollout alone |
 | Explanation faithfulness: risk drop when removing the top-5 features vs 5 random ones | **500×** | pass bar 2× |
-| Next-state prediction (NLL, lower is better, 10 s ahead) | **1.835** | 2.407 persistence · 2.738 autoregression |
+| Next-state prediction (NLL, lower is better, 10 s ahead) | **1.835** | 2.407 persistence · 2.738 autoregression · **1.202 recent-history histogram (better)** |
 
 **Speed:** 2 hours of traffic (334k flows) are analysed in about 7 seconds on a laptop CPU.
 
 ## 4. Limits we report openly
 
-* Early warning covers about 1 in 3 attacks and is minutes ahead, not hours: many attacks in public
-  datasets start with no precursor in the traffic. At the 5% budget, false early warnings fire on
-  about 3% of quiet time.
+* Early warning covers about 1 in 3 attacks and is minutes ahead, not hours; at the 5% budget,
+  false early warnings fire on about 3% of quiet time (7.2 windows per hour). On dev, the
+  early-warning score was at chance (0.064 vs 0.054) against 0.225 on test: unexplained.
 * On a brand-new network, ranking partly transfers but alert thresholds do not; the 15-minute
   warm-up calibration is required.
-* Predicting the next stage is right about half the time; the recent-history histogram still
-  predicts raw traffic features slightly better than the released decoder (a tested variant closes
-  that gap but halves early warnings, so it is not released).
+* Predicting the next stage is right about half the time, mostly thanks to the learned table. The
+  released decoder predicts the next state clearly worse than the recent-history histogram (1.835
+  vs 1.202); a tested residual decoder beats it (1.190) but halves early warnings, so it is not
+  released.
