@@ -92,7 +92,7 @@ No datasets are needed: the trained model and five real traffic samples are in t
 
 ### Requirements
 
-| | |
+| Item | Requirement |
 |---|---|
 | OS | Linux or macOS. On Windows, use **WSL 2 (Ubuntu)** or Docker (below) |
 | Python | 3.12 (installed automatically by `uv`) |
@@ -108,8 +108,8 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 #    then open a new terminal, or run:  source $HOME/.local/bin/env
 
 # 2. Get the code
-git clone https://github.com/csxzor/153.git cryonex
-cd cryonex
+git clone https://github.com/csxzor/CRYONEX.git
+cd CRYONEX
 
 # 3. Create the environment (exact, locked versions; CPU-only PyTorch)
 uv sync --all-extras --frozen
